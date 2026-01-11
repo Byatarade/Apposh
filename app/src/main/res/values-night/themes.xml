@@ -1,7 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme for dark theme. -->
     <style name="Base.Theme.PenjualanDev" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorButtonBackground</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <!-- Customize your theme here. -->
+        <item name="colorSurface">@color/colorScreenBackground</item>
+        <item name="colorOnSurface">@color/colorPrimaryText</item>
+        <item name="colorSurfaceContainer">@color/colorCardBackground</item>
+        <item name="colorOnSurfaceVariant">@color/colorSecondaryText</item>
     </style>
+    <style name="Theme.PenjualanDev" parent="Base.Theme.PenjualanDev" />
 </resources>

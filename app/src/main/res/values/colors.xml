@@ -2,4 +2,18 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorScreenBackground">#F5F5F5</color>
+    <color name="colorCardBackground">#FFFFFF</color>
+    <color name="colorPrimaryText">#000000</color>
+    <color name="colorThird">#666666</color>
+    <color name="colorSecondaryText">#B3B3B3</color>
+    <color name="colorAccent">#fe6e28</color>
+    <color name="colorButtonBackground">#2151f9</color>
+    <color name="colorButtonText">#FFFFFFFF</color>
+    <color name="red">#FF0000</color>
+
+    <!-- Bottom Nav Colors for new design -->
+    <color name="bottom_nav_background">#FF000000</color>
+    <color name="bottom_nav_item_tint">@android:color/white</color>
+    <color name="bottom_nav_selected_item_background">@color/colorAccent</color>
 </resources>
