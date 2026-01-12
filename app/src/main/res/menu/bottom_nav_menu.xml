@@ -9,10 +9,10 @@
         android:title="histori" />
     <item
         android:id="@+id/navigation_clock"
-        android:icon="@drawable/ic_clock"
+        android:icon="@drawable/notif"
         android:title="jam" />
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications"
+        android:icon="@drawable/akun"
         android:title="notif" />
 </menu>

@@ -113,8 +113,8 @@
                             <ImageView
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@drawable/transaksi"
-                                app:tint="?attr/colorOnSurface" />
+                                android:src="@drawable/transaksii"
+                                />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -134,8 +134,7 @@
                             <ImageView
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@drawable/client"
-                                app:tint="?attr/colorOnSurface" />
+                                android:src="@drawable/pelanggan" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -155,8 +154,7 @@
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/laporan"
-                                app:tint="?attr/colorOnSurface" />
+                                android:src="@drawable/laporann" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -203,8 +201,8 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/transaksi"
-                        app:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/menu"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -238,8 +236,7 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/client"
-                        app:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/cabang"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -273,8 +270,7 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/laporan"
-                        app:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/printer"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -309,8 +305,8 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/client"
-                        app:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/pegawai"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -345,8 +341,7 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/laporan"
-                        app:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/voucher" />
 
                     <TextView
                         android:layout_width="wrap_content"
