@@ -24,7 +24,7 @@
                 android:id="@+id/tvGreeting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="20dp"
                 android:text="@string/sapauser"
                 android:textColor="?attr/colorOnSurface"
@@ -176,7 +176,7 @@
                 android:id="@+id/program_container"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="-50dp"
+                android:layout_marginTop="-60dp"
                 app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"
-                    android:paddingTop="30dp"
+                    android:paddingTop="40dp"
                     android:paddingBottom="130dp">
 
                     <TextView

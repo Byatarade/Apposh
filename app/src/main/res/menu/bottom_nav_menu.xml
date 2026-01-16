@@ -8,11 +8,16 @@
         android:icon="@drawable/ic_analytics"
         android:title="histori" />
     <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/akun"
+        android:title="notif" />
+    <item
         android:id="@+id/navigation_clock"
         android:icon="@drawable/notif"
         android:title="jam" />
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/akun"
-        android:title="notif" />
+        android:id="@+id/exit"
+        android:icon="@drawable/exit"
+        android:title="jam" />
+
 </menu>
