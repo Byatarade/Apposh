@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">PenjualanDev</string>
+    <string name="app_name">DevSpark</string>
+    <string name="sapauser">Selamat Pagi, Byataradev</string>
+    <string name="saldoanda">Saldo Anda: </string>
+    <string name="tanggalberanda">26 Januari 2026</string>
+    <string name="transaksi">Transaksi</string>
+    <string name="pelanggan">Pelanggan</string>
+    <string name="laporan">Laporan</string>
+    <string name="menu">Menu</string>
+    <string name="cabang">Cabang</string>
+    <string name="printer">Cetak</string>
+    <string name="pegawai">Pegawai</string>
+    <string name="kupon">Kupon</string>
 </resources>

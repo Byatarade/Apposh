@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DevSparks</string>
+    <string name="sapauser">Goood Morning, Byataradev</string>
+    <string name="saldoanda">Your Balance: </string>
+    <string name="tanggalberanda">26 January 2026</string>
+    <string name="transaksi">Transaction</string>
+    <string name="pelanggan">Client</string>
+    <string name="laporan">Report</string>
+    <string name="menu">Menu</string>
+    <string name="cabang">Branch</string>
+    <string name="printer">Printer</string>
+    <string name="pegawai">Staff</string>
+    <string name="kupon">Voucher</string>
+</resources>
