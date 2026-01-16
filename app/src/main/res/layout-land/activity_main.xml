@@ -13,79 +13,94 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Background Card (Program Section Background) -->
-        <!-- Matches the portrait style logic but restricted to the right side -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/right_panel_bg"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
-            app:cardElevation="0dp"
-            app:strokeWidth="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/guideline_vertical_45"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="-40dp"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Card.TopRounded"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_sh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.30" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_vertical_45"
+            android:id="@+id/guideline_v50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.45" />
 
-        <!-- LEFT SIDE CONTENT -->
+        <!-- Background Sheet (Bottom) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/background_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Card.TopRounded"
+            app:layout_constraintTop_toTopOf="@+id/guideline_sh"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="-50dp"/>
+
+        <!-- Greeting Text -->
         <TextView
             android:id="@+id/tvGreeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="30dp"
             android:text="@string/sapauser"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Main Card: Landscape Version (Saldo + Actions) -->
+        <!-- Program Title -->
+        <TextView
+            android:id="@+id/program_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Program"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@id/guideline_sh"
+            app:layout_constraintStart_toEndOf="@id/guideline_v50"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"/>
+
+        <!-- MAIN CARD (Left) -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="30dp"
             app:cardBackgroundColor="?attr/colorSurfaceContainer"
-            app:cardCornerRadius="30dp"
-            app:cardElevation="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_45"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvGreeting"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvGreeting">
+            app:layout_constraintEnd_toStartOf="@+id/guideline_v50">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp"
-                android:baselineAligned="false">
+                android:orientation="vertical">
 
-                <!-- Saldo Section (Left) -->
+                <!-- Saldo Section -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardutama"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     app:cardCornerRadius="25dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
-
+                    app:cardBackgroundColor="?attr/colorSurfaceContainerLow">
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:padding="20dp">
 
                         <TextView
@@ -100,7 +115,9 @@
                             android:id="@+id/tvNominal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@id/labelSaldo"
+                            android:layout_marginTop="15dp"
                             android:text="Rp.100.000.000"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="22sp"
@@ -109,28 +126,29 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
                             android:layout_alignParentEnd="true"
+                            android:layout_below="@id/tvNominal"
+                            android:layout_marginTop="15dp"
                             android:text="@string/tanggalberanda"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Actions Section (Right Vertical) -->
+                <!-- Actions Section -->
                 <LinearLayout
                     android:id="@+id/cardseccond"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.8"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="16dp"
+                    android:background="@android:color/transparent"
+                    android:weightSum="3">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
@@ -141,21 +159,16 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/transaksi"
-                            android:layout_gravity="center"
                             android:textColor="?attr/colorOnSurface"
-                            android:textSize="10sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="12dp"/>
-
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
@@ -166,184 +179,158 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/pelanggan"
                             android:textColor="?attr/colorOnSurface"
-                            android:textSize="10sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="12dp"/>
-
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/laporann" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/laporan"
                             android:textColor="?attr/colorOnSurface"
-                            android:textSize="10sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- RIGHT SIDE: Program Section -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/program_container"
+
+        <!-- SCROLLABLE PROGRAM SECTION (Right Side) -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="@id/right_panel_bg"
-            app:layout_constraintBottom_toTopOf="@id/navbar_card"
-            app:layout_constraintStart_toStartOf="@id/right_panel_bg"
-            app:layout_constraintEnd_toEndOf="@id/right_panel_bg"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="5dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@id/program_label"
+            app:layout_constraintStart_toEndOf="@id/guideline_v50"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/navbar_card">
 
-            <TextView
-                android:id="@+id/program"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Program"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="15dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/flow_row1"
-                app:layout_constraintVertical_chainStyle="packed"/>
+                android:paddingBottom="10dp">
 
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flow_row1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="cardmenu,cardcabang,cardprinter"
-                app:flow_wrapMode="chain"
-                app:flow_horizontalStyle="packed"
-                app:flow_horizontalGap="12dp"
-                app:layout_constraintTop_toBottomOf="@id/program"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/flow_row2"
-                android:layout_marginBottom="12dp"/>
-
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flow_row2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="cardpegawai,cardvoucher"
-                app:flow_wrapMode="chain"
-                app:flow_horizontalStyle="packed"
-                app:flow_horizontalGap="12dp"
-                app:layout_constraintTop_toBottomOf="@id/flow_row1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <!-- Item Cards (Smaller for Landscape Balance) -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardmenu"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                app:cardCornerRadius="16dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
-                <LinearLayout
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:id="@+id/flow_programs"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/menu"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/menu" android:textColor="?attr/colorOnSurface" android:textSize="9sp" android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="cardmenu,cardcabang,cardprinter,cardpegawai,cardvoucher"
+                    app:flow_wrapMode="chain"
+                    app:flow_maxElementsWrap="3"
+                    app:flow_horizontalStyle="packed"
+                    app:flow_verticalGap="12dp"
+                    app:flow_horizontalGap="12dp"
+                    app:flow_lastHorizontalStyle="packed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardcabang"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                app:cardCornerRadius="16dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/cabang"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/cabang" android:textColor="?attr/colorOnSurface" android:textSize="9sp" android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <!-- Item Cards (SCALED UP -> 96dp) -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardmenu"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <ImageView android:layout_width="34dp" android:layout_height="34dp" android:src="@drawable/menu"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/menu" android:textColor="?attr/colorOnSurface" android:textSize="12sp" android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardprinter"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                app:cardCornerRadius="16dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/printer"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/printer" android:textColor="?attr/colorOnSurface" android:textSize="9sp" android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardcabang"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <ImageView android:layout_width="34dp" android:layout_height="34dp" android:src="@drawable/cabang"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/cabang" android:textColor="?attr/colorOnSurface" android:textSize="12sp" android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardpegawai"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                app:cardCornerRadius="16dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/pegawai"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/pegawai" android:textColor="?attr/colorOnSurface" android:textSize="9sp" android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardprinter"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/printer"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/printer" android:textColor="?attr/colorOnSurface" android:textSize="12sp" android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardvoucher"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                app:cardCornerRadius="16dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/voucher"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/kupon" android:textColor="?attr/colorOnSurface" android:textSize="9sp" android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardpegawai"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <ImageView android:layout_width="34dp" android:layout_height="34dp" android:src="@drawable/pegawai"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/pegawai" android:textColor="?attr/colorOnSurface" android:textSize="12sp" android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardvoucher"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <ImageView android:layout_width="34dp" android:layout_height="34dp" android:src="@drawable/voucher"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/kupon" android:textColor="?attr/colorOnSurface" android:textSize="12sp" android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <!-- Navbar (Floating, Centered, Top Rounded, Compact) -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/navbar_card"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
+            android:layout_width="450dp"
+            android:layout_height="100dp"
             android:layout_marginBottom="0dp"
             app:cardElevation="10dp"
             app:cardBackgroundColor="?attr/colorSurfaceContainer"
@@ -354,7 +341,7 @@
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
-                android:layout_width="350dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 style="@style/App.BottomNavigationView"
@@ -362,7 +349,9 @@
                 app:itemIconSize="24dp"
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/bottom_nav_menu"
-                android:minHeight="0dp" />
+                android:minHeight="0dp"
+                app:itemPaddingTop="12dp"
+                app:itemPaddingBottom="12dp" />
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
