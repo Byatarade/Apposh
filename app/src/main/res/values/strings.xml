@@ -11,4 +11,10 @@
     <string name="printer">Cetak</string>
     <string name="pegawai">Pegawai</string>
     <string name="kupon">Kupon</string>
+
+    <!-- Exit Dialog -->
+    <string name="exit_title">Ingin Keluar?</string>
+    <string name="exit_message">Apakah anda yakin ingin keluar dari aplikasi?</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
 </resources>

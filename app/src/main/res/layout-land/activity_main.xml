@@ -65,7 +65,7 @@
             android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="65dp"
             app:layout_constraintBottom_toTopOf="@id/guideline_sh"
             app:layout_constraintStart_toEndOf="@id/guideline_v50"
             app:layout_constraintEnd_toEndOf="parent"
@@ -329,8 +329,8 @@
         <!-- Navbar (Floating, Centered, Top Rounded, Compact) -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/navbar_card"
-            android:layout_width="450dp"
-            android:layout_height="100dp"
+            android:layout_width="420dp"
+            android:layout_height="95dp"
             android:layout_marginBottom="0dp"
             app:cardElevation="10dp"
             app:cardBackgroundColor="?attr/colorSurfaceContainer"

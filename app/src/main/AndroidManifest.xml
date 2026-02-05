@@ -12,10 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PenjualanDev">
         <activity
+            android:name=".kategori.ModKategoriActivity"
+            android:exported="false" />
+        <activity
+            android:name=".kategori.DataKategoriActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Exit"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

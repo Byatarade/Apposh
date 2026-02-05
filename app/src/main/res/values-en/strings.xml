@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DevSparks</string>
-    <string name="sapauser">Goood Morning, Byataradev</string>
+    <string name="app_name">DevSpark</string>
+    <string name="sapauser">Good Morning, Byataradev</string>
     <string name="saldoanda">Your Balance: </string>
-    <string name="tanggalberanda">26 January 2026</string>
+    <string name="tanggalberanda">January 26, 2026</string>
     <string name="transaksi">Transaction</string>
-    <string name="pelanggan">Client</string>
+    <string name="pelanggan">Customer</string>
     <string name="laporan">Report</string>
     <string name="menu">Menu</string>
     <string name="cabang">Branch</string>
-    <string name="printer">Printer</string>
-    <string name="pegawai">Staff</string>
-    <string name="kupon">Voucher</string>
+    <string name="printer">Print</string>
+    <string name="pegawai">Employee</string>
+    <string name="kupon">Coupon</string>
+
+    <!-- Exit Dialog -->
+    <string name="exit_title">Want to Exit?</string>
+    <string name="exit_message">Are you sure you want to exit the application?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
