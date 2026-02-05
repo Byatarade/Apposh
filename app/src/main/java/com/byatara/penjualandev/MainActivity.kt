@@ -25,6 +25,11 @@ class MainActivity : AppCompatActivity() {
 
         // Setup Bottom Navigation
         setupBottomNavigation()
+
+        // Navigate to DataKategoriActivity
+        findViewById<androidx.cardview.widget.CardView>(R.id.cardkategori).setOnClickListener {
+            startActivity(android.content.Intent(this, com.byatara.penjualandev.kategori.DataKategoriActivity::class.java))
+        }
     }
 
     private fun setupBottomNavigation() {
