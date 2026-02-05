@@ -10,7 +10,7 @@
     <string name="cabang">Cabang</string>
     <string name="printer">Cetak</string>
     <string name="pegawai">Pegawai</string>
-    <string name="kupon">Kupon</string>
+    <string name="kategori">Kategori</string>
 
     <!-- Exit Dialog -->
     <string name="exit_title">Ingin Keluar?</string>

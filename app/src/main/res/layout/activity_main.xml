@@ -313,7 +313,7 @@
                         android:layout_marginTop="20dp"
                         app:cardCornerRadius="16dp"
                         app:cardBackgroundColor="?attr/colorSurfaceContainer"
-                        app:layout_constraintEnd_toStartOf="@+id/cardvoucher"
+                        app:layout_constraintEnd_toStartOf="@+id/cardkategori"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
@@ -343,7 +343,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cardvoucher"
+                        android:id="@+id/cardkategori"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_marginTop="20dp"
@@ -364,13 +364,13 @@
                             <ImageView
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@drawable/voucher" />
+                                android:src="@drawable/label" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="@string/kupon"
+                                android:text="@string/kategori"
                                 android:textColor="?attr/colorOnSurface"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />

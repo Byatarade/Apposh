@@ -10,7 +10,8 @@
     android:layout_marginVertical="4dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
+    android:foreground="?attr/colorSurfaceContainerHigh"
+    app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp"
     app:strokeWidth="1dp">
@@ -59,11 +60,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Aktif"
+            app:chipBackgroundColor="?attr/colorSurfaceContainerHigh"
             app:chipIcon="@drawable/tick"
             app:chipIconVisible="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

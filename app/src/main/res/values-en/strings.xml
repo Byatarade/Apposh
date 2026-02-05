@@ -11,7 +11,7 @@
     <string name="cabang">Branch</string>
     <string name="printer">Print</string>
     <string name="pegawai">Employee</string>
-    <string name="kupon">Coupon</string>
+    <string name="kategori">Category</string>
 
     <!-- Exit Dialog -->
     <string name="exit_title">Want to Exit?</string>
