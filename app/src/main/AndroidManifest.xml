@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PenjualanDev">
         <activity
+            android:name=".item_data_produk"
+            android:exported="false" />
+        <activity
             android:name=".kategori.ModKategoriActivity"
             android:exported="false" />
         <activity
@@ -20,6 +23,9 @@
         <activity
             android:name=".Exit"
             android:exported="false" />
+        <activity
+            android:name=".produk.TambahProdukActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -33,23 +33,23 @@ class ModKategoriActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mod_kategori)
         
         val mainView = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.main)
-        ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            
-            // Get original padding from XML (in pixels)
-            val originalPaddingLeft = v.paddingLeft
-            val originalPaddingTop = v.paddingTop
-            val originalPaddingRight = v.paddingRight
-            val originalPaddingBottom = v.paddingBottom
-            
-            // Add system bars insets to original padding instead of replacing it
-            v.setPadding(
-                originalPaddingLeft + systemBars.left,
-                originalPaddingTop + systemBars.top,
-                originalPaddingRight + systemBars.right,
-                originalPaddingBottom + systemBars.bottom
-            )
-            insets
+        if (mainView != null) {
+            // Simpan padding awal dari XML agar tidak bertambah terus setiap kali inset diupdate (misal saat keyboard muncul)
+            val initialPaddingLeft = mainView.paddingLeft
+            val initialPaddingTop = mainView.paddingTop
+            val initialPaddingRight = mainView.paddingRight
+            val initialPaddingBottom = mainView.paddingBottom
+
+            ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(
+                    initialPaddingLeft + systemBars.left,
+                    initialPaddingTop + systemBars.top,
+                    initialPaddingRight + systemBars.right,
+                    initialPaddingBottom + systemBars.bottom
+                )
+                insets
+            }
         }
 
         initViews()
