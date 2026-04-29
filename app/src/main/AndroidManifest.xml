@@ -27,6 +27,9 @@
             android:name=".produk.TambahProdukActivity"
             android:exported="true" />
         <activity
+            android:name=".produk.DataProdukActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
