@@ -14,6 +14,17 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.SearchView
+import androidx.activity.enableEdgeToEdge
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.byatara.penjualandev.adapter.CabangAdapter
+import com.byatara.penjualandev.viewmodel.CabangViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -38,12 +49,18 @@ class TambahProdukActivity : AppCompatActivity() {
     
     private lateinit var btnSimpan: MaterialButton
 
+    private var selectedIdCabang: String = ""
+    private lateinit var cabangViewModel: CabangViewModel
+
     // Firebase
     private val database = FirebaseDatabase.getInstance().getReference("produk")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_tambah_produk)
+
+        cabangViewModel = ViewModelProvider(this).get(CabangViewModel::class.java)
 
         initViews()
         setupListeners()
@@ -131,8 +148,53 @@ class TambahProdukActivity : AppCompatActivity() {
         }
         
         btnPilihCabang.setOnClickListener {
-            Toast.makeText(this, "Pilih Cabang diklik", Toast.LENGTH_SHORT).show()
+            showBottomSheetCabang()
         }
+    }
+
+    private fun showBottomSheetCabang() {
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_cabang, null)
+        bottomSheetDialog.setContentView(view)
+
+        // Make background transparent to show custom rounded corners
+        (view.parent as View).setBackgroundColor(android.graphics.Color.TRANSPARENT)
+
+        val searchView = view.findViewById<SearchView>(R.id.search_view_cabang)
+        val rvCabang = view.findViewById<RecyclerView>(R.id.rv_cabang)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar_cabang)
+
+        val adapter = CabangAdapter(mutableListOf())
+        rvCabang.layoutManager = LinearLayoutManager(this)
+        rvCabang.adapter = adapter
+
+        adapter.setOnItemClickListener { cabang ->
+            selectedIdCabang = cabang.idCabang ?: ""
+            btnPilihCabang.text = cabang.namaCabang
+            bottomSheetDialog.dismiss()
+        }
+
+        cabangViewModel.cabangList.observe(this, Observer { listCabang ->
+            adapter.updateFullList(listCabang)
+        })
+
+        cabangViewModel.isLoading.observe(this, Observer { isLoading ->
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                cabangViewModel.filter(query.orEmpty())
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                cabangViewModel.filter(newText.orEmpty())
+                return true
+            }
+        })
+
+        bottomSheetDialog.show()
     }
 
     private fun calculateHargaJual() {
@@ -203,7 +265,8 @@ class TambahProdukActivity : AppCompatActivity() {
             hargaJual = hargaJual,
             tipeKeuntungan = tipeKeuntungan,
             stok = stok,
-            tanpaBatas = stringTanpaBatas
+            tanpaBatas = stringTanpaBatas,
+            idCabang = selectedIdCabang
         )
     }
 
@@ -214,7 +277,8 @@ class TambahProdukActivity : AppCompatActivity() {
         hargaJual: Int,
         tipeKeuntungan: String,
         stok: Int,
-        tanpaBatas: String
+        tanpaBatas: String,
+        idCabang: String
     ) {
         val idProduk = database.push().key ?: return
 
@@ -226,7 +290,7 @@ class TambahProdukActivity : AppCompatActivity() {
             fotoProduk = "", // Kosong sementara, nanti diisi link gambar
             deskripsiProduk = deskripsi,
             idKategori = "", // Harus diambil dari picker UI
-            idCabang = "",   // Harus diambil dari picker UI
+            idCabang = idCabang,
             stokProduk = stok,
             tanpaBatas = tanpaBatas,
             hargaBeli = hargaBeli,
