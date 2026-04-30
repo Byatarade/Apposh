@@ -12,6 +12,18 @@
     <color name="colorButtonText">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
     <color name="gray_background">#D9D9D9</color>
+    <color name="colorHint">#49454E</color>
+    <color name="colorSectionTitle">#6750A4</color>
+    <color name="colorPageBackground">#FCFAFF</color>
+    <color name="colorToolbarTitle">#1D1B20</color>
+    <color name="colorToolbarSubtitle">#49454E</color>
+    <color name="colorPhotoAreaBg">#E8DEF8</color>
+    <color name="colorPhotoAreaText">#4A4458</color>
+    <color name="colorPhotoBarBg">#4A4458</color>
+    <color name="colorPhotoButtonBg">#E8DEF8</color>
+    <color name="colorPhotoButtonText">#4A4458</color>
+    <color name="colorOutlineStroke">#CAC4D0</color>
+    <color name="colorSubtitleText">#49454E</color>
 
     <!-- Bottom Nav Colors for new design -->
     <color name="bottom_nav_background">#FF000000</color>

@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="Cabang"
+                android:text="Kategori"
                 android:textColor="#333333"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="Kategori"
+                android:text="Cabang"
                 android:textColor="#333333"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -138,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="Cabang"
+                android:text="Stok"
                 android:textColor="#333333"
                 android:textSize="12sp" />
         </LinearLayout>

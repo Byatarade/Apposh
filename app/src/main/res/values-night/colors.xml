@@ -4,5 +4,16 @@
     <color name="colorCardBackground">#1E1E1E</color>
     <color name="colorPrimaryText">#FFFFFF</color>
     <color name="colorSecondaryText">#B3B3B3</color>
-    <color name="colorHint">#666666</color>
+    <color name="colorHint">#999999</color>
+    <color name="colorSectionTitle">#D0BCFF</color>
+    <color name="colorPageBackground">#121212</color>
+    <color name="colorToolbarTitle">#E6E1E5</color>
+    <color name="colorToolbarSubtitle">#CAC4D0</color>
+    <color name="colorPhotoAreaBg">#332D41</color>
+    <color name="colorPhotoAreaText">#D0BCFF</color>
+    <color name="colorPhotoBarBg">#1D1B20</color>
+    <color name="colorPhotoButtonBg">#4A4458</color>
+    <color name="colorPhotoButtonText">#E8DEF8</color>
+    <color name="colorOutlineStroke">#49454F</color>
+    <color name="colorSubtitleText">#CAC4D0</color>
 </resources>
