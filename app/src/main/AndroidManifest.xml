@@ -30,6 +30,12 @@
             android:name=".produk.DataProdukActivity"
             android:exported="true" />
         <activity
+            android:name=".cabang.DataCabangActivity"
+            android:exported="false" />
+        <activity
+            android:name=".cabang.ModCabangActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
