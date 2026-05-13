@@ -6,75 +6,52 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.R
-import com.byatara.penjualandev.kategori.Kategori
+import com.byatara.penjualandev.model.ModelKategori
 import com.google.android.material.chip.Chip
 
 class KategoriAdapter(
-    private val kategoriList: MutableList<Kategori>,
-    private val onItemClick: (Kategori) -> Unit
+    private var kategoriList: List<ModelKategori>
 ) : RecyclerView.Adapter<KategoriAdapter.KategoriViewHolder>() {
 
-    // Full list from Firebase (used as the source of truth for filtering)
-    private var fullList = mutableListOf<Kategori>()
+    private var onItemClickListener: ((ModelKategori) -> Unit)? = null
 
-    inner class KategoriViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvNamaKategori: TextView = itemView.findViewById(R.id.kategori_name)
-        val chipStatus: Chip = itemView.findViewById(R.id.kategori_status)
+    fun setOnItemClickListener(listener: (ModelKategori) -> Unit) {
+        onItemClickListener = listener
+    }
 
-        fun bind(kategori: Kategori) {
-            tvNamaKategori.text = kategori.name
-
-            // Set status chip
-            if (kategori.isActive) {
-                chipStatus.text = "Aktif"
-            } else {
-                chipStatus.text = "Nonaktif"
-            }
-
-            itemView.setOnClickListener {
-                onItemClick(kategori)
-            }
-        }
+    fun updateFullList(newList: List<ModelKategori>) {
+        kategoriList = newList
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KategoriViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_data_kategori, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_data_kategori, parent, false)
         return KategoriViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: KategoriViewHolder, position: Int) {
-        holder.bind(kategoriList[position])
+        val kategori = kategoriList[position]
+        holder.bind(kategori)
     }
 
     override fun getItemCount(): Int = kategoriList.size
 
-    /**
-     * Update the full list (called when Firebase data changes).
-     * This stores a copy of the complete list for filtering purposes.
-     */
-    fun updateFullList(newList: List<Kategori>) {
-        fullList.clear()
-        fullList.addAll(newList)
-    }
+    inner class KategoriViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvName: TextView = itemView.findViewById(R.id.kategori_name)
+        private val chipStatus: Chip = itemView.findViewById(R.id.kategori_status)
 
-    /**
-     * Filter the displayed list based on the search query.
-     * Filters by category name (case-insensitive).
-     * If query is empty, shows all items from the full list.
-     */
-    fun filter(query: String) {
-        kategoriList.clear()
-        if (query.isEmpty()) {
-            kategoriList.addAll(fullList)
-        } else {
-            val lowerQuery = query.lowercase()
-            for (kategori in fullList) {
-                if (kategori.name.lowercase().contains(lowerQuery)) {
-                    kategoriList.add(kategori)
-                }
+        fun bind(kategori: ModelKategori) {
+            tvName.text = kategori.namaKategori
+
+            if (kategori.statusKategori == true) {
+                chipStatus.text = "Aktif"
+            } else {
+                chipStatus.text = "Non Aktif"
+            }
+
+            itemView.setOnClickListener {
+                onItemClickListener?.invoke(kategori)
             }
         }
-        notifyDataSetChanged()
     }
 }

@@ -11,9 +11,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.R
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.byatara.penjualandev.adapter.KategoriAdapter
+import com.byatara.penjualandev.model.ModelKategori
+import com.byatara.penjualandev.viewmodel.DataKategoriViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.*
 
 class DataKategoriActivity : AppCompatActivity() {
 
@@ -22,15 +25,13 @@ class DataKategoriActivity : AppCompatActivity() {
     private lateinit var btnBack: ImageButton
     private lateinit var searchView: SearchView
     private lateinit var adapter: KategoriAdapter
-    private val kategoriList = mutableListOf<Kategori>()
-
-    private val database = FirebaseDatabase.getInstance()
-    private val myRef = database.getReference("kategori")
+    private lateinit var kategoriViewModel: DataKategoriViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_data_kategori)
+        
         val mainView = findViewById<android.view.View>(R.id.main)
         mainView?.let {
             ViewCompat.setOnApplyWindowInsetsListener(it) { v, insets ->
@@ -40,11 +41,13 @@ class DataKategoriActivity : AppCompatActivity() {
             }
         }
 
+        kategoriViewModel = ViewModelProvider(this).get(DataKategoriViewModel::class.java)
+
         initViews()
         setupRecyclerView()
         setupListeners()
         setupSearchView()
-        loadKategoriFromFirebase()
+        observeViewModel()
     }
 
     private fun initViews() {
@@ -55,11 +58,11 @@ class DataKategoriActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = KategoriAdapter(kategoriList) { kategori ->
-            // Navigate to ModKategoriActivity when item is clicked (for edit)
+        adapter = KategoriAdapter(mutableListOf())
+        
+        adapter.setOnItemClickListener { kategori ->
             val intent = Intent(this, ModKategoriActivity::class.java)
-            intent.putExtra("KATEGORI_ID", kategori.firebaseKey)
-            intent.putExtra("KATEGORI_NAME", kategori.name)
+            intent.putExtra("KATEGORI_DATA", kategori)
             intent.putExtra("IS_EDIT", true)
             startActivity(intent)
         }
@@ -68,73 +71,31 @@ class DataKategoriActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    /**
-     * Setup SearchView for real-time filtering.
-     * Data will be filtered as the user types — no need to press Enter.
-     */
     private fun setupSearchView() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // Also filter on submit (when user presses Enter)
-                adapter.filter(query.orEmpty())
+                kategoriViewModel.filter(query.orEmpty())
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Filter in real-time as the user types
-                adapter.filter(newText.orEmpty())
+                kategoriViewModel.filter(newText.orEmpty())
                 return true
             }
         })
     }
 
-    private fun loadKategoriFromFirebase() {
-        myRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                kategoriList.clear()
-
-                for (kategoriSnapshot in snapshot.children) {
-                    val id = kategoriSnapshot.child("id").getValue(String::class.java)
-                    val name = kategoriSnapshot.child("name").getValue(String::class.java)
-                    val isActive = kategoriSnapshot.child("isActive").getValue(Boolean::class.java)
-
-                    // Only add to list if all data is valid (not null)
-                    if (!id.isNullOrEmpty() && !name.isNullOrEmpty() && isActive != null) {
-                        val kategori = Kategori(
-                            id = kategoriList.size + 1,
-                            firebaseKey = kategoriSnapshot.key ?: "",
-                            name = name,
-                            isActive = isActive
-                        )
-                        kategoriList.add(kategori)
-                    }
-                }
-
-                // Store the full list in the adapter for filtering
-                adapter.updateFullList(kategoriList.toList())
-
-                // Re-apply current search filter (if any)
-                val currentQuery = searchView.query?.toString().orEmpty()
-                if (currentQuery.isNotEmpty()) {
-                    adapter.filter(currentQuery)
-                } else {
-                    adapter.notifyDataSetChanged()
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
+    private fun observeViewModel() {
+        kategoriViewModel.kategoriList.observe(this, Observer { listKategori ->
+            adapter.updateFullList(listKategori)
         })
     }
 
     private fun setupListeners() {
-        // Navigate to ModKategoriActivity when FAB is clicked
         fabTambah.setOnClickListener {
             startActivity(Intent(this, ModKategoriActivity::class.java))
         }
 
-        // Back button
         btnBack.setOnClickListener {
             finish()
         }

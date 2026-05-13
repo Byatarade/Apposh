@@ -23,25 +23,31 @@ class DataKategoriViewModel : ViewModel() {
         getData()
     }
 
-    fun getData(){
-    isLoading.value=true
-        val query = myRef.orderByChild("idKategori").limitToLast(100)
-        query.addValueEventListener(object : ValueEventListener {
+    fun getData() {
+        isLoading.value = true
+        myRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 isLoading.value = false
                 if (snapshot.exists()) {
                     val list = ArrayList<ModelKategori>()
-                    for(dataSnapshot in snapshot.children){
+                    for (dataSnapshot in snapshot.children) {
                         val kategori = dataSnapshot.getValue(ModelKategori::class.java)
-                        if (kategori==null){
+                        if (kategori == null) {
                             Log.e("DataKategoriViewModel", "Failed to read value")
-                        }else{
+                        } else {
+                            if (kategori.idKategori.isNullOrEmpty()) {
+                                kategori.idKategori = dataSnapshot.key
+                            }
                             list.add(kategori)
                         }
                     }
                     originalKategoriList.clear()
                     originalKategoriList.addAll(list)
                     kategoriList.value = originalKategoriList
+                    isSearchEmpty.value = list.isEmpty()
+                } else {
+                    kategoriList.value = emptyList()
+                    isSearchEmpty.value = true
                 }
             }
 
@@ -50,5 +56,19 @@ class DataKategoriViewModel : ViewModel() {
                 Log.e("DataKategoriViewModel", "onCancelled", error.toException())
             }
         })
+    }
+
+    fun filter(query: String) {
+        if (query.isEmpty()) {
+            kategoriList.value = originalKategoriList
+            isSearchEmpty.value = originalKategoriList.isEmpty()
+        } else {
+            val lowerQuery = query.lowercase()
+            val filteredList = originalKategoriList.filter { kategori ->
+                kategori.namaKategori?.lowercase()?.contains(lowerQuery) == true
+            }
+            kategoriList.value = filteredList
+            isSearchEmpty.value = filteredList.isEmpty()
+        }
     }
 }

@@ -23,7 +23,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.adapter.CabangAdapter
+import com.byatara.penjualandev.adapter.KategoriAdapter
 import com.byatara.penjualandev.viewmodel.CabangViewModel
+import com.byatara.penjualandev.viewmodel.DataKategoriViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -50,7 +52,9 @@ class TambahProdukActivity : AppCompatActivity() {
     private lateinit var btnSimpan: MaterialButton
 
     private var selectedIdCabang: String = ""
+    private var selectedIdKategori: String = ""
     private lateinit var cabangViewModel: CabangViewModel
+    private lateinit var kategoriViewModel: DataKategoriViewModel
 
     // Firebase
     private val database = FirebaseDatabase.getInstance().getReference("produk")
@@ -61,6 +65,7 @@ class TambahProdukActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tambah_produk)
 
         cabangViewModel = ViewModelProvider(this).get(CabangViewModel::class.java)
+        kategoriViewModel = ViewModelProvider(this).get(DataKategoriViewModel::class.java)
 
         initViews()
         setupListeners()
@@ -142,14 +147,57 @@ class TambahProdukActivity : AppCompatActivity() {
         // Simpan Data
         btnSimpan.setOnClickListener { validsiDataProduk() }
         
-        // Placeholder dialog / intent untuk kategori dan cabang
         btnPilihKategori.setOnClickListener {
-            Toast.makeText(this, "Pilih Kategori diklik", Toast.LENGTH_SHORT).show()
+            showBottomSheetKategori()
         }
         
         btnPilihCabang.setOnClickListener {
             showBottomSheetCabang()
         }
+    }
+
+    private fun showBottomSheetKategori() {
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_kategori, null)
+        bottomSheetDialog.setContentView(view)
+
+        (view.parent as View).setBackgroundColor(android.graphics.Color.TRANSPARENT)
+
+        val searchView = view.findViewById<SearchView>(R.id.search_view_kategori)
+        val rvKategori = view.findViewById<RecyclerView>(R.id.rv_kategori)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar_kategori)
+
+        val adapter = KategoriAdapter(mutableListOf())
+        rvKategori.layoutManager = LinearLayoutManager(this)
+        rvKategori.adapter = adapter
+
+        adapter.setOnItemClickListener { kategori ->
+            selectedIdKategori = kategori.idKategori ?: ""
+            btnPilihKategori.text = kategori.namaKategori
+            bottomSheetDialog.dismiss()
+        }
+
+        kategoriViewModel.kategoriList.observe(this, Observer { listKategori ->
+            adapter.updateFullList(listKategori)
+        })
+
+        kategoriViewModel.isLoading.observe(this, Observer { isLoading ->
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                kategoriViewModel.filter(query.orEmpty())
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                kategoriViewModel.filter(newText.orEmpty())
+                return true
+            }
+        })
+
+        bottomSheetDialog.show()
     }
 
     private fun showBottomSheetCabang() {
@@ -207,7 +255,9 @@ class TambahProdukActivity : AppCompatActivity() {
         var hargaJual = 0.0
 
         if (tipeKeuntungan == "Persentase (%)") {
-            hargaJual = hargaBeli + (hargaBeli * (profit / 100))
+            if (hargaBeli > 0) {
+                hargaJual = hargaBeli + (hargaBeli * (profit / 100))
+            }
         } else {
             // Nominal (Rp)
             hargaJual = hargaBeli + profit
@@ -266,7 +316,8 @@ class TambahProdukActivity : AppCompatActivity() {
             tipeKeuntungan = tipeKeuntungan,
             stok = stok,
             tanpaBatas = stringTanpaBatas,
-            idCabang = selectedIdCabang
+            idCabang = selectedIdCabang,
+            idKategori = selectedIdKategori
         )
     }
 
@@ -278,7 +329,8 @@ class TambahProdukActivity : AppCompatActivity() {
         tipeKeuntungan: String,
         stok: Int,
         tanpaBatas: String,
-        idCabang: String
+        idCabang: String,
+        idKategori: String
     ) {
         val idProduk = database.push().key ?: return
 
@@ -289,7 +341,7 @@ class TambahProdukActivity : AppCompatActivity() {
             namaProduk = namaProduk,
             fotoProduk = "", // Kosong sementara, nanti diisi link gambar
             deskripsiProduk = deskripsi,
-            idKategori = "", // Harus diambil dari picker UI
+            idKategori = idKategori,
             idCabang = idCabang,
             stokProduk = stok,
             tanpaBatas = tanpaBatas,

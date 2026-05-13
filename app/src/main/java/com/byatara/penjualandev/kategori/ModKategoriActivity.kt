@@ -15,6 +15,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.FirebaseDatabase
 
+import com.byatara.penjualandev.model.ModelKategori
+
 class ModKategoriActivity : AppCompatActivity() {
 
     private val database = FirebaseDatabase.getInstance()
@@ -27,6 +29,9 @@ class ModKategoriActivity : AppCompatActivity() {
     private lateinit var status_kategori_auto_complete: AutoCompleteTextView
     private lateinit var button_simpan: Button
 
+    private var isEdit = false
+    private var existingKategori: ModelKategori? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,7 +39,6 @@ class ModKategoriActivity : AppCompatActivity() {
         
         val mainView = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.main)
         if (mainView != null) {
-            // Simpan padding awal dari XML agar tidak bertambah terus setiap kali inset diupdate (misal saat keyboard muncul)
             val initialPaddingLeft = mainView.paddingLeft
             val initialPaddingTop = mainView.paddingTop
             val initialPaddingRight = mainView.paddingRight
@@ -54,6 +58,7 @@ class ModKategoriActivity : AppCompatActivity() {
 
         initViews()
         setupDropdown()
+        checkIntent()
         setupListeners()
     }
 
@@ -67,17 +72,32 @@ class ModKategoriActivity : AppCompatActivity() {
     }
 
     private fun setupDropdown() {
-        // Setup dropdown items for status kategori
         val statusItems = arrayOf("Aktif", "Non Aktif")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, statusItems)
         status_kategori_auto_complete.setAdapter(adapter)
-        
-        // Set default value
         status_kategori_auto_complete.setText("Aktif", false)
     }
 
+    @Suppress("DEPRECATION")
+    private fun checkIntent() {
+        if (intent.hasExtra("IS_EDIT")) {
+            isEdit = intent.getBooleanExtra("IS_EDIT", false)
+        }
+        
+        if (isEdit) {
+            ettambahkategori.text = "Edit Kategori"
+            existingKategori = intent.getParcelableExtra("KATEGORI_DATA")
+            
+            existingKategori?.let {
+                nama_kategori_edit_text.setText(it.namaKategori)
+                status_kategori_auto_complete.setText(if (it.statusKategori == true) "Aktif" else "Non Aktif", false)
+            }
+        } else {
+            ettambahkategori.text = "Tambah Kategori"
+        }
+    }
+
     private fun setupListeners() {
-        // Setup button simpan click listener
         button_simpan.setOnClickListener {
             saveKategori()
         }
@@ -85,9 +105,8 @@ class ModKategoriActivity : AppCompatActivity() {
 
     private fun saveKategori() {
         val namaKategori = nama_kategori_edit_text.text.toString().trim()
-        val statusKategori = status_kategori_auto_complete.text.toString().trim()
+        val statusStr = status_kategori_auto_complete.text.toString().trim()
 
-        // Validation
         if (namaKategori.isEmpty()) {
             nama_kategori_layout.error = "Nama kategori tidak boleh kosong"
             return
@@ -95,31 +114,23 @@ class ModKategoriActivity : AppCompatActivity() {
             nama_kategori_layout.error = null
         }
 
-        if (statusKategori.isEmpty()) {
-            statuskategori.error = "Status kategori harus dipilih"
-            return
-        } else {
-            statuskategori.error = null
-        }
-
-        // Create kategori object
-        val kategoriId = myRef.push().key ?: return
-        val isActive = statusKategori == "Aktif"
+        val isActive = statusStr == "Aktif"
+        val kategoriId = if (isEdit) existingKategori?.idKategori ?: return else myRef.push().key ?: return
         
-        val kategoriData = hashMapOf(
-            "id" to kategoriId,
-            "name" to namaKategori,
-            "isActive" to isActive
+        val modelKategori = ModelKategori(
+            idKategori = kategoriId,
+            namaKategori = namaKategori,
+            statusKategori = isActive
         )
 
-        // Save to Firebase
-        myRef.child(kategoriId).setValue(kategoriData)
+        myRef.child(kategoriId).setValue(modelKategori)
             .addOnSuccessListener {
-                Toast.makeText(this, "Kategori berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                finish() // Close activity and return to DataKategoriActivity
+                val msg = if (isEdit) "Kategori berhasil diupdate" else "Kategori berhasil ditambahkan"
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+                finish()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Gagal menambahkan kategori: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Gagal: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 }
