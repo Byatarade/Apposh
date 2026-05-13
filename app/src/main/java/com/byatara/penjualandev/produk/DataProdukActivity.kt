@@ -95,6 +95,14 @@ class DataProdukActivity : AppCompatActivity() {
             adapter.updateFullList(listProduk)
         })
 
+        produkViewModel.cabangMap.observe(this, Observer { map ->
+            adapter.updateMaps(cabang = map, kategori = null)
+        })
+
+        produkViewModel.kategoriMap.observe(this, Observer { map ->
+            adapter.updateMaps(cabang = null, kategori = map)
+        })
+
         produkViewModel.isLoading.observe(this, Observer { isLoading ->
             if (isLoading) {
                 viewLoading.visibility = View.VISIBLE

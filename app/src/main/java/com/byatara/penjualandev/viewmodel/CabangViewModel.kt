@@ -25,8 +25,8 @@ class CabangViewModel : ViewModel() {
 
     fun getData() {
         isLoading.value = true
-        val query = myRef.orderByChild("idCabang").limitToLast(100)
-        query.addValueEventListener(object : ValueEventListener {
+        // Gunakan limitToLast(100) saja tanpa orderByChild yang spesifik jika tidak perlu filter server-side
+        myRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 isLoading.value = false
                 if (snapshot.exists()) {
@@ -36,6 +36,10 @@ class CabangViewModel : ViewModel() {
                         if (cabang == null) {
                             Log.e("CabangViewModel", "Failed to read value")
                         } else {
+                            // Jika idCabang di dalam object kosong, gunakan key dari Firebase
+                            if (cabang.idCabang.isNullOrEmpty()) {
+                                cabang.idCabang = dataSnapshot.key
+                            }
                             list.add(cabang)
                         }
                     }

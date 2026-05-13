@@ -27,6 +27,10 @@ class ProdukAdapter(
     // Simpan list penuh untuk keperluan filter
     private val fullList = mutableListOf<ModelProduk>()
 
+    // Map untuk lookup nama dari ID
+    private var mapCabang = mapOf<String, String>()
+    private var mapKategori = mapOf<String, String>()
+
     // Listener klik item
     interface OnItemClickListener {
         fun onItemClicked(produk: ModelProduk)
@@ -36,6 +40,15 @@ class ProdukAdapter(
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
+    }
+
+    /**
+     * Update map untuk translasi ID ke Nama.
+     */
+    fun updateMaps(cabang: Map<String, String>?, kategori: Map<String, String>?) {
+        cabang?.let { this.mapCabang = it }
+        kategori?.let { this.mapKategori = it }
+        notifyDataSetChanged()
     }
 
     // ---------------------------------------------------------------
@@ -94,10 +107,14 @@ class ProdukAdapter(
             }
 
             // ── Info Cabang (ll_info_1) ──────────────────────────────
-            tvCabang.text = produk.idCabang?.ifEmpty { "Semua Cabang" } ?: "Semua Cabang"
+            val idCabang = produk.idCabang ?: ""
+            val namaCabang = mapCabang[idCabang] ?: idCabang.ifEmpty { "Semua Cabang" }
+            tvCabang.text = namaCabang
 
             // ── Info Kategori (ll_info_2) ────────────────────────────
-            tvKategori.text = produk.idKategori?.ifEmpty { "-" } ?: "-"
+            val idKategori = produk.idKategori ?: ""
+            val namaKategori = mapKategori[idKategori] ?: idKategori.ifEmpty { "-" }
+            tvKategori.text = namaKategori
 
             // ── Info Stok (ll_info_3) ────────────────────────────────
             val stok = produk.stokProduk ?: 0

@@ -13,9 +13,15 @@ class ProdukViewModel : ViewModel() {
 
     private val database = FirebaseDatabase.getInstance()
     private val myRef = database.getReference("produk")
+    private val cabangRef = database.getReference("cabang")
+    private val kategoriRef = database.getReference("kategori")
 
     // LiveData list produk yang akan di-observe oleh Activity/Fragment
     val produkList = MutableLiveData<List<ModelProduk>>()
+    
+    // LiveData untuk mapping ID ke Nama
+    val cabangMap = MutableLiveData<Map<String, String>>()
+    val kategoriMap = MutableLiveData<Map<String, String>>()
 
     // Menyimpan list asli untuk keperluan filtering
     private var originalProdukList = ArrayList<ModelProduk>()
@@ -25,7 +31,43 @@ class ProdukViewModel : ViewModel() {
     val isSearchEmpty = MutableLiveData<Boolean>()
 
     init {
+        fetchCabang()
+        fetchKategori()
         getData()
+    }
+
+    private fun fetchCabang() {
+        cabangRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val map = mutableMapOf<String, String>()
+                for (ds in snapshot.children) {
+                    val id = ds.child("idCabang").getValue(String::class.java) ?: ds.key
+                    val nama = ds.child("namaCabang").getValue(String::class.java)
+                    if (id != null && nama != null) {
+                        map[id] = nama
+                    }
+                }
+                cabangMap.value = map
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun fetchKategori() {
+        kategoriRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val map = mutableMapOf<String, String>()
+                for (ds in snapshot.children) {
+                    val id = ds.child("idKategori").getValue(String::class.java) ?: ds.key
+                    val nama = ds.child("namaKategori").getValue(String::class.java)
+                    if (id != null && nama != null) {
+                        map[id] = nama
+                    }
+                }
+                kategoriMap.value = map
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     /**
