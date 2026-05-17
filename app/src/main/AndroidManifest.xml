@@ -42,6 +42,9 @@
             android:name=".pegawai.ModPegawaiActivity"
             android:exported="false" />
         <activity
+            android:name=".TransaksiActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

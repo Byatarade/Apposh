@@ -48,6 +48,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<androidx.cardview.widget.CardView>(R.id.cardpegawai).setOnClickListener {
             startActivity(android.content.Intent(this, com.byatara.penjualandev.pegawai.DataPegawaiActivity::class.java))
         }
+
+        // Navigate to TransaksiActivity (Mockup)
+        findViewById<android.widget.LinearLayout>(R.id.btn_transaksi).setOnClickListener {
+            startActivity(android.content.Intent(this, com.byatara.penjualandev.TransaksiActivity::class.java))
+        }
     }
 
     private fun setupBottomNavigation() {
