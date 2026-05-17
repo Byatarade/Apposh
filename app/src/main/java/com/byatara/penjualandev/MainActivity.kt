@@ -61,43 +61,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_analytics, R.id.navigation_clock -> {
-                    startActivity(android.content.Intent(this, HistoriActivity::class.java))
-                    false // Return false so tab active tetap di home, karena membuka activity baru
-                }
-                R.id.exit -> {
-                    showExitDialog()
-                    false
-                }
-                else -> true
-            }
-        }
-    }
-
-    private fun showExitDialog() {
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.activity_exit)
-        
-        // Make the background transparent so the CardView corners show properly
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        val btnCancel = dialog.findViewById<Button>(R.id.btnCancel)
-        val btnConfirm = dialog.findViewById<Button>(R.id.btnConfirm)
-
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnConfirm.setOnClickListener {
-            dialog.dismiss()
-            finishAffinity() // Closes the application
-        }
-
-        dialog.show()
+        com.byatara.penjualandev.utils.BottomNavigationHelper.setup(this, R.id.navigation_home)
     }
 }

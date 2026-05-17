@@ -62,8 +62,11 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingTop="8dp"
-            android:paddingBottom="32dp"
+            android:paddingBottom="100dp"
             android:visibility="gone"/>
 
     </FrameLayout>
+
+    <!-- Reusable Bottom Navigation Component -->
+    <include layout="@layout/layout_bottom_navigation" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

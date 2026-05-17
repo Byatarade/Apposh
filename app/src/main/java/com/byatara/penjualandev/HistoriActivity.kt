@@ -53,6 +53,9 @@ class HistoriActivity : AppCompatActivity() {
         rvHistori.layoutManager = LinearLayoutManager(this)
         rvHistori.adapter = adapter
 
+        // Setup Bottom Navigation using reusable helper
+        com.byatara.penjualandev.utils.BottomNavigationHelper.setup(this, R.id.navigation_analytics)
+
         fetchHistori()
     }
 
