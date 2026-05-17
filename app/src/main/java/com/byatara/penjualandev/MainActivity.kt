@@ -43,6 +43,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<androidx.cardview.widget.CardView>(R.id.cardcabang).setOnClickListener {
             startActivity(android.content.Intent(this, com.byatara.penjualandev.cabang.DataCabangActivity::class.java))
         }
+
+        // Navigate to DataPegawaiActivity
+        findViewById<androidx.cardview.widget.CardView>(R.id.cardpegawai).setOnClickListener {
+            startActivity(android.content.Intent(this, com.byatara.penjualandev.pegawai.DataPegawaiActivity::class.java))
+        }
     }
 
     private fun setupBottomNavigation() {
