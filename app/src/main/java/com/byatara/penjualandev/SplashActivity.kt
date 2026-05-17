@@ -1,12 +1,17 @@
 package com.byatara.penjualandev
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
-import android.widget.LinearLayout
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -32,27 +37,54 @@ class SplashActivity : AppCompatActivity() {
         }
 
         // Referensi View
-        val imgReceipt = findViewById<LinearLayout>(R.id.img_receipt)
+        val cartContainer = findViewById<FrameLayout>(R.id.cart_container)
+        val imgCart = findViewById<ImageView>(R.id.img_cart)
         val tvAppName = findViewById<TextView>(R.id.tv_app_name)
         val tvSubtitle = findViewById<TextView>(R.id.tv_subtitle)
+        
+        val speedLine1 = findViewById<View>(R.id.speed_line_1)
+        val speedLine2 = findViewById<View>(R.id.speed_line_2)
+        val speedLine3 = findViewById<View>(R.id.speed_line_3)
 
-        // Setup Awal Animasi (Sembunyikan Struk di bawah printer)
-        imgReceipt.translationY = 100f
-        imgReceipt.alpha = 0f
+        // Setup Awal Animasi
+        cartContainer.translationX = -800f // Mulai dari luar layar sebelah kiri
         
         tvAppName.translationY = 30f
+        tvAppName.alpha = 0f
         tvSubtitle.translationY = 30f
+        tvSubtitle.alpha = 0f
 
-        // Jalankan Animasi Struk Keluar dari Printer
-        imgReceipt.animate()
-            .translationY(0f)
-            .alpha(1f)
-            .setDuration(1200)
-            .setInterpolator(OvershootInterpolator(1.2f))
-            .setStartDelay(500)
+        // 1. Animasi Keranjang Meluncur Cepat (Ngebut) dari Kiri ke Tengah
+        cartContainer.animate()
+            .translationX(0f)
+            .setDuration(800)
+            .setInterpolator(OvershootInterpolator(1.5f)) // Memantul saat ngerem
+            .setStartDelay(300)
+            .withEndAction {
+                // Efek "mesin menyala/bergetar" (Wobble) saat keranjang berhenti
+                val wobble = PropertyValuesHolder.ofFloat(View.ROTATION, 0f, -3f, 3f, 0f)
+                val wobbleAnim = ObjectAnimator.ofPropertyValuesHolder(imgCart, wobble)
+                wobbleAnim.duration = 400
+                wobbleAnim.repeatCount = ValueAnimator.INFINITE
+                wobbleAnim.start()
+            }
             .start()
 
-        // Jalankan Animasi Teks Muncul
+        // 2. Animasi Garis Angin (Speed Lines) untuk Efek Ngebut
+        fun animateSpeedLine(line: View, durationMs: Long, delayMs: Long) {
+            val windAnim = ObjectAnimator.ofFloat(line, View.TRANSLATION_X, 800f, -800f)
+            windAnim.duration = durationMs
+            windAnim.startDelay = delayMs
+            windAnim.interpolator = LinearInterpolator()
+            windAnim.repeatCount = ValueAnimator.INFINITE
+            windAnim.start()
+        }
+
+        animateSpeedLine(speedLine1, 600, 400)
+        animateSpeedLine(speedLine2, 500, 550)
+        animateSpeedLine(speedLine3, 700, 600)
+
+        // 3. Jalankan Animasi Teks Muncul
         tvAppName.animate()
             .translationY(0f)
             .alpha(1f)
@@ -74,6 +106,6 @@ class SplashActivity : AppCompatActivity() {
             
             // Efek transisi antar activity yang halus (Fade In)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }, 2800)
+        }, 3200)
     }
 }

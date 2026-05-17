@@ -22,6 +22,12 @@
 
     <style name="Theme.PenjualanDev" parent="Base.Theme.PenjualanDev" />
 
+    <!-- Splash Screen Theme untuk mencegah kilatan layar putih -->
+    <style name="Theme.PenjualanDev.Splash" parent="Theme.PenjualanDev">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+
     <!-- Dialog Theme -->
     <style name="Theme.PenjualanDev.Dialog" parent="Theme.Material3.Light.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
