@@ -5,14 +5,16 @@
     android:id="@+id/card_produk"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="12dp"
+    android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="6dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="?attr/colorSurfaceContainer"
-    app:cardCornerRadius="14dp"
-    app:cardElevation="4dp"
-    app:strokeWidth="0dp">
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="?attr/colorOutlineStroke"
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -149,14 +151,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Aktif"
-            android:textSize="11sp"
-            app:chipBackgroundColor="@android:color/transparent"
+            android:textColor="?attr/colorOnSecondary"
+            app:chipBackgroundColor="?attr/colorSecondary"
             app:chipIcon="@drawable/tick"
+            app:chipIconTint="?attr/colorPrimary"
             app:chipIconVisible="true"
-            app:chipMinHeight="32dp"
-            app:chipStrokeColor="#4CAF50"
-            app:chipStrokeWidth="1dp"
-            app:iconStartPadding="6dp"
+            app:chipStrokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/card_image" />
 
