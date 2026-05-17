@@ -52,6 +52,7 @@ class TransaksiActivity : AppCompatActivity() {
                         isCheckable = true
                         isChecked = true
                     }
+                    styleChip(allChip)
                     chipGroup.addView(allChip)
 
                     // Add other categories from Database
@@ -66,6 +67,7 @@ class TransaksiActivity : AppCompatActivity() {
                                 text = kategori.namaKategori
                                 isCheckable = true
                             }
+                            styleChip(chip)
                             chipGroup.addView(chip)
                         }
                     }
@@ -77,5 +79,33 @@ class TransaksiActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun styleChip(chip: com.google.android.material.chip.Chip) {
+        val states = arrayOf(
+            intArrayOf(android.R.attr.state_checked),
+            intArrayOf(-android.R.attr.state_checked)
+        )
+
+        // Light Emerald Green background when checked, transparent when unchecked
+        val backgroundColors = intArrayOf(
+            androidx.core.content.ContextCompat.getColor(this, R.color.colorSecondary),
+            android.graphics.Color.TRANSPARENT
+        )
+        chip.chipBackgroundColor = android.content.res.ColorStateList(states, backgroundColors)
+
+        // Dark Emerald Green text when checked, grey when unchecked
+        val textColors = intArrayOf(
+            androidx.core.content.ContextCompat.getColor(this, R.color.colorOnSecondary),
+            androidx.core.content.ContextCompat.getColor(this, R.color.colorSecondaryText)
+        )
+        chip.setTextColor(android.content.res.ColorStateList(states, textColors))
+
+        // No stroke when checked, thin outline stroke when unchecked
+        val strokeColors = intArrayOf(
+            android.graphics.Color.TRANSPARENT,
+            androidx.core.content.ContextCompat.getColor(this, R.color.colorOutlineStroke)
+        )
+        chip.chipStrokeColor = android.content.res.ColorStateList(states, strokeColors)
+        chip.chipStrokeWidth = resources.displayMetrics.density * 1f // 1dp
     }
 }
