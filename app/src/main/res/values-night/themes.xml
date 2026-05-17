@@ -1,19 +1,23 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme for dark theme. -->
-    <style name="Base.Theme.PenjualanDev" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Enforce strict light mode by pointing to the exact same theme -->
+    <style name="Base.Theme.PenjualanDev" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/colorAccent</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/colorButtonBackground</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
         <!-- Customize your theme here. -->
         <item name="colorSurface">@color/colorScreenBackground</item>
         <item name="colorOnSurface">@color/colorPrimaryText</item>
         <item name="colorSurfaceContainer">@color/colorCardBackground</item>
+        <item name="colorSurfaceContainerHigh">@color/white</item>
         <item name="colorOnSurfaceVariant">@color/colorSecondaryText</item>
+        <item name="colorError">@color/red</item>
+        <!-- Button Styles -->
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
     </style>
     <style name="Theme.PenjualanDev" parent="Base.Theme.PenjualanDev" />
 </resources>
