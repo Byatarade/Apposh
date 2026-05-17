@@ -91,33 +91,48 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Main Content (Product List Mockup) -->
-    <androidx.core.widget.NestedScrollView
+    <!-- Main Content (Product List - Real Data) -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:paddingBottom="100dp"
-        android:clipToPadding="false">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!-- Loading State -->
+        <ProgressBar
+            android:id="@+id/view_loading"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="?attr/colorPrimary"
+            android:visibility="visible" />
+
+        <!-- Empty State -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/layout_empty"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="8dp">
-
-            <!-- Mock Product 1 -->
-            <include layout="@layout/item_data_produk" />
-            <!-- Mock Product 2 -->
-            <include layout="@layout/item_data_produk" />
-            <!-- Mock Product 3 -->
-            <include layout="@layout/item_data_produk" />
-            <!-- Mock Product 4 -->
-            <include layout="@layout/item_data_produk" />
-            <!-- Mock Product 5 -->
-            <include layout="@layout/item_data_produk" />
-
+            android:gravity="center"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tidak ada produk ditemukan"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+
+        <!-- RecyclerView Produk -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_produk_transaksi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="100dp"
+            android:clipToPadding="false"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <!-- Bottom Cart Bar (Bento Style) -->
     <com.google.android.material.card.MaterialCardView

@@ -100,12 +100,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Summary Cards (Bento Style) -->
+            <!-- Summary Stats Cards (Real data from Firebase) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingHorizontal="16dp"
+                android:paddingTop="8dp"
                 android:paddingBottom="16dp"
                 android:baselineAligned="false">
                 
@@ -119,7 +120,6 @@
                     app:strokeWidth="1dp"
                     app:strokeColor="@color/colorOutlineStroke"
                     app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
-                    
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -128,14 +128,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Transaksi"
+                            android:text="Total Produk"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp" />
                         <TextView
+                            android:id="@+id/tv_total_produk"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="142"
+                            android:text="--"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -152,7 +153,6 @@
                     app:strokeWidth="1dp"
                     app:strokeColor="@color/colorOutlineStroke"
                     app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
-                    
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -161,16 +161,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Pendapatan"
+                            android:text="Total Nilai Stok"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp" />
                         <TextView
+                            android:id="@+id/tv_total_nilai"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Rp 4.5M"
+                            android:text="--"
                             android:textColor="?attr/colorPrimary"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -181,17 +182,54 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="Riwayat Terbaru"
+                android:text="Daftar Produk"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- Mock Data Items -->
-            <include layout="@layout/item_data_produk" />
-            <include layout="@layout/item_data_produk" />
-            <include layout="@layout/item_data_produk" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!-- RecyclerView & States (outside scroll, full height) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="370dp">
+
+        <ProgressBar
+            android:id="@+id/view_loading"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="24dp"
+            android:indeterminateTint="?attr/colorPrimary"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/layout_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tidak ada data produk"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_laporan_produk"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="24dp"
+            android:clipToPadding="false"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
