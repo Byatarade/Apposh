@@ -45,6 +45,9 @@
             android:name=".TransaksiActivity"
             android:exported="false" />
         <activity
+            android:name=".LaporanActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

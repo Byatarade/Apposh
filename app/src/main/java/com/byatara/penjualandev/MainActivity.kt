@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<android.widget.LinearLayout>(R.id.btn_transaksi).setOnClickListener {
             startActivity(android.content.Intent(this, com.byatara.penjualandev.TransaksiActivity::class.java))
         }
+
+        // Navigate to LaporanActivity (Mockup)
+        findViewById<android.widget.LinearLayout>(R.id.btn_laporan).setOnClickListener {
+            startActivity(android.content.Intent(this, com.byatara.penjualandev.LaporanActivity::class.java))
+        }
     }
 
     private fun setupBottomNavigation() {
