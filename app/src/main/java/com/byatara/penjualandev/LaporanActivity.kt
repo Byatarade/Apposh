@@ -27,5 +27,29 @@ class LaporanActivity : AppCompatActivity() {
         toolbar?.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        // Setup Date Range Dropdown items
+        setupDateDropdown()
+    }
+
+    private fun setupDateDropdown() {
+        val spinnerTanggal = findViewById<android.widget.AutoCompleteTextView>(R.id.spinner_tanggal) ?: return
+        
+        val dateRanges = arrayOf(
+            "Hari Ini",
+            "Kemarin",
+            "Minggu Ini",
+            "Bulan Ini (01 Nov - 30 Nov 2026)",
+            "Kustom Rentang Waktu..."
+        )
+
+        val adapter = android.widget.ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            dateRanges
+        )
+        
+        spinnerTanggal.setAdapter(adapter)
+    }
     }
 }
