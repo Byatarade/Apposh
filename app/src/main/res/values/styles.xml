@@ -1,7 +1,7 @@
 <resources>
 
     <style name="App.BottomNavigation.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/bottom_nav_selected_item_background</item>
+        <item name="android:color">@android:color/transparent</item>
     </style>
 
     <style name="App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
