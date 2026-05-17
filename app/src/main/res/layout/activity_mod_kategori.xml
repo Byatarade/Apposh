@@ -11,13 +11,12 @@
 
     <TextView
         android:id="@+id/ettambahkategori"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Tambah Kategori"
-        android:textAlignment="center"
         android:textColor="?attr/colorOnSurface"
-        android:textSize="25sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +65,8 @@
 
     <Button
         android:id="@+id/button_simpan"
-        android:layout_width="200dp"
+        style="@style/Widget.App.Button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Tambahkan"
