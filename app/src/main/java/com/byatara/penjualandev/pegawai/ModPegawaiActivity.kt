@@ -165,6 +165,14 @@ class ModPegawaiActivity : AppCompatActivity() {
         myRef.child(pegawaiId).setValue(modelPegawai)
             .addOnSuccessListener {
                 val msg = if (isEdit) "Berhasil mengupdate pegawai" else "Berhasil menambahkan pegawai"
+                
+                // Catat log histori aktivitas ke Firebase
+                com.byatara.penjualandev.utils.CatatanHistori.catat(
+                    judul = if (isEdit) "Pegawai Diubah" else "Pegawai Ditambahkan",
+                    deskripsi = if (isEdit) "Pegawai '${existingPegawai?.namaPegawai}' diubah menjadi '${namaPegawai}' (${jabatanPegawai})" else "Menambahkan pegawai baru '${namaPegawai}' sebagai ${jabatanPegawai}",
+                    tipe = "pegawai"
+                )
+
                 Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
                 finish()
             }

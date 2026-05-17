@@ -126,6 +126,14 @@ class ModKategoriActivity : AppCompatActivity() {
         myRef.child(kategoriId).setValue(modelKategori)
             .addOnSuccessListener {
                 val msg = if (isEdit) "Kategori berhasil diupdate" else "Kategori berhasil ditambahkan"
+                
+                // Catat log histori aktivitas ke Firebase
+                com.byatara.penjualandev.utils.CatatanHistori.catat(
+                    judul = if (isEdit) "Kategori Diubah" else "Kategori Ditambahkan",
+                    deskripsi = if (isEdit) "Kategori '${existingKategori?.namaKategori}' diubah menjadi '${namaKategori}'" else "Menambahkan kategori baru '${namaKategori}'",
+                    tipe = "kategori"
+                )
+
                 Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
                 finish()
             }

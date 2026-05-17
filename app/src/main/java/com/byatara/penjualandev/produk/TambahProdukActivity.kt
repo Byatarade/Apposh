@@ -359,6 +359,13 @@ class TambahProdukActivity : AppCompatActivity() {
 
         database.child(idProduk).setValue(modelProduk)
             .addOnSuccessListener {
+                // Catat log histori aktivitas ke Firebase
+                com.byatara.penjualandev.utils.CatatanHistori.catat(
+                    judul = "Produk Ditambahkan",
+                    deskripsi = "Produk baru '$namaProduk' berhasil didaftarkan ke sistem",
+                    tipe = "produk"
+                )
+
                 Toast.makeText(this, "Produk berhasil ditambahkan", Toast.LENGTH_SHORT).show()
                 finish() // Kembali ke activity sebelumnya
             }

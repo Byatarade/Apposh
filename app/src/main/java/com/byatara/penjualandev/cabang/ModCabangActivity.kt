@@ -165,6 +165,14 @@ class ModCabangActivity : AppCompatActivity() {
         myRef.child(cabangId).setValue(modelCabang)
             .addOnSuccessListener {
                 val msg = if (isEdit) "Berhasil mengupdate cabang" else "Berhasil menambahkan cabang"
+                
+                // Catat log histori aktivitas ke Firebase
+                com.byatara.penjualandev.utils.CatatanHistori.catat(
+                    judul = if (isEdit) "Cabang Diubah" else "Cabang Ditambahkan",
+                    deskripsi = if (isEdit) "Cabang '${existingCabang?.namaCabang}' diubah menjadi '${namaCabang}'" else "Menambahkan cabang baru '${namaCabang}'",
+                    tipe = "cabang"
+                )
+
                 Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
                 finish()
             }
