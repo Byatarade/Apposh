@@ -65,11 +65,12 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@android:drawable/ic_menu_search"
-                    app:tint="?attr/colorOnSurface" />
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:iconifiedByDefault="true"
+                    app:queryHint="Cari layanan..." />
             </LinearLayout>
 
             <!-- Master Dashboard Card (Wadah Saldo hingga Quick Stats) -->
