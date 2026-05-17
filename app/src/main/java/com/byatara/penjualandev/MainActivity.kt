@@ -64,9 +64,13 @@ class MainActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.navigation_analytics, R.id.navigation_clock -> {
+                    startActivity(android.content.Intent(this, HistoriActivity::class.java))
+                    false // Return false so tab active tetap di home, karena membuka activity baru
+                }
                 R.id.exit -> {
                     showExitDialog()
-                    false // Return false so the item isn't selected visually as "active"
+                    false
                 }
                 else -> true
             }

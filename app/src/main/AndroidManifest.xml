@@ -48,6 +48,9 @@
             android:name=".LaporanActivity"
             android:exported="false" />
         <activity
+            android:name=".HistoriActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
