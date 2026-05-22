@@ -61,9 +61,8 @@ class DataPegawaiActivity : AppCompatActivity() {
         adapter = PegawaiAdapter(mutableListOf())
         
         adapter.setOnItemClickListener { pegawai ->
-            val intent = Intent(this, ModPegawaiActivity::class.java)
+            val intent = Intent(this, DetailPegawaiActivity::class.java)
             intent.putExtra("PEGAWAI_DATA", pegawai)
-            intent.putExtra("IS_EDIT", true)
             startActivity(intent)
         }
 

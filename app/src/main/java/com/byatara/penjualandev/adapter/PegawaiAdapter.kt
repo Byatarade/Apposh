@@ -7,8 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelPegawai
-import com.google.android.material.chip.Chip
-
+import com.google.android.material.button.MaterialButton
+import android.widget.Toast
+import android.content.Intent
+import android.net.Uri
 class PegawaiAdapter(
     private var pegawaiList: List<ModelPegawai>
 ) : RecyclerView.Adapter<PegawaiAdapter.PegawaiViewHolder>() {
@@ -37,20 +39,37 @@ class PegawaiAdapter(
     override fun getItemCount(): Int = pegawaiList.size
 
     inner class PegawaiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvName: TextView = itemView.findViewById(R.id.pegawai_name)
-        private val tvJabatan: TextView = itemView.findViewById(R.id.pegawai_jabatan)
-        private val chipStatus: Chip = itemView.findViewById(R.id.pegawai_status)
+        private val tvName: TextView = itemView.findViewById(R.id.tv_pegawai_name)
+        private val tvAddress: TextView = itemView.findViewById(R.id.tv_pegawai_address)
+        private val tvPhone: TextView = itemView.findViewById(R.id.tv_pegawai_phone)
+        private val tvCabang: TextView = itemView.findViewById(R.id.tv_pegawai_cabang)
+        private val tvJoined: TextView = itemView.findViewById(R.id.tv_pegawai_joined)
+        
+        private val btnHubungi: MaterialButton = itemView.findViewById(R.id.btn_hubungi)
+        private val btnLihat: MaterialButton = itemView.findViewById(R.id.btn_lihat)
 
         fun bind(pegawai: ModelPegawai) {
-            tvName.text = pegawai.namaPegawai
-            tvJabatan.text = pegawai.jabatanPegawai
+            tvName.text = pegawai.namaPegawai ?: "-"
+            tvAddress.text = pegawai.alamatPegawai ?: "-"
+            tvPhone.text = pegawai.teleponPegawai ?: "-"
+            tvCabang.text = pegawai.idCabang ?: "-"
+            tvJoined.text = "Bergabung pada ${pegawai.tanggalBergabung ?: "-"}"
 
-            if (pegawai.statusPegawai == true) {
-                chipStatus.text = "Aktif"
-            } else {
-                chipStatus.text = "Non Aktif"
+            btnHubungi.setOnClickListener {
+                val phone = pegawai.teleponPegawai
+                if (!phone.isNullOrEmpty()) {
+                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
+                    itemView.context.startActivity(intent)
+                } else {
+                    Toast.makeText(itemView.context, "Nomor telepon tidak tersedia", Toast.LENGTH_SHORT).show()
+                }
             }
 
+            btnLihat.setOnClickListener {
+                onItemClickListener?.invoke(pegawai)
+            }
+            
+            // Allow clicking the card itself to also view
             itemView.setOnClickListener {
                 onItemClickListener?.invoke(pegawai)
             }

@@ -8,7 +8,10 @@ data class ModelPegawai(
     var namaPegawai: String? = null,
     var jabatanPegawai: String? = null,
     var teleponPegawai: String? = null,
-    var statusPegawai: Boolean? = null
+    var statusPegawai: Boolean? = null,
+    var alamatPegawai: String? = null,
+    var idCabang: String? = null,
+    var tanggalBergabung: String? = null
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -16,7 +19,10 @@ data class ModelPegawai(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readByte() != 0.toByte()
+        parcel.readByte() != 0.toByte(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -25,6 +31,9 @@ data class ModelPegawai(
         parcel.writeString(jabatanPegawai)
         parcel.writeString(teleponPegawai)
         parcel.writeByte(if (statusPegawai == true) 1 else 0)
+        parcel.writeString(alamatPegawai)
+        parcel.writeString(idCabang)
+        parcel.writeString(tanggalBergabung)
     }
 
     override fun describeContents(): Int = 0
