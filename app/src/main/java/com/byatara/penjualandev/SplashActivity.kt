@@ -99,9 +99,16 @@ class SplashActivity : AppCompatActivity() {
             .setStartDelay(1200)
             .start()
 
-        // Pindah ke MainActivity setelah animasi selesai
+        // Pindah ke MainActivity atau LoginActivity setelah animasi selesai
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            val currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+            
+            val intent = if (currentUser != null) {
+                Intent(this, MainActivity::class.java)
+            } else {
+                Intent(this, LoginActivity::class.java)
+            }
+            startActivity(intent)
             finish()
             
             // Efek transisi antar activity yang halus (Fade In)
