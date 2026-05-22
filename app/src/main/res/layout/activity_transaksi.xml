@@ -161,17 +161,19 @@
                 android:orientation="vertical">
                 
                 <TextView
+                    android:id="@+id/tv_cart_items"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3 Item Terpilih"
+                    android:text="0 Item Terpilih"
                     android:textColor="?attr/colorOutline"
                     android:textSize="12sp"
                     android:textStyle="bold" />
                 
                 <TextView
+                    android:id="@+id/tv_cart_total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rp 45.000"
+                    android:text="Rp 0"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -179,6 +181,7 @@
 
             <!-- Pay Button -->
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_pay"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

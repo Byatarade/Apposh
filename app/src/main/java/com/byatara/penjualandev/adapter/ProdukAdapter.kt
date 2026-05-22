@@ -31,9 +31,14 @@ class ProdukAdapter(
     private var mapCabang = mapOf<String, String>()
     private var mapKategori = mapOf<String, String>()
 
+    private var isTransactionMode = false
+    private var cartMap = mapOf<String, Int>()
+
     // Listener klik item
     interface OnItemClickListener {
         fun onItemClicked(produk: ModelProduk)
+        fun onPlusClicked(produk: ModelProduk) {}
+        fun onMinusClicked(produk: ModelProduk) {}
     }
 
     private var listener: OnItemClickListener? = null
@@ -48,6 +53,16 @@ class ProdukAdapter(
     fun updateMaps(cabang: Map<String, String>?, kategori: Map<String, String>?) {
         cabang?.let { this.mapCabang = it }
         kategori?.let { this.mapKategori = it }
+        notifyDataSetChanged()
+    }
+
+    fun setTransactionMode(isTransaction: Boolean) {
+        this.isTransactionMode = isTransaction
+        notifyDataSetChanged()
+    }
+
+    fun updateCartMap(newCartMap: Map<String, Int>) {
+        this.cartMap = newCartMap
         notifyDataSetChanged()
     }
 
@@ -81,6 +96,12 @@ class ProdukAdapter(
         val tvCabang: TextView = llInfo1.getChildAt(1) as TextView
         val tvKategori: TextView = llInfo2.getChildAt(1) as TextView
         val tvStok: TextView = llInfo3.getChildAt(1) as TextView
+
+        // Cart Controls
+        val llCartControls: LinearLayout = itemView.findViewById(R.id.ll_cart_controls)
+        val btnMinus: TextView = itemView.findViewById(R.id.btn_minus)
+        val btnPlus: TextView = itemView.findViewById(R.id.btn_plus)
+        val tvCartQty: TextView = itemView.findViewById(R.id.tv_cart_qty)
 
         /**
          * Ikat data ModelProduk ke semua komponen layout.
@@ -136,7 +157,22 @@ class ProdukAdapter(
                 chipStatus.setChipIconResource(R.drawable.tick)
             }
 
-            // ── Klik item ────────────────────────────────────────────
+            // ── Cart Controls / Klik item ────────────────────────────
+            if (isTransactionMode) {
+                llCartControls.visibility = View.VISIBLE
+                val qty = cartMap[produk.idProduk] ?: 0
+                tvCartQty.text = qty.toString()
+
+                btnMinus.setOnClickListener {
+                    listener?.onMinusClicked(produk)
+                }
+                btnPlus.setOnClickListener {
+                    listener?.onPlusClicked(produk)
+                }
+            } else {
+                llCartControls.visibility = View.GONE
+            }
+
             itemView.setOnClickListener {
                 listener?.onItemClicked(produk)
             }

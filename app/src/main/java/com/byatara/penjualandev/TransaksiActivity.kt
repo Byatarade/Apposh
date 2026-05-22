@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
+import android.content.Intent
+import com.google.android.material.button.MaterialButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -33,6 +37,12 @@ class TransaksiActivity : AppCompatActivity() {
 
     private lateinit var adapter: ProdukAdapter
     private lateinit var produkViewModel: ProdukViewModel
+
+    private lateinit var tvCartItems: TextView
+    private lateinit var tvCartTotal: TextView
+    private lateinit var btnPay: MaterialButton
+
+    private val cartMap = mutableMapOf<String, Pair<ModelProduk, Int>>() // idProduk -> Pair(Produk, Quantity)
 
     // Map idKategori -> namaKategori, used for chip filtering
     private val idKategoriMap = mutableMapOf<String, String>() // chipText -> idKategori
@@ -74,13 +84,40 @@ class TransaksiActivity : AppCompatActivity() {
         layoutEmpty = findViewById(R.id.layout_empty)
         chipGroup = findViewById(R.id.chip_group_kategori)
         searchView = findViewById(R.id.search_produk)
+
+        tvCartItems = findViewById(R.id.tv_cart_items)
+        tvCartTotal = findViewById(R.id.tv_cart_total)
+        btnPay = findViewById(R.id.btn_pay)
+
+        btnPay.setOnClickListener {
+            handlePayment()
+        }
     }
 
     private fun setupRecyclerView() {
         adapter = ProdukAdapter(mutableListOf())
+        adapter.setTransactionMode(true)
         adapter.setOnItemClickListener(object : ProdukAdapter.OnItemClickListener {
             override fun onItemClicked(produk: ModelProduk) {
-                // TODO: tambah ke keranjang
+                // Ignore general item click in transaction mode, just let them use + and -
+            }
+
+            override fun onPlusClicked(produk: ModelProduk) {
+                val idProduk = produk.idProduk ?: return
+                val currentQty = cartMap[idProduk]?.second ?: 0
+                cartMap[idProduk] = Pair(produk, currentQty + 1)
+                updateCartUI()
+            }
+
+            override fun onMinusClicked(produk: ModelProduk) {
+                val idProduk = produk.idProduk ?: return
+                val currentQty = cartMap[idProduk]?.second ?: 0
+                if (currentQty > 1) {
+                    cartMap[idProduk] = Pair(produk, currentQty - 1)
+                } else {
+                    cartMap.remove(idProduk)
+                }
+                updateCartUI()
             }
         })
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -205,5 +242,50 @@ class TransaksiActivity : AppCompatActivity() {
         )
         chip.chipStrokeColor = android.content.res.ColorStateList(states, strokeColors)
         chip.chipStrokeWidth = resources.displayMetrics.density * 1f
+    }
+
+    private fun updateCartUI() {
+        var totalItems = 0
+        var totalPrice = 0
+        for ((_, item) in cartMap) {
+            val produk = item.first
+            val qty = item.second
+            totalItems += qty
+            totalPrice += (produk.hargaJual ?: 0) * qty
+        }
+
+        tvCartItems.text = "$totalItems Item Terpilih"
+        tvCartTotal.text = formatRupiah(totalPrice)
+
+        // Update adapter to reflect cart qty
+        val adapterCartMap = cartMap.mapValues { it.value.second }
+        adapter.updateCartMap(adapterCartMap)
+    }
+
+    private fun handlePayment() {
+        if (cartMap.isEmpty()) {
+            Toast.makeText(this, "Keranjang masih kosong!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        var totalItems = 0
+        var totalPrice = 0
+        for ((_, item) in cartMap) {
+            totalItems += item.second
+            totalPrice += (item.first.hargaJual ?: 0) * item.second
+        }
+
+        val intent = Intent(this, PembayaranActivity::class.java).apply {
+            putExtra("TOTAL_ITEMS", totalItems)
+            putExtra("TOTAL_PRICE", totalPrice)
+        }
+        startActivity(intent)
+        // Opsional: Anda bisa clear cart jika PembayaranActivity berhasil,
+        // Tapi untuk sementara kita tidak akan clear sebelum dikonfirmasi di PembayaranActivity.
+    }
+
+    private fun formatRupiah(amount: Int): String {
+        val format = java.text.NumberFormat.getCurrencyInstance(java.util.Locale("id", "ID"))
+        return format.format(amount).replace(",00", "")
     }
 }
