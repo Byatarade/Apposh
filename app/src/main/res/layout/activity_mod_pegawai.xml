@@ -141,6 +141,49 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Alamat Pegawai -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/alamat_pegawai_layout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Alamat Pegawai"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/alamat_pegawai_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPostalAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Cabang -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cabang_pegawai_layout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Cabang"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/cabang_pegawai_auto_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    tools:text="Cabang Suka Mundur" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

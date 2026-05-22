@@ -28,6 +28,10 @@ class ModPegawaiActivity : AppCompatActivity() {
     private lateinit var jabatanPegawaiEditText: TextInputEditText
     private lateinit var teleponPegawaiLayout: TextInputLayout
     private lateinit var teleponPegawaiEditText: TextInputEditText
+    private lateinit var alamatPegawaiLayout: TextInputLayout
+    private lateinit var alamatPegawaiEditText: TextInputEditText
+    private lateinit var cabangPegawaiLayout: TextInputLayout
+    private lateinit var cabangPegawaiAutoComplete: AutoCompleteTextView
     private lateinit var statusPegawaiLayout: TextInputLayout
     private lateinit var statusPegawaiAutoComplete: AutoCompleteTextView
     private lateinit var buttonSimpan: Button
@@ -73,6 +77,10 @@ class ModPegawaiActivity : AppCompatActivity() {
         jabatanPegawaiEditText = findViewById(R.id.jabatan_pegawai_edit_text)
         teleponPegawaiLayout = findViewById(R.id.telepon_pegawai_layout)
         teleponPegawaiEditText = findViewById(R.id.telepon_pegawai_edit_text)
+        alamatPegawaiLayout = findViewById(R.id.alamat_pegawai_layout)
+        alamatPegawaiEditText = findViewById(R.id.alamat_pegawai_edit_text)
+        cabangPegawaiLayout = findViewById(R.id.cabang_pegawai_layout)
+        cabangPegawaiAutoComplete = findViewById(R.id.cabang_pegawai_auto_complete)
         statusPegawaiLayout = findViewById(R.id.status_pegawai_layout)
         statusPegawaiAutoComplete = findViewById(R.id.status_pegawai_auto_complete)
         buttonSimpan = findViewById(R.id.button_simpan)
@@ -80,9 +88,22 @@ class ModPegawaiActivity : AppCompatActivity() {
 
     private fun setupDropdown() {
         val statusItems = arrayOf("Aktif", "Non Aktif")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, statusItems)
-        statusPegawaiAutoComplete.setAdapter(adapter)
+        val statusAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, statusItems)
+        statusPegawaiAutoComplete.setAdapter(statusAdapter)
         statusPegawaiAutoComplete.setText("Aktif", false)
+
+        val cabangRef = database.getReference("cabang")
+        cabangRef.get().addOnSuccessListener { snapshot ->
+            val cabangList = mutableListOf<String>()
+            for (child in snapshot.children) {
+                val nama = child.child("namaCabang").value as? String
+                if (nama != null) cabangList.add(nama)
+            }
+            if (cabangList.isNotEmpty()) {
+                val cabangAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, cabangList)
+                cabangPegawaiAutoComplete.setAdapter(cabangAdapter)
+            }
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -99,6 +120,8 @@ class ModPegawaiActivity : AppCompatActivity() {
                 namaPegawaiEditText.setText(it.namaPegawai)
                 jabatanPegawaiEditText.setText(it.jabatanPegawai)
                 teleponPegawaiEditText.setText(it.teleponPegawai)
+                alamatPegawaiEditText.setText(it.alamatPegawai)
+                cabangPegawaiAutoComplete.setText(it.idCabang, false)
                 statusPegawaiAutoComplete.setText(if (it.statusPegawai == true) "Aktif" else "Non Aktif", false)
             }
         } else {
@@ -116,6 +139,8 @@ class ModPegawaiActivity : AppCompatActivity() {
         val namaPegawai = namaPegawaiEditText.text.toString().trim()
         val jabatanPegawai = jabatanPegawaiEditText.text.toString().trim()
         val teleponPegawai = teleponPegawaiEditText.text.toString().trim()
+        val alamatPegawai = alamatPegawaiEditText.text.toString().trim()
+        val cabangPegawai = cabangPegawaiAutoComplete.text.toString().trim()
         val statusStr = statusPegawaiAutoComplete.text.toString().trim()
 
         var isValid = true
@@ -141,6 +166,20 @@ class ModPegawaiActivity : AppCompatActivity() {
             teleponPegawaiLayout.error = null
         }
 
+        if (alamatPegawai.isEmpty()) {
+            alamatPegawaiLayout.error = "Alamat tidak boleh kosong"
+            isValid = false
+        } else {
+            alamatPegawaiLayout.error = null
+        }
+
+        if (cabangPegawai.isEmpty()) {
+            cabangPegawaiLayout.error = "Cabang harus dipilih"
+            isValid = false
+        } else {
+            cabangPegawaiLayout.error = null
+        }
+
         if (statusStr.isEmpty()) {
             statusPegawaiLayout.error = "Status pegawai harus dipilih"
             isValid = false
@@ -153,13 +192,17 @@ class ModPegawaiActivity : AppCompatActivity() {
         val isActive = statusStr == "Aktif"
         
         val pegawaiId = if (isEdit) existingPegawai?.idPegawai ?: return else myRef.push().key ?: return
+        val joinedDate = if (isEdit) existingPegawai?.tanggalBergabung ?: getCurrentDate() else getCurrentDate()
         
         val modelPegawai = ModelPegawai(
             idPegawai = pegawaiId,
             namaPegawai = namaPegawai,
             jabatanPegawai = jabatanPegawai,
             teleponPegawai = teleponPegawai,
-            statusPegawai = isActive
+            statusPegawai = isActive,
+            alamatPegawai = alamatPegawai,
+            idCabang = cabangPegawai,
+            tanggalBergabung = joinedDate
         )
 
         myRef.child(pegawaiId).setValue(modelPegawai)
@@ -179,5 +222,10 @@ class ModPegawaiActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Gagal: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun getCurrentDate(): String {
+        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+        return sdf.format(java.util.Date())
     }
 }
