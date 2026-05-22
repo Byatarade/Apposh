@@ -66,6 +66,9 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashActivity"
             android:theme="@style/Theme.PenjualanDev.Splash"
             android:exported="true">

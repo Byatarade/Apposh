@@ -55,6 +55,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        com.byatara.penjualandev.utils.BottomNavigationHelper.setup(this, R.id.navigation_notifications)
+        com.byatara.penjualandev.utils.BottomNavigationHelper.setup(this, R.id.navigation_profile)
     }
 }
