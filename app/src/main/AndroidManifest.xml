@@ -51,6 +51,9 @@
             android:name=".PembayaranActivity"
             android:exported="false" />
         <activity
+            android:name=".ReceiptActivity"
+            android:exported="false" />
+        <activity
             android:name=".LaporanActivity"
             android:exported="false" />
         <activity

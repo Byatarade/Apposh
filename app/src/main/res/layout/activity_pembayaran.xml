@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Pembayaran"
+            app:title="Pembayaran &amp; Checkout"
             app:titleCentered="true"
             app:titleTextColor="?attr/colorOnSurface"
             app:navigationIcon="?homeAsUpIndicator"
@@ -27,122 +27,403 @@
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <!-- Scrollable content to handle long bills and small screens -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="100dp"
+        android:clipToPadding="false">
 
-        <!-- Ringkasan Transaksi -->
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="0dp"
-            app:cardBackgroundColor="?attr/colorPrimaryContainer">
+            android:orientation="vertical"
+            android:padding="20dp">
 
+            <!-- Section 1: Ringkasan Total Tagihan -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="?attr/colorPrimaryContainer">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TOTAL AKHIR (TERMASUK PPN 11%)"
+                        android:textColor="?attr/colorOnPrimaryContainer"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.08"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tv_total_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Rp 0"
+                        android:textColor="?attr/colorOnPrimaryContainer"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/tv_total_items"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="0 Item"
+                        android:textColor="?attr/colorPrimary"
+                        app:chipBackgroundColor="?attr/colorOnPrimaryContainer"
+                        app:chipStrokeWidth="0dp"
+                        app:chipMinHeight="28dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section 2: Info Pesanan (Kasir, Meja) -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/colorOutlineStroke"
+                app:cardBackgroundColor="?attr/colorSurfaceContainerLow">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Info Pelanggan &amp; Staff"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Grid Info -->
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="2"
+                        android:rowCount="3">
+
+                        <TextView
+                            android:text="Kasir / Staff:"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="12sp"
+                            android:layout_columnWeight="1" />
+                        <TextView
+                            android:id="@+id/tv_pay_cashier"
+                            android:text="Kasir Utama"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:gravity="end" />
+
+                        <TextView
+                            android:text="Pelanggan:"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp" />
+                        <TextView
+                            android:id="@+id/tv_pay_customer"
+                            android:text="Umum"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:layout_marginTop="4dp" />
+
+
+                    </GridLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section 3: Ringkasan Item Pesanan -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Item Yang Dipesan"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/colorOutlineStroke"
+                app:cardBackgroundColor="?attr/colorSurfaceContainerLowest">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_pay_items"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        tools:listitem="@layout/item_order_summary" />
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorOutlineStroke"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <!-- Rincian Harga -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Subtotal"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:textSize="12sp" />
+                            <TextView
+                                android:id="@+id/tv_pay_subtotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp 0"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="4dp">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="PPN (11%)"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:textSize="12sp" />
+                            <TextView
+                                android:id="@+id/tv_pay_tax"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp 0"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section 4: Metode Pembayaran -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Pilih Metode Pembayaran"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_payment_method"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:checkedButton="@+id/btn_tunai">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_tunai"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingVertical="12dp"
+                    android:text="Tunai"
+                    android:textSize="12sp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_qris"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingVertical="12dp"
+                    android:text="QRIS"
+                    android:textSize="12sp"/>
+                
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_transfer"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingVertical="12dp"
+                    android:text="Transfer"
+                    android:textSize="12sp"/>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <!-- Section 5: Kalkulator Tunai (Hanya muncul jika Tunai dipilih) -->
             <LinearLayout
+                android:id="@+id/ll_cash_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:padding="32dp">
+                android:layout_marginTop="16dp"
+                android:visibility="visible">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TOTAL TAGIHAN"
-                    android:textColor="?attr/colorOnPrimaryContainer"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.1"
-                    android:textSize="12sp" />
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/colorOutlineStroke"
+                    app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
 
-                <TextView
-                    android:id="@+id/tv_total_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Rp 0"
-                    android:textColor="?attr/colorOnPrimaryContainer"
-                    android:textSize="36sp"
-                    android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/tv_total_items"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="0 Item"
-                    android:textColor="?attr/colorPrimary"
-                    app:chipBackgroundColor="?attr/colorOnPrimaryContainer"
-                    app:chipStrokeWidth="0dp"
-                    app:chipMinHeight="32dp"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_cash_received"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Jumlah Uang Diterima"
+                            app:prefixText="Rp "
+                            app:prefixTextColor="?attr/colorPrimary">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_cash_received"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- Fast Cash Options -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center">
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chip_exact_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Uang Pas"
+                                android:layout_marginEnd="6dp"
+                                app:chipStrokeColor="?attr/colorPrimary"
+                                android:textColor="?attr/colorPrimary" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chip_50k"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp 50.000"
+                                android:layout_marginEnd="6dp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chip_100k"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp 100.000" />
+                        </LinearLayout>
+
+                        <!-- Kembalian Info -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Uang Kembalian:"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tv_change_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp 0"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-        <TextView
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Confirmation Button -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="16dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="?attr/colorSurface">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Metode Pembayaran"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggle_payment_method"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:singleSelection="true"
-            app:selectionRequired="true"
-            app:checkedButton="@+id/btn_tunai">
+            android:padding="16dp">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_tunai"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingVertical="12dp"
-                android:text="Tunai" />
+                android:id="@+id/btn_confirm_payment"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Konfirmasi Pembayaran"
+                app:cornerRadius="16dp"
+                android:textSize="16sp"
+                app:backgroundTint="?attr/colorPrimary"
+                android:textColor="?attr/colorOnPrimary" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_qris"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingVertical="12dp"
-                android:text="QRIS" />
-            
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_transfer"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingVertical="12dp"
-                android:text="Transfer" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_confirm_payment"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Konfirmasi Pembayaran"
-            app:cornerRadius="16dp"
-            android:paddingVertical="14dp"
-            app:backgroundTint="?attr/colorPrimary"
-            android:textColor="?attr/colorOnPrimary" />
-            
-    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

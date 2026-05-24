@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Transaksi Baru"
+            app:title="Mesin Kasir (POS)"
             app:titleCentered="true"
             app:titleTextColor="?attr/colorOnSurface"
             app:navigationIcon="?homeAsUpIndicator"
@@ -36,7 +36,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="24dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="1dp"
                 app:strokeColor="@color/colorOutlineStroke"
@@ -48,11 +48,11 @@
                     android:layout_height="wrap_content"
                     app:iconifiedByDefault="false"
                     app:queryBackground="@null"
-                    app:queryHint="Cari produk..." />
+                    app:queryHint="Cari item di menu..." />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
         
-        <!-- Category Filter Chips (Mockup) -->
+        <!-- Category Filter Chips -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,27 +71,12 @@
                     android:layout_height="wrap_content"
                     android:text="Semua"
                     android:checked="true"/>
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Makanan"/>
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Minuman"/>
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Snack"/>
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Main Content (Product List - Real Data) -->
+    <!-- Main Content (Grid Product List - POS Mode) -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -118,30 +103,31 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tidak ada produk ditemukan"
+                android:text="Menu produk masih kosong"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- RecyclerView Produk -->
+        <!-- RecyclerView Produk (Grid POS) -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_produk_transaksi"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="100dp"
+            android:paddingHorizontal="8dp"
+            android:paddingBottom="120dp"
             android:clipToPadding="false"
             android:visibility="gone" />
 
     </FrameLayout>
 
-    <!-- Bottom Cart Bar (Bento Style) -->
+    <!-- Bottom Cart Bar (Bento POS Style) -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
         app:cardCornerRadius="24dp"
-        app:cardElevation="8dp"
+        app:cardElevation="12dp"
         app:cardBackgroundColor="?attr/colorPrimary"
         app:strokeWidth="0dp">
 
@@ -151,6 +137,14 @@
             android:orientation="horizontal"
             android:padding="16dp"
             android:gravity="center_vertical">
+
+            <!-- Basket Info Icon -->
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@android:drawable/ic_input_add"
+                android:layout_marginEnd="12dp"
+                app:tint="?attr/colorOnPrimary" />
 
             <!-- Cart Info -->
             <LinearLayout
@@ -163,7 +157,7 @@
                     android:id="@+id/tv_cart_items"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 Item Terpilih"
+                    android:text="Belum ada pesanan"
                     android:textColor="?attr/colorOnPrimary"
                     android:alpha="0.8"
                     android:textSize="12sp"
@@ -185,13 +179,11 @@
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Checkout"
+                android:text="Buat Order"
                 app:cornerRadius="16dp"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="12dp"
-                app:icon="@android:drawable/ic_menu_send"
                 app:backgroundTint="?attr/colorOnPrimary"
-                app:iconTint="?attr/colorPrimary"
                 android:textColor="?attr/colorPrimary"/>
 
         </LinearLayout>

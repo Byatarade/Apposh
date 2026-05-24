@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_produk"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/colorOutlineStroke"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Product Image Container -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="?attr/colorSurfaceVariant">
+
+            <ImageView
+                android:id="@+id/img_produk"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/menu" />
+
+            <!-- Category / Branch Badge Overlay -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_kategori_badge"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_margin="8dp"
+                android:text="Makanan"
+                android:textSize="10sp"
+                android:textColor="?attr/colorOnSecondary"
+                app:chipBackgroundColor="?attr/colorSecondary"
+                app:chipMinHeight="24dp"
+                app:chipStrokeWidth="0dp" />
+        </FrameLayout>
+
+        <!-- Product Info & Actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tv_nama_produk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Nama Produk"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Price -->
+            <TextView
+                android:id="@+id/tv_harga_produk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Rp 15.000"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- Stock Info & Badge -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@android:drawable/ic_menu_myplaces"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+
+                <TextView
+                    android:id="@+id/tv_stok"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:text="Stok: 12"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <!-- Separator Line -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/colorOutlineStroke" />
+
+            <!-- Cart Action Controls (POS Style) -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp">
+
+                <!-- Zero State Button: Add To Cart -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_initial"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Tambah"
+                    android:textSize="12sp"
+                    android:padding="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="8dp"
+                    app:strokeColor="?attr/colorPrimary"
+                    app:strokeWidth="1dp"
+                    android:textColor="?attr/colorPrimary" />
+
+                <!-- Active State Controls: Minus / Qty / Plus -->
+                <LinearLayout
+                    android:id="@+id/ll_qty_controls"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:background="@color/colorSecondary"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:paddingHorizontal="4dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_minus_pos"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="32dp"
+                        android:layout_height="match_parent"
+                        android:text="-"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:padding="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <TextView
+                        android:id="@+id/tv_cart_qty_pos"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_plus_pos"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="32dp"
+                        android:layout_height="match_parent"
+                        android:text="+"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:padding="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -14,18 +14,23 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.byatara.penjualandev.adapter.ProdukAdapter
+import com.byatara.penjualandev.adapter.ProdukPosAdapter
 import com.byatara.penjualandev.model.ModelProduk
+import com.byatara.penjualandev.model.ModelOrder
+import com.byatara.penjualandev.model.ModelOrderItem
 import com.byatara.penjualandev.viewmodel.ProdukViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.util.Locale
 
 class TransaksiActivity : AppCompatActivity() {
 
@@ -35,7 +40,7 @@ class TransaksiActivity : AppCompatActivity() {
     private lateinit var chipGroup: ChipGroup
     private lateinit var searchView: androidx.appcompat.widget.SearchView
 
-    private lateinit var adapter: ProdukAdapter
+    private lateinit var adapter: ProdukPosAdapter
     private lateinit var produkViewModel: ProdukViewModel
 
     private lateinit var tvCartItems: TextView
@@ -90,21 +95,25 @@ class TransaksiActivity : AppCompatActivity() {
         btnPay = findViewById(R.id.btn_pay)
 
         btnPay.setOnClickListener {
-            handlePayment()
+            showOrderDetailBottomSheet()
         }
     }
 
     private fun setupRecyclerView() {
-        adapter = ProdukAdapter(mutableListOf())
-        adapter.setTransactionMode(true)
-        adapter.setOnItemClickListener(object : ProdukAdapter.OnItemClickListener {
-            override fun onItemClicked(produk: ModelProduk) {
-                // Ignore general item click in transaction mode, just let them use + and -
-            }
-
+        adapter = ProdukPosAdapter(mutableListOf())
+        adapter.setOnItemClickListener(object : ProdukPosAdapter.OnItemClickListener {
             override fun onPlusClicked(produk: ModelProduk) {
                 val idProduk = produk.idProduk ?: return
                 val currentQty = cartMap[idProduk]?.second ?: 0
+                
+                // Stock validation
+                val isUnlimited = produk.tanpaBatas == "ya"
+                val maxStok = produk.stokProduk ?: 0
+                if (!isUnlimited && currentQty >= maxStok) {
+                    Toast.makeText(this@TransaksiActivity, "Stok produk tidak mencukupi!", Toast.LENGTH_SHORT).show()
+                    return
+                }
+
                 cartMap[idProduk] = Pair(produk, currentQty + 1)
                 updateCartUI()
             }
@@ -120,18 +129,18 @@ class TransaksiActivity : AppCompatActivity() {
                 updateCartUI()
             }
         })
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = adapter
     }
 
     private fun setupSearchView() {
         searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                produkViewModel.filter(query.orEmpty())
+                adapter.filter(query.orEmpty())
                 return true
             }
             override fun onQueryTextChange(newText: String?): Boolean {
-                produkViewModel.filter(newText.orEmpty())
+                adapter.filter(newText.orEmpty())
                 return true
             }
         })
@@ -188,15 +197,13 @@ class TransaksiActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         produkViewModel.produkList.observe(this, Observer { listProduk ->
-            adapter.updateFullList(listProduk)
-        })
-
-        produkViewModel.cabangMap.observe(this, Observer { map ->
-            adapter.updateMaps(cabang = map, kategori = null)
+            // Hanya tampilkan produk dengan status "aktif" pada transaksi POS
+            val activeProduk = listProduk.filter { it.statusProduk?.lowercase() == "aktif" }
+            adapter.updateData(activeProduk)
         })
 
         produkViewModel.kategoriMap.observe(this, Observer { map ->
-            adapter.updateMaps(cabang = null, kategori = map)
+            adapter.updateKategoriMap(map ?: emptyMap())
         })
 
         produkViewModel.isLoading.observe(this, Observer { isLoading ->
@@ -254,34 +261,106 @@ class TransaksiActivity : AppCompatActivity() {
             totalPrice += (produk.hargaJual ?: 0) * qty
         }
 
-        tvCartItems.text = "$totalItems Item Terpilih"
-        tvCartTotal.text = formatRupiah(totalPrice)
+        if (totalItems > 0) {
+            tvCartItems.text = "$totalItems Item Terpilih"
+            tvCartTotal.text = formatRupiah(totalPrice)
+        } else {
+            tvCartItems.text = "Belum ada pesanan"
+            tvCartTotal.text = "Rp 0"
+        }
 
         // Update adapter to reflect cart qty
         val adapterCartMap = cartMap.mapValues { it.value.second }
-        adapter.updateCartMap(adapterCartMap)
+        adapter.updateCart(adapterCartMap)
     }
 
-    private fun handlePayment() {
+    private fun showOrderDetailBottomSheet() {
         if (cartMap.isEmpty()) {
             Toast.makeText(this, "Keranjang masih kosong!", Toast.LENGTH_SHORT).show()
             return
         }
 
-        var totalItems = 0
-        var totalPrice = 0
-        for ((_, item) in cartMap) {
-            totalItems += item.second
-            totalPrice += (item.first.hargaJual ?: 0) * item.second
+        val dialog = BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_order_detail, null)
+        dialog.setContentView(view)
+
+        val etKasir = view.findViewById<TextInputEditText>(R.id.et_kasir)
+        val etPelanggan = view.findViewById<TextInputEditText>(R.id.et_pelanggan)
+        val etCatatan = view.findViewById<TextInputEditText>(R.id.et_catatan)
+        val btnProceed = view.findViewById<MaterialButton>(R.id.btn_proceed_payment)
+
+        // Default Cashier
+        etKasir.setText("Kasir Utama")
+
+        btnProceed.setOnClickListener {
+            val kasir = etKasir.text.toString().trim()
+            val pelanggan = etPelanggan.text.toString().trim()
+            val catatan = etCatatan.text.toString().trim()
+
+            if (kasir.isEmpty()) {
+                etKasir.error = "Nama kasir wajib diisi"
+                return@setOnClickListener
+            }
+
+            // Create Order data transfer
+            var totalItems = 0
+            var subtotalPrice = 0
+            val orderItems = ArrayList<ModelOrderItem>()
+
+            for ((_, item) in cartMap) {
+                val p = item.first
+                val qty = item.second
+                val subtotal = (p.hargaJual ?: 0) * qty
+                
+                totalItems += qty
+                subtotalPrice += subtotal
+
+                orderItems.add(
+                    ModelOrderItem(
+                        idProduk = p.idProduk,
+                        namaProduk = p.namaProduk,
+                        fotoProduk = p.fotoProduk,
+                        hargaJual = p.hargaJual,
+                        qty = qty,
+                        subtotal = subtotal,
+                        tanpaBatas = p.tanpaBatas
+                    )
+                )
+            }
+
+            // Hitung Pajak (PPN 11%) & Total Akhir
+            val pajak = (subtotalPrice * 0.11).toInt()
+            val totalAkhir = subtotalPrice + pajak
+
+            val formatter = java.text.SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))
+            val formattedDate = formatter.format(java.util.Date())
+
+            val orderData = ModelOrder(
+                idOrder = "ORD-${System.currentTimeMillis() / 1000}",
+                namaKasir = kasir,
+                namaPelanggan = pelanggan,
+                nomorMeja = "",
+                catatan = catatan,
+                items = orderItems,
+                subtotal = subtotalPrice,
+                pajak = pajak,
+                totalHarga = totalAkhir,
+                status = "PAID",
+                timestamp = System.currentTimeMillis(),
+                tanggalWaktu = formattedDate,
+                idCabang = cartMap.values.firstOrNull()?.first?.idCabang // Pakai idCabang produk pertama
+            )
+
+            dialog.dismiss()
+
+            // Navigate to PembayaranActivity
+            val intent = Intent(this@TransaksiActivity, PembayaranActivity::class.java).apply {
+                putExtra("ORDER_DATA", orderData)
+            }
+            startActivity(intent)
         }
 
-        val intent = Intent(this, PembayaranActivity::class.java).apply {
-            putExtra("TOTAL_ITEMS", totalItems)
-            putExtra("TOTAL_PRICE", totalPrice)
-        }
-        startActivity(intent)
-        // Opsional: Anda bisa clear cart jika PembayaranActivity berhasil,
-        // Tapi untuk sementara kita tidak akan clear sebelum dikonfirmasi di PembayaranActivity.
+        dialog.show()
     }
 
     private fun formatRupiah(amount: Int): String {
