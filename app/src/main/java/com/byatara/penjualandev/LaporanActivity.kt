@@ -2,22 +2,23 @@ package com.byatara.penjualandev
 
 import android.os.Bundle
 import android.view.View
-import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.byatara.penjualandev.adapter.ProdukAdapter
-import com.byatara.penjualandev.model.ModelProduk
-import com.byatara.penjualandev.viewmodel.ProdukViewModel
+import com.byatara.penjualandev.adapter.LaporanTransaksiAdapter
+import com.byatara.penjualandev.model.ModelOrder
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -26,11 +27,13 @@ class LaporanActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewLoading: ProgressBar
     private lateinit var layoutEmpty: LinearLayout
-    private lateinit var tvTotalProduk: TextView
-    private lateinit var tvTotalNilai: TextView
+    private lateinit var tvTotalPendapatan: TextView
+    private lateinit var tvTotalKeuntungan: TextView
+    private lateinit var tvJumlahTransaksi: TextView
 
-    private lateinit var adapter: ProdukAdapter
-    private lateinit var produkViewModel: ProdukViewModel
+    private lateinit var adapter: LaporanTransaksiAdapter
+    private val database = FirebaseDatabase.getInstance()
+    private val ordersRef = database.getReference("orders")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,93 +56,82 @@ class LaporanActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        // Init ViewModel
-        produkViewModel = ViewModelProvider(this).get(ProdukViewModel::class.java)
-
         initViews()
         setupRecyclerView()
-        setupDateDropdown()
-        observeViewModel()
+        loadDataFromFirebase()
     }
 
     private fun initViews() {
-        recyclerView = findViewById(R.id.rv_laporan_produk)
+        recyclerView = findViewById(R.id.rv_laporan_transaksi)
         viewLoading = findViewById(R.id.view_loading)
         layoutEmpty = findViewById(R.id.layout_empty)
-        tvTotalProduk = findViewById(R.id.tv_total_produk)
-        tvTotalNilai = findViewById(R.id.tv_total_nilai)
+        tvTotalPendapatan = findViewById(R.id.tv_total_pendapatan)
+        tvTotalKeuntungan = findViewById(R.id.tv_total_keuntungan)
+        tvJumlahTransaksi = findViewById(R.id.tv_jumlah_transaksi)
     }
 
     private fun setupRecyclerView() {
-        adapter = ProdukAdapter(mutableListOf())
-        adapter.setOnItemClickListener(object : ProdukAdapter.OnItemClickListener {
-            override fun onItemClicked(produk: ModelProduk) {
-                // Detail produk (opsional)
-            }
-        })
+        adapter = LaporanTransaksiAdapter(mutableListOf())
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
     }
 
-    private fun setupDateDropdown() {
-        val spinnerTanggal = findViewById<AutoCompleteTextView>(R.id.spinner_tanggal) ?: return
-        val dateRanges = arrayOf(
-            "Hari Ini",
-            "Kemarin",
-            "Minggu Ini",
-            "Bulan Ini",
-            "Kustom Rentang Waktu..."
-        )
-        val dropdownAdapter = android.widget.ArrayAdapter(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            dateRanges
-        )
-        spinnerTanggal.setAdapter(dropdownAdapter)
-    }
+    private fun loadDataFromFirebase() {
+        viewLoading.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        layoutEmpty.visibility = View.GONE
 
-    private fun observeViewModel() {
-        produkViewModel.produkList.observe(this, Observer { listProduk ->
-            adapter.updateFullList(listProduk)
-
-            // Hitung statistik dari data real
-            val totalProduk = listProduk.size
-            val totalNilaiStok = listProduk.sumOf { produk ->
-                val hargaBeli = produk.hargaBeli ?: 0
-                val stok = if (produk.tanpaBatas == "ya") 0 else (produk.stokProduk ?: 0)
-                hargaBeli * stok
-            }
-
-            tvTotalProduk.text = totalProduk.toString()
-            tvTotalNilai.text = formatRupiah(totalNilaiStok)
-        })
-
-        produkViewModel.cabangMap.observe(this, Observer { map ->
-            adapter.updateMaps(cabang = map, kategori = null)
-        })
-
-        produkViewModel.kategoriMap.observe(this, Observer { map ->
-            adapter.updateMaps(cabang = null, kategori = map)
-        })
-
-        produkViewModel.isLoading.observe(this, Observer { isLoading ->
-            if (isLoading) {
-                viewLoading.visibility = View.VISIBLE
-                recyclerView.visibility = View.GONE
-                layoutEmpty.visibility = View.GONE
-            } else {
+        ordersRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
                 viewLoading.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
-            }
-        })
+                
+                if (snapshot.exists()) {
+                    val orderList = ArrayList<ModelOrder>()
+                    var totalRevenue = 0
+                    var totalProfit = 0
 
-        produkViewModel.isSearchEmpty.observe(this, Observer { isEmpty ->
-            if (isEmpty) {
+                    for (child in snapshot.children) {
+                        val order = child.getValue(ModelOrder::class.java)
+                        if (order != null) {
+                            if (order.idOrder.isNullOrEmpty()) {
+                                order.idOrder = child.key
+                            }
+                            orderList.add(order)
+                            totalRevenue += order.totalHarga ?: 0
+                            totalProfit += order.keuntungan ?: 0
+                        }
+                    }
+
+                    // Sort orders by timestamp descending (newest first)
+                    orderList.sortByDescending { it.timestamp ?: 0L }
+
+                    adapter.updateData(orderList)
+
+                    tvTotalPendapatan.text = formatRupiah(totalRevenue)
+                    tvTotalKeuntungan.text = formatRupiah(totalProfit)
+                    tvJumlahTransaksi.text = orderList.size.toString()
+
+                    if (orderList.isEmpty()) {
+                        layoutEmpty.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
+                    } else {
+                        layoutEmpty.visibility = View.GONE
+                        recyclerView.visibility = View.VISIBLE
+                    }
+                } else {
+                    tvTotalPendapatan.text = "Rp 0"
+                    tvTotalKeuntungan.text = "Rp 0"
+                    tvJumlahTransaksi.text = "0"
+                    layoutEmpty.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                viewLoading.visibility = View.GONE
                 layoutEmpty.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
-            } else {
-                layoutEmpty.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
+                Toast.makeText(this@LaporanActivity, "Gagal memuat data: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }

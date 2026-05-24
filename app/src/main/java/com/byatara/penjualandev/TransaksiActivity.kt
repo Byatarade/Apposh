@@ -20,6 +20,12 @@ import com.byatara.penjualandev.adapter.ProdukPosAdapter
 import com.byatara.penjualandev.model.ModelProduk
 import com.byatara.penjualandev.model.ModelOrder
 import com.byatara.penjualandev.model.ModelOrderItem
+import com.byatara.penjualandev.model.ModelPelanggan
+import com.byatara.penjualandev.model.ModelPegawai
+import com.byatara.penjualandev.adapter.PelangganAdapter
+import com.byatara.penjualandev.adapter.PegawaiAdapter
+import com.byatara.penjualandev.pelanggan.ModPelangganActivity
+import com.byatara.penjualandev.pegawai.ModPegawaiActivity
 import com.byatara.penjualandev.viewmodel.ProdukViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.Chip
@@ -30,6 +36,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import androidx.recyclerview.widget.LinearLayoutManager
 import java.util.Locale
 
 class TransaksiActivity : AppCompatActivity() {
@@ -51,6 +58,9 @@ class TransaksiActivity : AppCompatActivity() {
 
     // Map idKategori -> namaKategori, used for chip filtering
     private val idKategoriMap = mutableMapOf<String, String>() // chipText -> idKategori
+
+    private var selectedPelanggan: ModelPelanggan? = null
+    private var selectedPegawai: ModelPegawai? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -158,6 +168,7 @@ class TransaksiActivity : AppCompatActivity() {
 
                     // Add "Semua" chip
                     val allChip = Chip(this@TransaksiActivity, null, com.google.android.material.R.attr.chipStyle).apply {
+                        id = View.generateViewId()
                         text = "Semua"
                         isCheckable = true
                         isChecked = true
@@ -178,6 +189,7 @@ class TransaksiActivity : AppCompatActivity() {
                             idKategoriMap[namaKategori] = idKategori
 
                             val chip = Chip(this@TransaksiActivity, null, com.google.android.material.R.attr.chipStyle).apply {
+                                id = View.generateViewId()
                                 text = namaKategori
                                 isCheckable = true
                             }
@@ -234,12 +246,12 @@ class TransaksiActivity : AppCompatActivity() {
             intArrayOf(-android.R.attr.state_checked)
         )
         val backgroundColors = intArrayOf(
-            androidx.core.content.ContextCompat.getColor(this, R.color.colorSecondary),
+            androidx.core.content.ContextCompat.getColor(this, R.color.colorPrimary),
             android.graphics.Color.TRANSPARENT
         )
         chip.chipBackgroundColor = android.content.res.ColorStateList(states, backgroundColors)
         val textColors = intArrayOf(
-            androidx.core.content.ContextCompat.getColor(this, R.color.colorOnSecondary),
+            androidx.core.content.ContextCompat.getColor(this, R.color.white),
             androidx.core.content.ContextCompat.getColor(this, R.color.colorSecondaryText)
         )
         chip.setTextColor(android.content.res.ColorStateList(states, textColors))
@@ -284,23 +296,27 @@ class TransaksiActivity : AppCompatActivity() {
         val view = layoutInflater.inflate(R.layout.bottom_sheet_order_detail, null)
         dialog.setContentView(view)
 
-        val etKasir = view.findViewById<TextInputEditText>(R.id.et_kasir)
-        val etPelanggan = view.findViewById<TextInputEditText>(R.id.et_pelanggan)
+        val btnPilihPegawai = view.findViewById<MaterialButton>(R.id.btn_pilih_pegawai)
+        val btnPilihPelanggan = view.findViewById<MaterialButton>(R.id.btn_pilih_pelanggan)
         val etCatatan = view.findViewById<TextInputEditText>(R.id.et_catatan)
         val btnProceed = view.findViewById<MaterialButton>(R.id.btn_proceed_payment)
 
-        // Default Cashier
-        etKasir.setText("Kasir Utama")
+        // Reset selections for new order
+        selectedPelanggan = null
+        selectedPegawai = null
+
+        btnPilihPegawai.setOnClickListener {
+            showPilihPegawaiDialog(btnPilihPegawai)
+        }
+
+        btnPilihPelanggan.setOnClickListener {
+            showPilihPelangganDialog(btnPilihPelanggan)
+        }
 
         btnProceed.setOnClickListener {
-            val kasir = etKasir.text.toString().trim()
-            val pelanggan = etPelanggan.text.toString().trim()
+            val kasir = selectedPegawai?.namaPegawai ?: "Kasir Utama"
+            val pelanggan = selectedPelanggan?.namaPelanggan ?: "Pelanggan Umum"
             val catatan = etCatatan.text.toString().trim()
-
-            if (kasir.isEmpty()) {
-                etKasir.error = "Nama kasir wajib diisi"
-                return@setOnClickListener
-            }
 
             // Create Order data transfer
             var totalItems = 0
@@ -321,6 +337,7 @@ class TransaksiActivity : AppCompatActivity() {
                         namaProduk = p.namaProduk,
                         fotoProduk = p.fotoProduk,
                         hargaJual = p.hargaJual,
+                        hargaBeli = p.hargaBeli ?: 0,
                         qty = qty,
                         subtotal = subtotal,
                         tanpaBatas = p.tanpaBatas
@@ -358,6 +375,154 @@ class TransaksiActivity : AppCompatActivity() {
                 putExtra("ORDER_DATA", orderData)
             }
             startActivity(intent)
+        }
+
+        dialog.show()
+    }
+
+    private fun showPilihPelangganDialog(btnPilihPelanggan: MaterialButton) {
+        val dialog = BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_pilih_pelanggan, null)
+        dialog.setContentView(dialogView)
+
+        val searchView = dialogView.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_pelanggan_dialog)
+        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.rv_pelanggan_dialog)
+        val btnPelangganUmum = dialogView.findViewById<MaterialButton>(R.id.btn_pelanggan_umum)
+        val btnTambahBaru = dialogView.findViewById<MaterialButton>(R.id.btn_tambah_pelanggan_baru)
+
+        val pelangganList = mutableListOf<ModelPelanggan>()
+        val filteredList = mutableListOf<ModelPelanggan>()
+        val dialogAdapter = PelangganAdapter(filteredList, isPickerMode = true)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = dialogAdapter
+
+        // Fetch from Firebase
+        val ref = FirebaseDatabase.getInstance().getReference("pelanggan")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    pelangganList.clear()
+                    for (child in snapshot.children) {
+                        val p = child.getValue(ModelPelanggan::class.java)
+                        if (p != null && p.statusPelanggan == true) {
+                            if (p.idPelanggan.isNullOrEmpty()) p.idPelanggan = child.key
+                            pelangganList.add(p)
+                        }
+                    }
+                    filteredList.clear()
+                    filteredList.addAll(pelangganList)
+                    dialogAdapter.notifyDataSetChanged()
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val q = newText.orEmpty().lowercase()
+                filteredList.clear()
+                filteredList.addAll(pelangganList.filter { 
+                    it.namaPelanggan?.lowercase()?.contains(q) == true ||
+                    it.teleponPelanggan?.lowercase()?.contains(q) == true
+                })
+                dialogAdapter.notifyDataSetChanged()
+                return true
+            }
+        })
+
+        dialogAdapter.setOnItemClickListener { pelanggan ->
+            selectedPelanggan = pelanggan
+            btnPilihPelanggan.text = "Pelanggan: ${pelanggan.namaPelanggan}"
+            dialog.dismiss()
+        }
+
+        btnPelangganUmum.setOnClickListener {
+            selectedPelanggan = null
+            btnPilihPelanggan.text = "Pelanggan: Pelanggan Umum"
+            dialog.dismiss()
+        }
+
+        btnTambahBaru.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, ModPelangganActivity::class.java))
+        }
+
+        dialog.show()
+    }
+
+    private fun showPilihPegawaiDialog(btnPilihPegawai: MaterialButton) {
+        val dialog = BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_pilih_pegawai, null)
+        dialog.setContentView(dialogView)
+
+        val searchView = dialogView.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_pegawai_dialog)
+        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.rv_pegawai_dialog)
+        val btnKasirUtama = dialogView.findViewById<MaterialButton>(R.id.btn_kasir_utama)
+        val btnTambahBaru = dialogView.findViewById<MaterialButton>(R.id.btn_tambah_pegawai_baru)
+
+        val pegawaiList = mutableListOf<ModelPegawai>()
+        val filteredList = mutableListOf<ModelPegawai>()
+        val dialogAdapter = PegawaiAdapter(filteredList, isPickerMode = true)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = dialogAdapter
+
+        // Fetch from Firebase
+        val ref = FirebaseDatabase.getInstance().getReference("pegawai")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    pegawaiList.clear()
+                    for (child in snapshot.children) {
+                        val p = child.getValue(ModelPegawai::class.java)
+                        if (p != null) {
+                            if (p.idPegawai.isNullOrEmpty()) p.idPegawai = child.key
+                            pegawaiList.add(p)
+                        }
+                    }
+                    filteredList.clear()
+                    filteredList.addAll(pegawaiList)
+                    dialogAdapter.notifyDataSetChanged()
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val q = newText.orEmpty().lowercase()
+                filteredList.clear()
+                filteredList.addAll(pegawaiList.filter { 
+                    it.namaPegawai?.lowercase()?.contains(q) == true ||
+                    it.teleponPegawai?.lowercase()?.contains(q) == true
+                })
+                dialogAdapter.notifyDataSetChanged()
+                return true
+            }
+        })
+
+        dialogAdapter.setOnItemClickListener { pegawai ->
+            selectedPegawai = pegawai
+            btnPilihPegawai.text = "Kasir: ${pegawai.namaPegawai}"
+            dialog.dismiss()
+        }
+
+        btnKasirUtama.setOnClickListener {
+            selectedPegawai = null
+            btnPilihPegawai.text = "Kasir: Kasir Utama"
+            dialog.dismiss()
+        }
+
+        btnTambahBaru.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, ModPegawaiActivity::class.java))
         }
 
         dialog.show()

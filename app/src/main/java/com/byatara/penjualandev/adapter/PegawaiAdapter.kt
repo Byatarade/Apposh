@@ -12,7 +12,8 @@ import android.widget.Toast
 import android.content.Intent
 import android.net.Uri
 class PegawaiAdapter(
-    private var pegawaiList: List<ModelPegawai>
+    private var pegawaiList: List<ModelPegawai>,
+    private val isPickerMode: Boolean = false
 ) : RecyclerView.Adapter<PegawaiAdapter.PegawaiViewHolder>() {
 
     private var onItemClickListener: ((ModelPegawai) -> Unit)? = null
@@ -67,6 +68,14 @@ class PegawaiAdapter(
 
             btnLihat.setOnClickListener {
                 onItemClickListener?.invoke(pegawai)
+            }
+            
+            if (isPickerMode) {
+                btnHubungi.visibility = View.GONE
+                btnLihat.visibility = View.GONE
+            } else {
+                btnHubungi.visibility = View.VISIBLE
+                btnLihat.visibility = View.VISIBLE
             }
             
             // Allow clicking the card itself to also view

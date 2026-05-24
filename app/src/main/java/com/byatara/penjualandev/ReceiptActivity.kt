@@ -126,7 +126,6 @@ class ReceiptActivity : AppCompatActivity() {
             val tvName = itemView.findViewById<TextView>(R.id.tv_summary_name)
             val tvQtyPrice = itemView.findViewById<TextView>(R.id.tv_summary_qty_price)
             val tvSubtotal = itemView.findViewById<TextView>(R.id.tv_summary_subtotal)
-            itemView.findViewById<View>(R.id.img_summary_item).visibility = View.GONE // Hide image in paper receipt
 
             tvName.text = item.namaProduk ?: "-"
             tvQtyPrice.text = "${item.qty} x ${formatRupiah(item.hargaJual ?: 0)}"

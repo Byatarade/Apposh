@@ -19,7 +19,8 @@ data class ModelOrder(
     var status: String? = "PAID",
     var timestamp: Long? = 0L,
     var tanggalWaktu: String? = null,
-    var idCabang: String? = null
+    var idCabang: String? = null,
+    var keuntungan: Int? = 0
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -37,7 +38,8 @@ data class ModelOrder(
         parcel.readString(),
         parcel.readValue(Long::class.java.classLoader) as? Long,
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readValue(Int::class.java.classLoader) as? Int
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -57,6 +59,7 @@ data class ModelOrder(
         parcel.writeValue(timestamp)
         parcel.writeString(tanggalWaktu)
         parcel.writeString(idCabang)
+        parcel.writeValue(keuntungan)
     }
 
     override fun describeContents(): Int = 0

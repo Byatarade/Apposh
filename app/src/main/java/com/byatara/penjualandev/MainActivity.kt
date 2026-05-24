@@ -12,6 +12,7 @@ import com.byatara.penjualandev.cabang.DataCabangActivity
 import com.byatara.penjualandev.kategori.DataKategoriActivity
 import com.byatara.penjualandev.pegawai.DataPegawaiActivity
 import com.byatara.penjualandev.produk.DataProdukActivity
+import com.byatara.penjualandev.pelanggan.DataPelangganActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -81,6 +82,11 @@ class MainActivity : AppCompatActivity() {
         // Navigate to TransaksiActivity (Mockup)
         findViewById<android.widget.LinearLayout>(R.id.btn_transaksi).setOnClickListener {
             startActivity(Intent(this, TransaksiActivity::class.java))
+        }
+
+        // Navigate to DataPelangganActivity
+        findViewById<android.widget.LinearLayout>(R.id.btn_pelanggan).setOnClickListener {
+            startActivity(Intent(this, DataPelangganActivity::class.java))
         }
 
         // Navigate to LaporanActivity (Mockup)

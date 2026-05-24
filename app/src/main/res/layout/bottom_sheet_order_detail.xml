@@ -26,37 +26,39 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
 
-    <!-- Cashier Info -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_kasir"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <!-- Cashier Selection -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_pilih_pegawai"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginBottom="12dp"
-        android:hint="Nama Kasir / Staff">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_kasir"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:singleLine="true" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:text="Kasir: Kasir Utama"
+        android:textColor="?attr/colorOnSurface"
+        android:gravity="start|center_vertical"
+        android:paddingStart="16dp"
+        app:icon="@android:drawable/ic_menu_myplaces"
+        app:iconTint="?attr/colorPrimary"
+        app:strokeColor="@color/colorOutlineStroke"
+        app:strokeWidth="1dp"
+        app:cornerRadius="12dp" />
 
-    <!-- Customer Name -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_pelanggan"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <!-- Customer Selection -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_pilih_pelanggan"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginBottom="12dp"
-        android:hint="Nama Pelanggan (Opsional)">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_pelanggan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:singleLine="true" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:text="Pelanggan: Pelanggan Umum"
+        android:textColor="?attr/colorOnSurface"
+        android:gravity="start|center_vertical"
+        android:paddingStart="16dp"
+        app:icon="@android:drawable/ic_menu_myplaces"
+        app:iconTint="?attr/colorPrimary"
+        app:strokeColor="@color/colorOutlineStroke"
+        app:strokeWidth="1dp"
+        app:cornerRadius="12dp" />
 
 
     <!-- Notes -->

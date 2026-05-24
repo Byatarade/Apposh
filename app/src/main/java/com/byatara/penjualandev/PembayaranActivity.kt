@@ -208,6 +208,15 @@ class PembayaranActivity : AppCompatActivity() {
         order.kembalian = if (selectedMethod == "Tunai") change else 0
         order.status = "PAID"
 
+        // Hitung Keuntungan (Profit)
+        val totalKeuntungan = order.items?.sumOf { item ->
+            val jual = item.hargaJual ?: 0
+            val beli = item.hargaBeli ?: 0
+            val qty = item.qty ?: 0
+            (jual - beli) * qty
+        } ?: 0
+        order.keuntungan = totalKeuntungan
+
         val database = FirebaseDatabase.getInstance()
         
         // 1. Simpan Transaksi Ke Firebase

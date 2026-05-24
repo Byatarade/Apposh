@@ -1,235 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="?attr/colorSurface"
     tools:context=".LaporanActivity">
 
     <!-- App Bar Section -->
-    <com.google.android.material.appbar.AppBarLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="Laporan Transaksi"
+        app:titleCentered="true"
+        app:titleTextColor="?attr/colorOnSurface"
+        app:navigationIcon="?homeAsUpIndicator"
+        app:navigationIconTint="?attr/colorOnSurface" />
+
+    <!-- 3 Summary Stats Cards in a horizontal line -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="0dp"
-        android:background="?attr/colorSurface">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:weightSum="3">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="Laporan"
-            app:titleCentered="true"
-            app:titleTextColor="?attr/colorOnSurface"
-            app:navigationIcon="?homeAsUpIndicator"
-            app:navigationIconTint="?attr/colorOnSurface">
-        </com.google.android.material.appbar.MaterialToolbar>
-
-        <!-- Date Range Picker Dropdown -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Total Pendapatan -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            android:paddingBottom="16dp">
-            
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Periode Laporan"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
-                app:startIconTint="?attr/colorPrimary">
-
-                <AutoCompleteTextView
-                    android:id="@+id/spinner_tanggal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:text="Bulan Ini (01 Nov - 30 Nov 2026)"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <!-- TabLayout -->
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="?attr/colorPrimary"
-            app:tabSelectedTextColor="?attr/colorPrimary"
-            app:tabTextColor="?attr/colorOnSurfaceVariant"
-            android:background="?attr/colorSurface">
-            
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Penjualan" />
-                
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Stok" />
-                
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Keuntungan" />
-        </com.google.android.material.tabs.TabLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- Main Content (Report List Mockup) -->
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="24dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Summary Stats Cards (Real data from Firebase) -->
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/colorOutlineStroke"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="16dp"
-                android:baselineAligned="false">
-                
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
+                android:orientation="vertical"
+                android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/colorOutlineStroke"
-                    app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total Produk"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="12sp" />
-                        <TextView
-                            android:id="@+id/tv_total_produk"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="--"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
+                    android:text="Pendapatan"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="11sp" />
+                <TextView
+                    android:id="@+id/tv_total_pendapatan"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/colorOutlineStroke"
-                    app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total Nilai Stok"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="12sp" />
-                        <TextView
-                            android:id="@+id/tv_total_nilai"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="--"
-                            android:textColor="?attr/colorPrimary"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                    android:layout_marginTop="4dp"
+                    android:text="Rp 0"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <TextView
+        <!-- Total Keuntungan -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/colorOutlineStroke"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="Daftar Produk"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Keuntungan"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="11sp" />
+                <TextView
+                    android:id="@+id/tv_total_keuntungan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Rp 0"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        <!-- Jumlah Transaksi -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/colorOutlineStroke"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Transaksi"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="11sp" />
+                <TextView
+                    android:id="@+id/tv_jumlah_transaksi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="0"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
-    <!-- RecyclerView & States (outside scroll, full height) -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="Riwayat Transaksi"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="370dp">
+        android:layout_weight="1">
 
         <ProgressBar
             android:id="@+id/view_loading"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="24dp"
+            android:layout_gravity="center"
             android:indeterminateTint="?attr/colorPrimary"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/layout_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="24dp"
+            android:layout_gravity="center"
             android:orientation="vertical"
             android:gravity="center"
             android:visibility="gone">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tidak ada data produk"
+                android:text="Belum ada transaksi terdaftar"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_laporan_produk"
+            android:id="@+id/rv_laporan_transaksi"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="24dp"
             android:clipToPadding="false"
-            android:visibility="gone" />
+            android:paddingBottom="16dp" />
 
     </FrameLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

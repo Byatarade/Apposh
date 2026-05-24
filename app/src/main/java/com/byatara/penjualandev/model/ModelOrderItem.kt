@@ -8,6 +8,7 @@ data class ModelOrderItem(
     var namaProduk: String? = null,
     var fotoProduk: String? = null,
     var hargaJual: Int? = 0,
+    var hargaBeli: Int? = 0,
     var qty: Int? = 0,
     var subtotal: Int? = 0,
     var tanpaBatas: String? = null // untuk cek apakah stok dikurangi
@@ -19,6 +20,7 @@ data class ModelOrderItem(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString()
     )
 
@@ -27,6 +29,7 @@ data class ModelOrderItem(
         parcel.writeString(namaProduk)
         parcel.writeString(fotoProduk)
         parcel.writeValue(hargaJual)
+        parcel.writeValue(hargaBeli)
         parcel.writeValue(qty)
         parcel.writeValue(subtotal)
         parcel.writeString(tanpaBatas)
