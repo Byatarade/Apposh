@@ -66,10 +66,9 @@ class DataCabangActivity : AppCompatActivity() {
         adapter = CabangAdapter(mutableListOf())
         
         adapter.setOnItemClickListener { cabang ->
-            val intent = Intent(this, ModCabangActivity::class.java)
-            intent.putExtra("CABANG_DATA", cabang)
-            intent.putExtra("IS_EDIT", true)
-            startActivity(intent)
+            startActivity(Intent(this, DetailCabangActivity::class.java).apply {
+                putExtra("CABANG_DATA", cabang)
+            })
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)

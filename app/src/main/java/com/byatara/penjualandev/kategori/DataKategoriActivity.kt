@@ -61,10 +61,9 @@ class DataKategoriActivity : AppCompatActivity() {
         adapter = KategoriAdapter(mutableListOf())
         
         adapter.setOnItemClickListener { kategori ->
-            val intent = Intent(this, ModKategoriActivity::class.java)
-            intent.putExtra("KATEGORI_DATA", kategori)
-            intent.putExtra("IS_EDIT", true)
-            startActivity(intent)
+            startActivity(Intent(this, DetailKategoriActivity::class.java).apply {
+                putExtra("KATEGORI_DATA", kategori)
+            })
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)

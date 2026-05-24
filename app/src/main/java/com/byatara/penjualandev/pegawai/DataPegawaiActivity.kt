@@ -60,10 +60,17 @@ class DataPegawaiActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         adapter = PegawaiAdapter(mutableListOf())
         
-        adapter.setOnItemClickListener { pegawai ->
-            val intent = Intent(this, DetailPegawaiActivity::class.java)
-            intent.putExtra("PEGAWAI_DATA", pegawai)
-            startActivity(intent)
+        adapter.setOnShowClickListener { pegawai ->
+            startActivity(Intent(this, DetailPegawaiActivity::class.java).apply {
+                putExtra("PEGAWAI_DATA", pegawai)
+            })
+        }
+
+        adapter.setOnEditClickListener { pegawai ->
+            startActivity(Intent(this, ModPegawaiActivity::class.java).apply {
+                putExtra("IS_EDIT", true)
+                putExtra("PEGAWAI_DATA", pegawai)
+            })
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)

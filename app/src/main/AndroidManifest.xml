@@ -21,6 +21,9 @@
             android:name=".kategori.DataKategoriActivity"
             android:exported="false" />
         <activity
+            android:name=".kategori.DetailKategoriActivity"
+            android:exported="false" />
+        <activity
             android:name=".Exit"
             android:exported="false" />
         <activity
@@ -34,6 +37,9 @@
             android:exported="false" />
         <activity
             android:name=".cabang.ModCabangActivity"
+            android:exported="false" />
+        <activity
+            android:name=".cabang.DetailCabangActivity"
             android:exported="false" />
         <activity
             android:name=".pegawai.DataPegawaiActivity"

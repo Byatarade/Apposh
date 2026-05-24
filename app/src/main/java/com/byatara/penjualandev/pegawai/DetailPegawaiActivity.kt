@@ -12,18 +12,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelPegawai
+import com.byatara.penjualandev.utils.CrudDeleteHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 
 class DetailPegawaiActivity : AppCompatActivity() {
 
-    private lateinit var tvName: TextView
-    private lateinit var tvJabatan: TextView
-    private lateinit var tvAddress: TextView
-    private lateinit var tvPhone: TextView
-    private lateinit var tvCabang: TextView
-    private lateinit var tvJoined: TextView
-    private lateinit var btnHubungi: MaterialButton
+    private var pegawai: ModelPegawai? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,40 +34,65 @@ class DetailPegawaiActivity : AppCompatActivity() {
             }
         }
 
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar?.setNavigationOnClickListener {
+        findViewById<MaterialToolbar>(R.id.toolbar).setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        tvName = findViewById(R.id.tv_detail_name)
-        tvJabatan = findViewById(R.id.tv_detail_jabatan)
-        tvAddress = findViewById(R.id.tv_detail_address)
-        tvPhone = findViewById(R.id.tv_detail_phone)
-        tvCabang = findViewById(R.id.tv_detail_cabang)
-        tvJoined = findViewById(R.id.tv_detail_joined)
-        btnHubungi = findViewById(R.id.btn_detail_hubungi)
-
-        val pegawai = intent.getParcelableExtra<ModelPegawai>("PEGAWAI_DATA")
-        if (pegawai != null) {
-            tvName.text = pegawai.namaPegawai ?: "-"
-            tvJabatan.text = pegawai.jabatanPegawai ?: "-"
-            tvAddress.text = pegawai.alamatPegawai ?: "-"
-            tvPhone.text = pegawai.teleponPegawai ?: "-"
-            tvCabang.text = pegawai.idCabang ?: "-"
-            tvJoined.text = "Bergabung pada ${pegawai.tanggalBergabung ?: "-"}"
-
-            btnHubungi.setOnClickListener {
-                val phone = pegawai.teleponPegawai
-                if (!phone.isNullOrEmpty()) {
-                    val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
-                    startActivity(dialIntent)
-                } else {
-                    Toast.makeText(this, "Nomor telepon tidak tersedia", Toast.LENGTH_SHORT).show()
-                }
-            }
-        } else {
+        pegawai = intent.getParcelableExtra("PEGAWAI_DATA")
+        if (pegawai == null) {
             Toast.makeText(this, "Data pegawai tidak ditemukan", Toast.LENGTH_SHORT).show()
             finish()
+            return
+        }
+
+        bindData(pegawai!!)
+        setupActions()
+    }
+
+    private fun bindData(pegawai: ModelPegawai) {
+        findViewById<TextView>(R.id.tv_detail_name).text = pegawai.namaPegawai ?: "-"
+        findViewById<TextView>(R.id.tv_detail_jabatan).text = pegawai.jabatanPegawai ?: "-"
+        findViewById<TextView>(R.id.tv_detail_address).text = pegawai.alamatPegawai ?: "-"
+        findViewById<TextView>(R.id.tv_detail_phone).text = pegawai.teleponPegawai ?: "-"
+        findViewById<TextView>(R.id.tv_detail_cabang).text = pegawai.idCabang ?: "-"
+        findViewById<TextView>(R.id.tv_detail_joined).text =
+            "Bergabung pada ${pegawai.tanggalBergabung ?: "-"}"
+    }
+
+    private fun setupActions() {
+        val data = pegawai ?: return
+
+        findViewById<MaterialButton>(R.id.btn_detail_hubungi).setOnClickListener {
+            val phone = data.teleponPegawai
+            if (!phone.isNullOrEmpty()) {
+                startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone")))
+            } else {
+                Toast.makeText(this, "Nomor telepon tidak tersedia", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        findViewById<MaterialButton>(R.id.btn_detail_edit).setOnClickListener {
+            val intent = Intent(this, ModPegawaiActivity::class.java).apply {
+                putExtra("IS_EDIT", true)
+                putExtra("PEGAWAI_DATA", data)
+            }
+            startActivity(intent)
+        }
+
+        findViewById<MaterialButton>(R.id.btn_detail_hapus).setOnClickListener {
+            val id = data.idPegawai ?: return@setOnClickListener
+            val nama = data.namaPegawai ?: "pegawai ini"
+            CrudDeleteHelper.confirmAndDelete(
+                activity = this,
+                title = "Hapus Pegawai",
+                message = "Apakah Anda yakin ingin menghapus \"$nama\"?",
+                firebasePath = "pegawai",
+                itemId = id,
+                historiJudul = "Pegawai Dihapus",
+                historiDeskripsi = "Menghapus pegawai '$nama'",
+                historiTipe = "pegawai",
+                onSuccess = { finish() }
+            )
         }
     }
 }

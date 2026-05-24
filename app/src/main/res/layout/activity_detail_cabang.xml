@@ -6,23 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
-    tools:context=".pegawai.DetailPegawaiActivity">
+    tools:context=".cabang.DetailCabangActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="0dp"
-        android:background="?attr/colorSurface">
+        android:background="?attr/colorSurface"
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Detail Pegawai"
-            app:titleCentered="true"
-            app:titleTextColor="?attr/colorOnSurface"
             app:navigationIcon="?homeAsUpIndicator"
-            app:navigationIconTint="?attr/colorOnSurface" />
+            app:navigationIconTint="?attr/colorOnSurface"
+            app:title="Detail Cabang"
+            app:titleCentered="true"
+            app:titleTextColor="?attr/colorOnSurface" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -37,7 +37,8 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_marginTop="24dp"
-            android:src="@drawable/pegawai"
+            android:contentDescription="Ikon Cabang"
+            android:src="@drawable/cabang"
             app:tint="?attr/colorPrimary" />
 
         <TextView
@@ -46,30 +47,34 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="Nama Pegawai"
             android:textColor="?attr/colorOnSurface"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Cabang Utama" />
 
-        <TextView
-            android:id="@+id/tv_detail_jabatan"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_detail_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="4dp"
-            android:text="Jabatan"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="16sp" />
+            android:layout_marginTop="8dp"
+            android:textColor="?attr/colorOnSecondary"
+            app:chipBackgroundColor="?attr/colorSecondary"
+            app:chipIcon="@drawable/tick"
+            app:chipIconTint="?attr/colorPrimary"
+            app:chipIconVisible="true"
+            app:chipStrokeWidth="0dp"
+            tools:text="Aktif" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/colorOutlineStroke"
-            app:strokeWidth="1dp"
-            app:cardBackgroundColor="@android:color/white">
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,39 +82,41 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- Address -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/cabang" 
+                        android:src="@drawable/cabang"
                         app:tint="?attr/colorPrimary" />
+
                     <TextView
-                        android:id="@+id/tv_detail_address"
+                        android:id="@+id/tv_detail_alamat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
-                        tools:text="Bibis Baru" />
+                        tools:text="Jl. Merdeka No. 10" />
                 </LinearLayout>
 
-                <!-- Phone -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_menu_call"
                         app:tint="?attr/colorPrimary" />
+
                     <TextView
                         android:id="@+id/tv_detail_phone"
                         android:layout_width="wrap_content"
@@ -117,53 +124,8 @@
                         android:layout_marginStart="16dp"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
-                        tools:text="6282133289048" />
+                        tools:text="08123456789" />
                 </LinearLayout>
-
-                <!-- Cabang -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/cabang"
-                        app:tint="?attr/colorPrimary" />
-                    <TextView
-                        android:id="@+id/tv_detail_cabang"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp"
-                        tools:text="Cabang Suka Mundur" />
-                </LinearLayout>
-
-                <!-- Joined Date -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_recent_history"
-                        app:tint="?attr/colorPrimary" />
-                    <TextView
-                        android:id="@+id/tv_detail_joined"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp"
-                        tools:text="Bergabung pada 2025-06-04 07:24:58" />
-                </LinearLayout>
-
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -171,18 +133,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_detail_hubungi"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:paddingVertical="14dp"
-            android:text="Hubungi Pegawai"
-            android:textColor="?attr/colorOnPrimary"
-            app:backgroundTint="?attr/colorPrimary"
-            app:cornerRadius="12dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -214,6 +164,5 @@
                 app:cornerRadius="12dp"
                 app:strokeColor="@color/red" />
         </LinearLayout>
-
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
