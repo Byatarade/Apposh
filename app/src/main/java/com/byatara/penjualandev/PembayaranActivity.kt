@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.adapter.OrderSummaryAdapter
 import com.byatara.penjualandev.model.ModelOrder
+import com.byatara.penjualandev.utils.SaldoManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -262,14 +263,24 @@ class PembayaranActivity : AppCompatActivity() {
             )
             historiRef.setValue(historiData)
 
-            Toast.makeText(this, "Pembayaran Berhasil!", Toast.LENGTH_SHORT).show()
-
-            // Navigate ke Halaman Struk
-            val intent = Intent(this, ReceiptActivity::class.java).apply {
-                putExtra("ORDER_DATA", order)
+            // 4. Tambah saldo toko otomatis sesuai total pembayaran
+            SaldoManager.tambahSaldo(totalAkhir) { saldoOk ->
+                runOnUiThread {
+                    if (!saldoOk) {
+                        Toast.makeText(
+                            this,
+                            "Transaksi tersimpan, namun saldo gagal diperbarui",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    Toast.makeText(this, "Pembayaran Berhasil!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, ReceiptActivity::class.java).apply {
+                        putExtra("ORDER_DATA", order)
+                    }
+                    startActivity(intent)
+                    finish()
+                }
             }
-            startActivity(intent)
-            finish()
 
         }.addOnFailureListener {
             Toast.makeText(this, "Gagal memproses transaksi: ${it.message}", Toast.LENGTH_LONG).show()

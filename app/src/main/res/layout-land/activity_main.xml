@@ -50,9 +50,10 @@
                     android:layout_marginStart="16dp"
                     android:orientation="vertical">
                     <TextView
+                        android:id="@+id/tvSalam"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Halo,"
+                        android:text="Halo, Selamat Pagi"
                         android:textColor="?attr/colorOutline"
                         android:textSize="14sp" />
                     <TextView
@@ -114,17 +115,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Rp 100.000.000"
+                            android:text="Rp 0"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="36sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvTanggalBeranda"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:text="@string/tanggalberanda"
-                            android:textColor="?attr/colorPrimary"
+                            android:textColor="@color/colorOnSecondary"
                             android:background="?attr/colorSecondary"
                             android:paddingHorizontal="12dp"
                             android:paddingVertical="4dp"

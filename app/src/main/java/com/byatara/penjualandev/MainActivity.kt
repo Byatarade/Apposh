@@ -11,24 +11,37 @@ import androidx.core.view.WindowInsetsCompat
 import com.byatara.penjualandev.cabang.DataCabangActivity
 import com.byatara.penjualandev.kategori.DataKategoriActivity
 import com.byatara.penjualandev.pegawai.DataPegawaiActivity
-import com.byatara.penjualandev.produk.DataProdukActivity
 import com.byatara.penjualandev.pelanggan.DataPelangganActivity
+import com.byatara.penjualandev.produk.DataProdukActivity
+import com.byatara.penjualandev.utils.GreetingHelper
+import com.byatara.penjualandev.utils.SaldoManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private val database = FirebaseDatabase.getInstance()
-    private val usersRef = database.getReference("users")
+    private val usersRef = FirebaseDatabase.getInstance().getReference("users")
+
+    private lateinit var tvSalam: TextView
+    private lateinit var tvGreeting: TextView
+    private lateinit var tvNominal: TextView
+    private lateinit var tvTanggalBeranda: TextView
+
+    private var saldoListener: ValueEventListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Paksa aplikasi menggunakan Mode Terang (Light Mode) secara global
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
         val mainView = findViewById<android.view.View>(R.id.main)
         mainView?.let {
             ViewCompat.setOnApplyWindowInsetsListener(it) { v, insets ->
@@ -39,62 +52,100 @@ class MainActivity : AppCompatActivity() {
         }
 
         auth = FirebaseAuth.getInstance()
-        val tvGreeting = findViewById<TextView>(R.id.tvGreeting)
+        tvSalam = findViewById(R.id.tvSalam)
+        tvGreeting = findViewById(R.id.tvGreeting)
+        tvNominal = findViewById(R.id.tvNominal)
+        tvTanggalBeranda = findViewById(R.id.tvTanggalBeranda)
 
-        // Ambil data user yang sedang login
+        setupGreeting()
+        setupTanggalBeranda()
+        loadUserName()
+        setupNavigation()
+        setupBottomNavigation()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        attachSaldoListener()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        saldoListener?.let { SaldoManager.removeListener(it) }
+        saldoListener = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupGreeting()
+        setupTanggalBeranda()
+    }
+
+    private fun setupGreeting() {
+        tvSalam.text = GreetingHelper.getHaloSalamWib()
+    }
+
+    private fun setupTanggalBeranda() {
+        val format = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
+        tvTanggalBeranda.text = format.format(Date())
+    }
+
+    private fun loadUserName() {
         val currentUser = auth.currentUser
-        if (currentUser != null) {
-            usersRef.child(currentUser.uid).get().addOnSuccessListener { snapshot ->
-                if (snapshot.exists()) {
-                    val name = snapshot.child("name").value.toString()
-                    tvGreeting.text = name
-                } else {
-                    tvGreeting.text = currentUser.email?.split("@")?.get(0) ?: "User"
-                }
-            }.addOnFailureListener {
-                tvGreeting.text = currentUser.email?.split("@")?.get(0) ?: "User"
-            }
+        if (currentUser == null) {
+            tvGreeting.text = "User"
+            return
         }
 
-        // Setup Bottom Navigation
-        setupBottomNavigation()
+        usersRef.child(currentUser.uid).get().addOnSuccessListener { snapshot ->
+            tvGreeting.text = if (snapshot.exists()) {
+                snapshot.child("name").value?.toString()?.takeIf { it.isNotBlank() }
+                    ?: currentUser.email?.substringBefore("@")
+                    ?: "User"
+            } else {
+                currentUser.email?.substringBefore("@") ?: "User"
+            }
+        }.addOnFailureListener {
+            tvGreeting.text = currentUser.email?.substringBefore("@") ?: "User"
+        }
+    }
 
-        // Navigate to DataKategoriActivity
+    private fun attachSaldoListener() {
+        saldoListener?.let { SaldoManager.removeListener(it) }
+        saldoListener = SaldoManager.listenSaldo { saldo ->
+            tvNominal.text = formatRupiah(saldo)
+        }
+    }
+
+    private fun setupNavigation() {
         findViewById<androidx.cardview.widget.CardView>(R.id.cardkategori).setOnClickListener {
             startActivity(Intent(this, DataKategoriActivity::class.java))
         }
 
-        // Navigate to DataProdukActivity
         findViewById<androidx.cardview.widget.CardView>(R.id.cardmenu).setOnClickListener {
             startActivity(Intent(this, DataProdukActivity::class.java))
         }
 
-        // Navigate to DataCabangActivity
         findViewById<androidx.cardview.widget.CardView>(R.id.cardcabang).setOnClickListener {
             startActivity(Intent(this, DataCabangActivity::class.java))
         }
 
-        // Navigate to DataPegawaiActivity
         findViewById<androidx.cardview.widget.CardView>(R.id.cardpegawai).setOnClickListener {
             startActivity(Intent(this, DataPegawaiActivity::class.java))
         }
 
-        // Navigate to TransaksiActivity (Mockup)
         findViewById<android.widget.LinearLayout>(R.id.btn_transaksi).setOnClickListener {
             startActivity(Intent(this, TransaksiActivity::class.java))
         }
 
-        // Navigate to DataPelangganActivity
         findViewById<android.widget.LinearLayout>(R.id.btn_pelanggan).setOnClickListener {
             startActivity(Intent(this, DataPelangganActivity::class.java))
         }
 
-        // Navigate to LaporanActivity (Mockup)
         findViewById<android.widget.LinearLayout>(R.id.btn_laporan).setOnClickListener {
             startActivity(Intent(this, LaporanActivity::class.java))
         }
 
-        // Navigate to PrintHistoryActivity (Cetak ulang struk)
         findViewById<androidx.cardview.widget.CardView>(R.id.cardprinter).setOnClickListener {
             startActivity(Intent(this, PrintHistoryActivity::class.java))
         }
@@ -102,5 +153,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
         com.byatara.penjualandev.utils.BottomNavigationHelper.setup(this, R.id.navigation_home)
+    }
+
+    private fun formatRupiah(amount: Long): String {
+        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+        return format.format(amount).replace(",00", "")
     }
 }
