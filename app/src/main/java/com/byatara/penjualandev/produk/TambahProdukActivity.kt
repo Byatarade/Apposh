@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.adapter.CabangAdapter
+import com.byatara.penjualandev.util.applyCleanSearchStyle
 import com.byatara.penjualandev.adapter.KategoriAdapter
 import com.byatara.penjualandev.viewmodel.CabangViewModel
 import com.byatara.penjualandev.viewmodel.DataKategoriViewModel
@@ -164,6 +165,7 @@ class TambahProdukActivity : AppCompatActivity() {
         (view.parent as View).setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
         val searchView = view.findViewById<SearchView>(R.id.search_view_kategori)
+        searchView.applyCleanSearchStyle()
         val rvKategori = view.findViewById<RecyclerView>(R.id.rv_kategori)
         val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar_kategori)
 
@@ -209,6 +211,7 @@ class TambahProdukActivity : AppCompatActivity() {
         (view.parent as View).setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
         val searchView = view.findViewById<SearchView>(R.id.search_view_cabang)
+        searchView.applyCleanSearchStyle()
         val rvCabang = view.findViewById<RecyclerView>(R.id.rv_cabang)
         val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar_cabang)
 

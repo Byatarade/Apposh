@@ -26,6 +26,9 @@ import com.byatara.penjualandev.adapter.PelangganAdapter
 import com.byatara.penjualandev.adapter.PegawaiAdapter
 import com.byatara.penjualandev.pelanggan.ModPelangganActivity
 import com.byatara.penjualandev.pegawai.ModPegawaiActivity
+import com.byatara.penjualandev.util.applyCleanSearchStyle
+import com.byatara.penjualandev.viewmodel.PegawaiViewModel
+import com.byatara.penjualandev.viewmodel.PelangganViewModel
 import com.byatara.penjualandev.viewmodel.ProdukViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.Chip
@@ -386,50 +389,32 @@ class TransaksiActivity : AppCompatActivity() {
         dialog.setContentView(dialogView)
 
         val searchView = dialogView.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_pelanggan_dialog)
+        searchView.applyCleanSearchStyle()
         val recyclerView = dialogView.findViewById<RecyclerView>(R.id.rv_pelanggan_dialog)
         val btnPelangganUmum = dialogView.findViewById<MaterialButton>(R.id.btn_pelanggan_umum)
         val btnTambahBaru = dialogView.findViewById<MaterialButton>(R.id.btn_tambah_pelanggan_baru)
 
-        val pelangganList = mutableListOf<ModelPelanggan>()
-        val filteredList = mutableListOf<ModelPelanggan>()
-        val dialogAdapter = PelangganAdapter(filteredList, isPickerMode = true)
+        val pelangganViewModel = ViewModelProvider(this)[PelangganViewModel::class.java]
+        val dialogAdapter = PelangganAdapter(emptyList(), isPickerMode = true)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = dialogAdapter
 
-        // Fetch from Firebase
-        val ref = FirebaseDatabase.getInstance().getReference("pelanggan")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    pelangganList.clear()
-                    for (child in snapshot.children) {
-                        val p = child.getValue(ModelPelanggan::class.java)
-                        if (p != null && p.statusPelanggan == true) {
-                            if (p.idPelanggan.isNullOrEmpty()) p.idPelanggan = child.key
-                            pelangganList.add(p)
-                        }
-                    }
-                    filteredList.clear()
-                    filteredList.addAll(pelangganList)
-                    dialogAdapter.notifyDataSetChanged()
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
+        val pelangganObserver = Observer<List<ModelPelanggan>> { list ->
+            val aktifSaja = list.filter { it.statusPelanggan != false }
+            dialogAdapter.updateFullList(aktifSaja)
+        }
+        pelangganViewModel.pelangganList.observe(this, pelangganObserver)
+        pelangganViewModel.filter("")
 
         searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
+                pelangganViewModel.filter(query.orEmpty())
+                return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
-                val q = newText.orEmpty().lowercase()
-                filteredList.clear()
-                filteredList.addAll(pelangganList.filter { 
-                    it.namaPelanggan?.lowercase()?.contains(q) == true ||
-                    it.teleponPelanggan?.lowercase()?.contains(q) == true
-                })
-                dialogAdapter.notifyDataSetChanged()
+                pelangganViewModel.filter(newText.orEmpty())
                 return true
             }
         })
@@ -451,6 +436,11 @@ class TransaksiActivity : AppCompatActivity() {
             startActivity(Intent(this, ModPelangganActivity::class.java))
         }
 
+        dialog.setOnDismissListener {
+            pelangganViewModel.pelangganList.removeObserver(pelangganObserver)
+            pelangganViewModel.filter("")
+        }
+
         dialog.show()
     }
 
@@ -460,50 +450,32 @@ class TransaksiActivity : AppCompatActivity() {
         dialog.setContentView(dialogView)
 
         val searchView = dialogView.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_pegawai_dialog)
+        searchView.applyCleanSearchStyle()
         val recyclerView = dialogView.findViewById<RecyclerView>(R.id.rv_pegawai_dialog)
         val btnKasirUtama = dialogView.findViewById<MaterialButton>(R.id.btn_kasir_utama)
         val btnTambahBaru = dialogView.findViewById<MaterialButton>(R.id.btn_tambah_pegawai_baru)
 
-        val pegawaiList = mutableListOf<ModelPegawai>()
-        val filteredList = mutableListOf<ModelPegawai>()
-        val dialogAdapter = PegawaiAdapter(filteredList, isPickerMode = true)
+        val pegawaiViewModel = ViewModelProvider(this)[PegawaiViewModel::class.java]
+        val dialogAdapter = PegawaiAdapter(emptyList(), isPickerMode = true)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = dialogAdapter
 
-        // Fetch from Firebase
-        val ref = FirebaseDatabase.getInstance().getReference("pegawai")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    pegawaiList.clear()
-                    for (child in snapshot.children) {
-                        val p = child.getValue(ModelPegawai::class.java)
-                        if (p != null) {
-                            if (p.idPegawai.isNullOrEmpty()) p.idPegawai = child.key
-                            pegawaiList.add(p)
-                        }
-                    }
-                    filteredList.clear()
-                    filteredList.addAll(pegawaiList)
-                    dialogAdapter.notifyDataSetChanged()
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
+        val pegawaiObserver = Observer<List<ModelPegawai>> { list ->
+            val aktifSaja = list.filter { it.statusPegawai != false }
+            dialogAdapter.updateFullList(aktifSaja)
+        }
+        pegawaiViewModel.pegawaiList.observe(this, pegawaiObserver)
+        pegawaiViewModel.filter("")
 
         searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
+                pegawaiViewModel.filter(query.orEmpty())
+                return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
-                val q = newText.orEmpty().lowercase()
-                filteredList.clear()
-                filteredList.addAll(pegawaiList.filter { 
-                    it.namaPegawai?.lowercase()?.contains(q) == true ||
-                    it.teleponPegawai?.lowercase()?.contains(q) == true
-                })
-                dialogAdapter.notifyDataSetChanged()
+                pegawaiViewModel.filter(newText.orEmpty())
                 return true
             }
         })
@@ -523,6 +495,11 @@ class TransaksiActivity : AppCompatActivity() {
         btnTambahBaru.setOnClickListener {
             dialog.dismiss()
             startActivity(Intent(this, ModPegawaiActivity::class.java))
+        }
+
+        dialog.setOnDismissListener {
+            pegawaiViewModel.pegawaiList.removeObserver(pegawaiObserver)
+            pegawaiViewModel.filter("")
         }
 
         dialog.show()
