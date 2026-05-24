@@ -8,10 +8,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.byatara.penjualandev.model.ModelOrder
+import com.byatara.penjualandev.utils.BluetoothPermissionHelper
+import com.byatara.penjualandev.utils.BluetoothPrinterHelper
 import com.google.android.material.button.MaterialButton
 import java.text.NumberFormat
 import java.util.Locale
@@ -34,9 +37,23 @@ class ReceiptActivity : AppCompatActivity() {
     private lateinit var tvReceiptMethodLabel: TextView
 
     private lateinit var btnShareReceipt: MaterialButton
+    private lateinit var btnPrintReceipt: MaterialButton
     private lateinit var btnReceiptDone: MaterialButton
 
     private var currentOrder: ModelOrder? = null
+    private var pendingPrintOrder: ModelOrder? = null
+
+    private val bluetoothPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions.values.all { it }
+        if (granted) {
+            pendingPrintOrder?.let { startPrint(it) }
+        } else {
+            Toast.makeText(this, "Izin Bluetooth diperlukan untuk mencetak", Toast.LENGTH_LONG).show()
+        }
+        pendingPrintOrder = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +92,10 @@ class ReceiptActivity : AppCompatActivity() {
         btnShareReceipt.setOnClickListener {
             shareReceiptText(currentOrder!!)
         }
+
+        btnPrintReceipt.setOnClickListener {
+            requestPrint(currentOrder!!)
+        }
     }
 
     private fun initViews() {
@@ -94,7 +115,26 @@ class ReceiptActivity : AppCompatActivity() {
         tvReceiptMethodLabel = findViewById(R.id.tv_receipt_method_label)
 
         btnShareReceipt = findViewById(R.id.btn_share_receipt)
+        btnPrintReceipt = findViewById(R.id.btn_print_receipt)
         btnReceiptDone = findViewById(R.id.btn_receipt_done)
+    }
+
+    private fun requestPrint(order: ModelOrder) {
+        if (BluetoothPermissionHelper.hasAllPermissions(this)) {
+            startPrint(order)
+        } else {
+            pendingPrintOrder = order
+            bluetoothPermissionLauncher.launch(BluetoothPermissionHelper.requiredPermissions())
+        }
+    }
+
+    private fun startPrint(order: ModelOrder) {
+        btnPrintReceipt.isEnabled = false
+        Toast.makeText(this, "Menghubungkan ke printer...", Toast.LENGTH_SHORT).show()
+        BluetoothPrinterHelper.printReceipt(order) { success, message ->
+            btnPrintReceipt.isEnabled = true
+            Toast.makeText(this, message, if (success) Toast.LENGTH_SHORT else Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun populateReceiptData(order: ModelOrder) {

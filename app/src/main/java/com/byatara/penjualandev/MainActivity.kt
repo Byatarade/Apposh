@@ -93,6 +93,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<android.widget.LinearLayout>(R.id.btn_laporan).setOnClickListener {
             startActivity(Intent(this, LaporanActivity::class.java))
         }
+
+        // Navigate to PrintHistoryActivity (Cetak ulang struk)
+        findViewById<androidx.cardview.widget.CardView>(R.id.cardprinter).setOnClickListener {
+            startActivity(Intent(this, PrintHistoryActivity::class.java))
+        }
     }
 
     private fun setupBottomNavigation() {

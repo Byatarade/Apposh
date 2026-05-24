@@ -384,33 +384,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp"
+            android:padding="12dp"
             android:gravity="center">
 
-            <!-- Share Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_share_receipt"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
+                android:layout_height="52dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="6dp"
                 android:text="Bagikan"
+                android:textSize="12sp"
                 app:icon="@android:drawable/ic_menu_share"
-                app:cornerRadius="16dp"
+                app:cornerRadius="14dp"
                 app:strokeColor="?attr/colorPrimary"
                 android:textColor="?attr/colorPrimary" />
 
-            <!-- Done Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_print_receipt"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="6dp"
+                android:text="Cetak"
+                android:textSize="12sp"
+                app:icon="@drawable/printer"
+                app:iconTint="?attr/colorPrimary"
+                app:cornerRadius="14dp"
+                app:strokeColor="?attr/colorPrimary"
+                android:textColor="?attr/colorPrimary" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_receipt_done"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1.2"
-                android:layout_marginStart="8dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
                 android:text="Selesai"
-                app:cornerRadius="16dp"
+                android:textSize="12sp"
+                app:cornerRadius="14dp"
                 app:backgroundTint="?attr/colorPrimary"
                 android:textColor="?attr/colorOnPrimary" />
 
