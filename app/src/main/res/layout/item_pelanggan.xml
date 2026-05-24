@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:weightSum="3">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_hubungi"
@@ -100,10 +100,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="4dp"
                 android:text="Hubungi"
                 android:textColor="?attr/colorPrimary"
+                android:textSize="12sp"
                 app:strokeColor="?attr/colorPrimary"
+                app:cornerRadius="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_lihat"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="4dp"
+                android:text="Lihat"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="12sp"
+                app:backgroundTint="?attr/colorPrimary"
                 app:cornerRadius="8dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -112,9 +126,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:text="Edit"
                 android:textColor="?attr/colorOnPrimary"
+                android:textSize="12sp"
                 app:backgroundTint="?attr/colorPrimary"
                 app:cornerRadius="8dp" />
 

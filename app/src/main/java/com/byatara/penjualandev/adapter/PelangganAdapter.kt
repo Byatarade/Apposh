@@ -1,26 +1,37 @@
 package com.byatara.penjualandev.adapter
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelPelanggan
 import com.google.android.material.button.MaterialButton
-import android.widget.Toast
-import android.content.Intent
-import android.net.Uri
+import com.google.android.material.card.MaterialCardView
 
 class PelangganAdapter(
     private var pelangganList: List<ModelPelanggan>,
     private val isPickerMode: Boolean = false
 ) : RecyclerView.Adapter<PelangganAdapter.PelangganViewHolder>() {
 
-    private var onItemClickListener: ((ModelPelanggan) -> Unit)? = null
+    private var onShowClickListener: ((ModelPelanggan) -> Unit)? = null
+    private var onEditClickListener: ((ModelPelanggan) -> Unit)? = null
 
+    fun setOnShowClickListener(listener: (ModelPelanggan) -> Unit) {
+        onShowClickListener = listener
+    }
+
+    fun setOnEditClickListener(listener: (ModelPelanggan) -> Unit) {
+        onEditClickListener = listener
+    }
+
+    /** @deprecated Use setOnShowClickListener */
     fun setOnItemClickListener(listener: (ModelPelanggan) -> Unit) {
-        onItemClickListener = listener
+        onShowClickListener = listener
     }
 
     fun updateFullList(newList: List<ModelPelanggan>) {
@@ -29,13 +40,13 @@ class PelangganAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PelangganViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pelanggan, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_pelanggan, parent, false)
         return PelangganViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PelangganViewHolder, position: Int) {
-        val pelanggan = pelangganList[position]
-        holder.bind(pelanggan)
+        holder.bind(pelangganList[position])
     }
 
     override fun getItemCount(): Int = pelangganList.size
@@ -44,10 +55,10 @@ class PelangganAdapter(
         private val tvName: TextView = itemView.findViewById(R.id.tv_pelanggan_name)
         private val tvPhone: TextView = itemView.findViewById(R.id.tv_pelanggan_phone)
         private val tvAddress: TextView = itemView.findViewById(R.id.tv_pelanggan_address)
-        
         private val btnHubungi: MaterialButton = itemView.findViewById(R.id.btn_hubungi)
+        private val btnLihat: MaterialButton = itemView.findViewById(R.id.btn_lihat)
         private val btnEdit: MaterialButton = itemView.findViewById(R.id.btn_edit)
-        private val cardView: com.google.android.material.card.MaterialCardView = itemView.findViewById(R.id.card_pelanggan)
+        private val cardView: MaterialCardView = itemView.findViewById(R.id.card_pelanggan)
 
         fun bind(pelanggan: ModelPelanggan) {
             tvName.text = pelanggan.namaPelanggan ?: "-"
@@ -55,34 +66,41 @@ class PelangganAdapter(
             tvAddress.text = pelanggan.alamatPelanggan ?: "-"
 
             if (isPickerMode) {
-                // Hide action buttons in picker mode
                 btnHubungi.visibility = View.GONE
+                btnLihat.visibility = View.GONE
                 btnEdit.visibility = View.GONE
-                // Adjust card padding/margins for compact dialog list
                 val params = cardView.layoutParams as ViewGroup.MarginLayoutParams
                 params.setMargins(0, 4, 0, 4)
                 cardView.layoutParams = params
-            } else {
-                btnHubungi.visibility = View.VISIBLE
-                btnEdit.visibility = View.VISIBLE
+                itemView.setOnClickListener { onShowClickListener?.invoke(pelanggan) }
+                return
+            }
 
-                btnHubungi.setOnClickListener {
-                    val phone = pelanggan.teleponPelanggan
-                    if (!phone.isNullOrEmpty()) {
-                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
-                        itemView.context.startActivity(intent)
-                    } else {
-                        Toast.makeText(itemView.context, "Nomor telepon tidak tersedia", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            btnHubungi.visibility = View.VISIBLE
+            btnLihat.visibility = View.VISIBLE
+            btnEdit.visibility = View.VISIBLE
 
-                btnEdit.setOnClickListener {
-                    onItemClickListener?.invoke(pelanggan)
+            btnHubungi.setOnClickListener {
+                val phone = pelanggan.teleponPelanggan
+                if (!phone.isNullOrEmpty()) {
+                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
+                    itemView.context.startActivity(intent)
+                } else {
+                    Toast.makeText(itemView.context, "Nomor telepon tidak tersedia", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
+            btnLihat.setOnClickListener {
+                onShowClickListener?.invoke(pelanggan)
+            }
+
+            btnEdit.setOnClickListener {
+                onEditClickListener?.invoke(pelanggan)
+            }
+
             itemView.setOnClickListener {
-                onItemClickListener?.invoke(pelanggan)
+                onShowClickListener?.invoke(pelanggan)
             }
         }
     }

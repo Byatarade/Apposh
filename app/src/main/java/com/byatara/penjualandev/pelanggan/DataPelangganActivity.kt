@@ -60,12 +60,17 @@ class DataPelangganActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         adapter = PelangganAdapter(mutableListOf())
 
-        adapter.setOnItemClickListener { pelanggan ->
-            val intent = Intent(this, ModPelangganActivity::class.java).apply {
+        adapter.setOnShowClickListener { pelanggan ->
+            startActivity(Intent(this, DetailPelangganActivity::class.java).apply {
+                putExtra("PELANGGAN_DATA", pelanggan)
+            })
+        }
+
+        adapter.setOnEditClickListener { pelanggan ->
+            startActivity(Intent(this, ModPelangganActivity::class.java).apply {
                 putExtra("IS_EDIT", true)
                 putExtra("PELANGGAN_DATA", pelanggan)
-            }
-            startActivity(intent)
+            })
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
