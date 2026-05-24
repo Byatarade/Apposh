@@ -1,6 +1,8 @@
 package com.byatara.penjualandev
 
+import android.app.DatePickerDialog
 import android.os.Bundle
+import androidx.appcompat.view.ContextThemeWrapper
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -8,18 +10,23 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.adapter.LaporanTransaksiAdapter
 import com.byatara.penjualandev.model.ModelOrder
+import com.byatara.penjualandev.util.applyCleanSearchStyle
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 class LaporanActivity : AppCompatActivity() {
@@ -27,20 +34,29 @@ class LaporanActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewLoading: ProgressBar
     private lateinit var layoutEmpty: LinearLayout
+    private lateinit var tvEmptyMessage: TextView
     private lateinit var tvTotalPendapatan: TextView
     private lateinit var tvTotalKeuntungan: TextView
     private lateinit var tvJumlahTransaksi: TextView
+    private lateinit var searchView: SearchView
+    private lateinit var btnFilterTanggal: MaterialButton
 
     private lateinit var adapter: LaporanTransaksiAdapter
     private val database = FirebaseDatabase.getInstance()
     private val ordersRef = database.getReference("orders")
+
+    private var allOrders = listOf<ModelOrder>()
+    private var searchQuery = ""
+    private var filterDayStartMillis: Long? = null
+
+    private val dateDisplayFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+    private val dateTimeParseFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_laporan)
 
-        // Setup window insets for edge-to-edge layout
         val mainView = findViewById<View>(android.R.id.content)
         mainView?.let {
             ViewCompat.setOnApplyWindowInsetsListener(it) { v, insets ->
@@ -50,14 +66,13 @@ class LaporanActivity : AppCompatActivity() {
             }
         }
 
-        // Handle back button on toolbar
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar?.setNavigationOnClickListener {
+        findViewById<MaterialToolbar>(R.id.toolbar).setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         initViews()
         setupRecyclerView()
+        setupFilters()
         loadDataFromFirebase()
     }
 
@@ -65,15 +80,77 @@ class LaporanActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.rv_laporan_transaksi)
         viewLoading = findViewById(R.id.view_loading)
         layoutEmpty = findViewById(R.id.layout_empty)
+        tvEmptyMessage = findViewById(R.id.tv_empty_message)
         tvTotalPendapatan = findViewById(R.id.tv_total_pendapatan)
         tvTotalKeuntungan = findViewById(R.id.tv_total_keuntungan)
         tvJumlahTransaksi = findViewById(R.id.tv_jumlah_transaksi)
+        searchView = findViewById(R.id.search_laporan)
+        btnFilterTanggal = findViewById(R.id.btn_filter_tanggal)
     }
 
     private fun setupRecyclerView() {
         adapter = LaporanTransaksiAdapter(mutableListOf())
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+    }
+
+    private fun setupFilters() {
+        searchView.applyCleanSearchStyle()
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchQuery = query.orEmpty().trim()
+                applyFilters()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchQuery = newText.orEmpty().trim()
+                applyFilters()
+                return true
+            }
+        })
+
+        btnFilterTanggal.setOnClickListener {
+            showDatePicker()
+        }
+
+        btnFilterTanggal.setOnLongClickListener {
+            clearDateFilter()
+            true
+        }
+    }
+
+    private fun showDatePicker() {
+        val cal = Calendar.getInstance()
+        filterDayStartMillis?.let { cal.timeInMillis = it }
+
+        DatePickerDialog(
+            ContextThemeWrapper(this, R.style.Theme_PenjualanDev_DatePicker),
+            { _, year, month, dayOfMonth ->
+                val selected = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, year)
+                    set(Calendar.MONTH, month)
+                    set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
+                filterDayStartMillis = selected.timeInMillis
+                btnFilterTanggal.text = dateDisplayFormat.format(selected.time)
+                applyFilters()
+            },
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun clearDateFilter() {
+        filterDayStartMillis = null
+        btnFilterTanggal.text = "Semua Tanggal"
+        applyFilters()
+        Toast.makeText(this, "Filter tanggal direset", Toast.LENGTH_SHORT).show()
     }
 
     private fun loadDataFromFirebase() {
@@ -84,60 +161,105 @@ class LaporanActivity : AppCompatActivity() {
         ordersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 viewLoading.visibility = View.GONE
-                
-                if (snapshot.exists()) {
-                    val orderList = ArrayList<ModelOrder>()
-                    var totalRevenue = 0
-                    var totalProfit = 0
 
-                    for (child in snapshot.children) {
-                        val order = child.getValue(ModelOrder::class.java)
-                        if (order != null) {
-                            if (order.idOrder.isNullOrEmpty()) {
-                                order.idOrder = child.key
-                            }
-                            orderList.add(order)
-                            totalRevenue += order.totalHarga ?: 0
-                            totalProfit += order.keuntungan ?: 0
-                        }
-                    }
-
-                    // Sort orders by timestamp descending (newest first)
-                    orderList.sortByDescending { it.timestamp ?: 0L }
-
-                    adapter.updateData(orderList)
-
-                    tvTotalPendapatan.text = formatRupiah(totalRevenue)
-                    tvTotalKeuntungan.text = formatRupiah(totalProfit)
-                    tvJumlahTransaksi.text = orderList.size.toString()
-
-                    if (orderList.isEmpty()) {
-                        layoutEmpty.visibility = View.VISIBLE
-                        recyclerView.visibility = View.GONE
-                    } else {
-                        layoutEmpty.visibility = View.GONE
-                        recyclerView.visibility = View.VISIBLE
-                    }
-                } else {
-                    tvTotalPendapatan.text = "Rp 0"
-                    tvTotalKeuntungan.text = "Rp 0"
-                    tvJumlahTransaksi.text = "0"
-                    layoutEmpty.visibility = View.VISIBLE
-                    recyclerView.visibility = View.GONE
+                if (!snapshot.exists()) {
+                    allOrders = emptyList()
+                    applyFilters()
+                    return
                 }
+
+                val orderList = ArrayList<ModelOrder>()
+                for (child in snapshot.children) {
+                    val order = child.getValue(ModelOrder::class.java) ?: continue
+                    if (order.idOrder.isNullOrEmpty()) {
+                        order.idOrder = child.key
+                    }
+                    orderList.add(order)
+                }
+
+                allOrders = orderList.sortedByDescending { it.timestamp ?: 0L }
+                applyFilters()
             }
 
             override fun onCancelled(error: DatabaseError) {
                 viewLoading.visibility = View.GONE
-                layoutEmpty.visibility = View.VISIBLE
-                recyclerView.visibility = View.GONE
-                Toast.makeText(this@LaporanActivity, "Gagal memuat data: ${error.message}", Toast.LENGTH_SHORT).show()
+                allOrders = emptyList()
+                applyFilters()
+                Toast.makeText(
+                    this@LaporanActivity,
+                    "Gagal memuat data: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
+    }
+
+    private fun applyFilters() {
+        var filtered = allOrders
+
+        filterDayStartMillis?.let { dayStart ->
+            val dayEnd = dayStart + DAY_MILLIS - 1
+            filtered = filtered.filter { order ->
+                val ts = order.timestamp ?: parseOrderDate(order.tanggalWaktu)
+                ts != null && ts in dayStart..dayEnd
+            }
+        }
+
+        if (searchQuery.isNotEmpty()) {
+            val q = searchQuery.lowercase(Locale.getDefault())
+            filtered = filtered.filter { order ->
+                order.idOrder?.lowercase()?.contains(q) == true ||
+                    order.namaKasir?.lowercase()?.contains(q) == true ||
+                    order.namaPelanggan?.lowercase()?.contains(q) == true ||
+                    order.metodeBayar?.lowercase()?.contains(q) == true ||
+                    order.tanggalWaktu?.lowercase()?.contains(q) == true
+            }
+        }
+
+        filtered = filtered.sortedByDescending { it.timestamp ?: parseOrderDate(it.tanggalWaktu) ?: 0L }
+
+        val totalRevenue = filtered.sumOf { it.totalHarga ?: 0 }
+        val totalProfit = filtered.sumOf { it.keuntungan ?: 0 }
+
+        tvTotalPendapatan.text = formatRupiah(totalRevenue)
+        tvTotalKeuntungan.text = formatRupiah(totalProfit)
+        tvJumlahTransaksi.text = filtered.size.toString()
+
+        adapter.updateData(filtered)
+
+        when {
+            allOrders.isEmpty() -> {
+                tvEmptyMessage.text = "Belum ada transaksi terdaftar"
+                layoutEmpty.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            }
+            filtered.isEmpty() -> {
+                tvEmptyMessage.text = "Tidak ada transaksi yang cocok dengan filter"
+                layoutEmpty.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            }
+            else -> {
+                layoutEmpty.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun parseOrderDate(tanggalWaktu: String?): Long? {
+        if (tanggalWaktu.isNullOrBlank()) return null
+        return try {
+            dateTimeParseFormat.parse(tanggalWaktu)?.time
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun formatRupiah(amount: Int): String {
         val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
         return format.format(amount).replace(",00", "")
+    }
+
+    companion object {
+        private const val DAY_MILLIS = 24L * 60L * 60L * 1000L
     }
 }
