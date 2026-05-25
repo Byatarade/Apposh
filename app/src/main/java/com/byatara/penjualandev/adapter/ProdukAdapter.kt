@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelProduk
 import com.google.android.material.card.MaterialCardView
@@ -238,8 +239,4 @@ class ProdukAdapter(
     // ---------------------------------------------------------------
 
     /** Format angka ke format Rupiah: Rp 10.000 */
-    private fun formatRupiah(amount: Int): String {
-        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-        return format.format(amount).replace(",00", "")
-    }
 }

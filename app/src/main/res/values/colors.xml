@@ -30,6 +30,7 @@
     <!-- Accent/Status Colors -->
     <color name="colorAccent">#10B981</color>
     <color name="red">#EF4444</color>
+    <color name="colorError">#EF4444</color>
     <color name="green_success">#059669</color>
     
     <!-- Old colors mapping (kept to prevent crashes if used directly) -->

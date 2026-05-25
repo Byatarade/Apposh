@@ -13,6 +13,7 @@ import com.byatara.penjualandev.kategori.DataKategoriActivity
 import com.byatara.penjualandev.pegawai.DataPegawaiActivity
 import com.byatara.penjualandev.pelanggan.DataPelangganActivity
 import com.byatara.penjualandev.produk.DataProdukActivity
+import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.utils.GreetingHelper
 import com.byatara.penjualandev.utils.SaldoManager
 import com.google.firebase.auth.FirebaseAuth
@@ -153,10 +154,5 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
         com.byatara.penjualandev.utils.BottomNavigationHelper.setup(this, R.id.navigation_home)
-    }
-
-    private fun formatRupiah(amount: Long): String {
-        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-        return format.format(amount).replace(",00", "")
     }
 }

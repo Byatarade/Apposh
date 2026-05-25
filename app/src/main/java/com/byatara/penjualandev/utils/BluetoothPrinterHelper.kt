@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import android.os.Looper
+import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.model.ModelOrder
 import java.io.IOException
 import java.nio.charset.Charset
@@ -141,10 +142,5 @@ object BluetoothPrinterHelper {
         write(CUT_PAPER)
 
         return buffer.toByteArray()
-    }
-
-    private fun formatRupiah(amount: Int): String {
-        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-        return format.format(amount).replace(",00", "")
     }
 }

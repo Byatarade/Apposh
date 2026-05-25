@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.adapter.OrderSummaryAdapter
 import com.byatara.penjualandev.model.ModelNotification
+import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.model.ModelOrder
 import com.byatara.penjualandev.utils.SaldoManager
 import com.google.android.material.appbar.MaterialToolbar
@@ -335,10 +336,5 @@ class PembayaranActivity : AppCompatActivity() {
         }.addOnFailureListener {
             Toast.makeText(this, "Gagal memproses transaksi: ${it.message}", Toast.LENGTH_LONG).show()
         }
-    }
-
-    private fun formatRupiah(amount: Int): String {
-        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-        return format.format(amount).replace(",00", "")
     }
 }

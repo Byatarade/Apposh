@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelOrder
 import com.google.android.material.button.MaterialButton
@@ -54,11 +55,6 @@ class PrintHistoryAdapter(
 
             btnPrint.setOnClickListener { onPrintClick(order) }
             itemView.setOnClickListener { onPrintClick(order) }
-        }
-
-        private fun formatRupiah(amount: Int): String {
-            val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-            return format.format(amount).replace(",00", "")
         }
     }
 }

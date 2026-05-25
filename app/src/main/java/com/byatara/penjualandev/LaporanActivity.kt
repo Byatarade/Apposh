@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.adapter.LaporanTransaksiAdapter
 import com.byatara.penjualandev.model.ModelOrder
 import com.byatara.penjualandev.util.applyCleanSearchStyle
@@ -302,11 +303,6 @@ class LaporanActivity : AppCompatActivity() {
         } catch (_: Exception) {
             null
         }
-    }
-
-    private fun formatRupiah(amount: Int): String {
-        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-        return format.format(amount).replace(",00", "")
     }
 
     companion object {

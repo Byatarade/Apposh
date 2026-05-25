@@ -68,7 +68,9 @@ class DataProdukActivity : AppCompatActivity() {
         
         adapter.setOnItemClickListener(object : ProdukAdapter.OnItemClickListener {
             override fun onItemClicked(produk: ModelProduk) {
-                // Fungsi ketika item di-klik, untuk sekarang dibiarkan (opsional untuk edit/detail)
+                val intent = Intent(this@DataProdukActivity, DetailProdukActivity::class.java)
+                intent.putExtra("PRODUK_DATA", produk)
+                startActivity(intent)
             }
         })
 

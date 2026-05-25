@@ -27,6 +27,7 @@ import com.byatara.penjualandev.adapter.PegawaiAdapter
 import com.byatara.penjualandev.pelanggan.ModPelangganActivity
 import com.byatara.penjualandev.pegawai.ModPegawaiActivity
 import com.byatara.penjualandev.util.applyCleanSearchStyle
+import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.viewmodel.PegawaiViewModel
 import com.byatara.penjualandev.viewmodel.PelangganViewModel
 import com.byatara.penjualandev.viewmodel.ProdukViewModel
@@ -507,10 +508,5 @@ class TransaksiActivity : AppCompatActivity() {
         }
 
         dialog.show()
-    }
-
-    private fun formatRupiah(amount: Int): String {
-        val format = java.text.NumberFormat.getCurrencyInstance(java.util.Locale("id", "ID"))
-        return format.format(amount).replace(",00", "")
     }
 }

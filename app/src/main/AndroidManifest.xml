@@ -35,8 +35,11 @@
             android:name=".Exit"
             android:exported="false" />
         <activity
+            android:name=".produk.DetailProdukActivity"
+            android:exported="false" />
+        <activity
             android:name=".produk.TambahProdukActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".produk.DataProdukActivity"
             android:exported="true" />

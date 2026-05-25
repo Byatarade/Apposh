@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelOrder
 import java.text.NumberFormat
@@ -56,11 +57,6 @@ class LaporanTransaksiAdapter(
             } else {
                 tvOrderKeuntungan.setTextColor(android.graphics.Color.parseColor("#EF4444")) // Red
             }
-        }
-
-        private fun formatRupiah(amount: Int): String {
-            val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-            return format.format(amount).replace(",00", "")
         }
     }
 }

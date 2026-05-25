@@ -12,7 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.byatara.penjualandev.adapter.OrderSummaryAdapter
 import com.byatara.penjualandev.model.ModelOrder
+import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.utils.BluetoothPermissionHelper
 import com.byatara.penjualandev.utils.BluetoothPrinterHelper
 import com.google.android.material.button.MaterialButton
@@ -210,10 +212,5 @@ class ReceiptActivity : AppCompatActivity() {
             putExtra(Intent.EXTRA_TEXT, shareText)
         }
         startActivity(Intent.createChooser(intent, "Bagikan Struk Melalui"))
-    }
-
-    private fun formatRupiah(amount: Int): String {
-        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-        return format.format(amount).replace(",00", "")
     }
 }

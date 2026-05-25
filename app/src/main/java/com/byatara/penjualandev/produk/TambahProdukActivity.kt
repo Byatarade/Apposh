@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.byatara.penjualandev.R
@@ -57,6 +58,10 @@ class TambahProdukActivity : AppCompatActivity() {
     private lateinit var cabangViewModel: CabangViewModel
     private lateinit var kategoriViewModel: DataKategoriViewModel
 
+    // Edit Mode
+    private var isEditMode: Boolean = false
+    private var existingProduk: ModelProduk? = null
+
     // Firebase
     private val database = FirebaseDatabase.getInstance().getReference("produk")
 
@@ -65,12 +70,67 @@ class TambahProdukActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_tambah_produk)
 
+        isEditMode = intent.getBooleanExtra("EDIT_MODE", false)
+        existingProduk = intent.getParcelableExtra("PRODUK_DATA")
+
         cabangViewModel = ViewModelProvider(this).get(CabangViewModel::class.java)
         kategoriViewModel = ViewModelProvider(this).get(DataKategoriViewModel::class.java)
 
         initViews()
         setupListeners()
         setupSpinner()
+
+        if (isEditMode && existingProduk != null) {
+            setupEditMode()
+        }
+    }
+
+    private fun setupEditMode() {
+        existingProduk?.let { p ->
+            findViewById<TextView>(R.id.tv_toolbar_title).text = "Edit Produk"
+            etNamaProduk.setText(p.namaProduk)
+            etHargaBeli.setText(p.hargaBeli.toString())
+            etHargaJual.setText(p.hargaJual.toString())
+            
+            // Parse deskripsi back to SKU & Barcode if possible
+            val desc = p.deskripsiProduk ?: ""
+            if (desc.contains("SKU: ") && desc.contains("Barcode: ")) {
+                val lines = desc.split("\n")
+                etSku.setText(lines[0].replace("SKU: ", "").trim())
+                etBarcode.setText(lines[1].replace("Barcode: ", "").trim())
+            }
+
+            selectedIdKategori = p.idKategori ?: ""
+            selectedIdCabang = p.idCabang ?: ""
+            
+            if (selectedIdKategori.isNotEmpty()) {
+                FirebaseDatabase.getInstance().getReference("kategori").child(selectedIdKategori).get()
+                    .addOnSuccessListener { snapshot ->
+                        btnPilihKategori.text = snapshot.child("namaKategori").value.toString()
+                    }
+            }
+
+            if (selectedIdCabang.isNotEmpty()) {
+                FirebaseDatabase.getInstance().getReference("cabang").child(selectedIdCabang).get()
+                    .addOnSuccessListener { snapshot ->
+                        btnPilihCabang.text = snapshot.child("namaCabang").value.toString()
+                    }
+            }
+
+            spinnerTipeKeuntungan.setText(p.tipeKeuntungan, false)
+            
+            if (p.tanpaBatas == "ya") {
+                cbStokTakTerbatas.isChecked = true
+                etStok.setText("")
+                etStok.isEnabled = false
+            } else {
+                cbStokTakTerbatas.isChecked = false
+                etStok.setText(p.stokProduk.toString())
+                etStok.isEnabled = true
+            }
+
+            btnSimpan.text = "Update Produk"
+        }
     }
 
     private fun initViews() {
@@ -335,14 +395,18 @@ class TambahProdukActivity : AppCompatActivity() {
         idCabang: String,
         idKategori: String
     ) {
-        val idProduk = database.push().key ?: return
+        val idProduk = if (isEditMode && existingProduk != null) {
+            existingProduk?.idProduk ?: ""
+        } else {
+            database.push().key ?: return
+        }
 
         val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
         val modelProduk = ModelProduk(
             idProduk = idProduk,
             namaProduk = namaProduk,
-            fotoProduk = "", // Kosong sementara, nanti diisi link gambar
+            fotoProduk = existingProduk?.fotoProduk ?: "",
             deskripsiProduk = deskripsi,
             idKategori = idKategori,
             idCabang = idCabang,
@@ -351,29 +415,30 @@ class TambahProdukActivity : AppCompatActivity() {
             hargaBeli = hargaBeli,
             hargaJual = hargaJual,
             tipeKeuntungan = tipeKeuntungan,
-            manajemenStok = "aktif",
-            statusProduk = "aktif",
-            createdAt = currentDate,
+            manajemenStok = existingProduk?.manajemenStok ?: "aktif",
+            statusProduk = existingProduk?.statusProduk ?: "aktif",
+            createdAt = existingProduk?.createdAt ?: currentDate,
             updatedAt = currentDate
         )
 
-        // Panggil Toast Loading... (Opsional bisa pakai ProgressDialog)
-        Toast.makeText(this, "Menyimpan produk...", Toast.LENGTH_SHORT).show()
+        val loadingMsg = if (isEditMode) "Mengupdate produk..." else "Menyimpan produk..."
+        Toast.makeText(this, loadingMsg, Toast.LENGTH_SHORT).show()
 
-        database.child(idProduk).setValue(modelProduk)
-            .addOnSuccessListener {
-                // Catat log histori aktivitas ke Firebase
-                com.byatara.penjualandev.utils.CatatanHistori.catat(
-                    judul = "Produk Ditambahkan",
-                    deskripsi = "Produk baru '$namaProduk' berhasil didaftarkan ke sistem",
-                    tipe = "produk"
-                )
-
-                Toast.makeText(this, "Produk berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                finish() // Kembali ke activity sebelumnya
+        database.child(idProduk).setValue(modelProduk).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                if (!isEditMode) {
+                    com.byatara.penjualandev.utils.CatatanHistori.catat(
+                        judul = "Produk Ditambahkan",
+                        deskripsi = "Produk baru '$namaProduk' berhasil didaftarkan ke sistem",
+                        tipe = "produk"
+                    )
+                }
+                val msg = if (isEditMode) "Produk berhasil diupdate" else "Produk berhasil ditambahkan"
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, "Gagal menyimpan data: ${task.exception?.message}", Toast.LENGTH_LONG).show()
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Gagal: ${e.message}", Toast.LENGTH_LONG).show()
-            }
+        }
     }
 }
