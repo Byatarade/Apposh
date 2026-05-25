@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DevSpark</string>
-    <string name="sapauser">Good Morning, Byataradev</string>
+    <string name="sapauser">Byataradev</string>
     <string name="saldoanda">Your Balance: </string>
     <string name="tanggalberanda">January 26, 2026</string>
     <string name="transaksi">Transaction</string>
