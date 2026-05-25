@@ -48,7 +48,7 @@
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="?attr/colorPrimaryContainer">
+                app:cardBackgroundColor="@color/colorPrimary">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TOTAL AKHIR (TERMASUK PPN 11%)"
-                        android:textColor="?attr/colorOnPrimaryContainer"
+                        android:textColor="@color/white"
                         android:textStyle="bold"
                         android:letterSpacing="0.08"
                         android:textSize="11sp" />
@@ -72,7 +72,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:text="Rp 0"
-                        android:textColor="?attr/colorOnPrimaryContainer"
+                        android:textColor="@color/white"
                         android:textSize="32sp"
                         android:textStyle="bold" />
 
@@ -82,8 +82,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="0 Item"
-                        android:textColor="?attr/colorPrimary"
-                        app:chipBackgroundColor="?attr/colorOnPrimaryContainer"
+                        android:textColor="@color/colorPrimary"
+                        app:chipBackgroundColor="@color/white"
                         app:chipStrokeWidth="0dp"
                         app:chipMinHeight="28dp"/>
                 </LinearLayout>
@@ -271,7 +271,10 @@
                     android:layout_weight="1"
                     android:paddingVertical="12dp"
                     android:text="Tunai"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    app:backgroundTint="@color/toggle_button_background"
+                    android:textColor="@color/toggle_button_text"
+                    app:strokeColor="@color/colorOutlineStroke"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_qris"
@@ -281,7 +284,10 @@
                     android:layout_weight="1"
                     android:paddingVertical="12dp"
                     android:text="QRIS"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    app:backgroundTint="@color/toggle_button_background"
+                    android:textColor="@color/toggle_button_text"
+                    app:strokeColor="@color/colorOutlineStroke"/>
                 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_transfer"
@@ -291,7 +297,10 @@
                     android:layout_weight="1"
                     android:paddingVertical="12dp"
                     android:text="Transfer"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    app:backgroundTint="@color/toggle_button_background"
+                    android:textColor="@color/toggle_button_text"
+                    app:strokeColor="@color/colorOutlineStroke"/>
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <!-- Section 5: Kalkulator Tunai (Hanya muncul jika Tunai dipilih) -->
