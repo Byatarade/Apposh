@@ -80,6 +80,9 @@
             android:name=".PrintHistoryActivity"
             android:exported="false" />
         <activity
+            android:name=".NotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".LaporanActivity"
             android:exported="false" />
         <activity

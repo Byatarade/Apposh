@@ -49,6 +49,14 @@ object BottomNavigationHelper {
                     }
                     true
                 }
+                R.id.navigation_clock -> {
+                    val intent = Intent(activity, com.byatara.penjualandev.NotificationActivity::class.java)
+                    activity.startActivity(intent)
+                    if (activity !is MainActivity) {
+                        activity.finish()
+                    }
+                    true
+                }
                 R.id.navigation_profile -> {
                     val intent = Intent(activity, com.byatara.penjualandev.ProfileActivity::class.java)
                     activity.startActivity(intent)

@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.adapter.OrderSummaryAdapter
+import com.byatara.penjualandev.model.ModelNotification
 import com.byatara.penjualandev.model.ModelOrder
 import com.byatara.penjualandev.utils.SaldoManager
 import com.google.android.material.appbar.MaterialToolbar
@@ -235,7 +236,24 @@ class PembayaranActivity : AppCompatActivity() {
                     stockRef.runTransaction(object : Transaction.Handler {
                         override fun doTransaction(mutableData: MutableData): Transaction.Result {
                             val currentStock = mutableData.getValue(Int::class.java) ?: 0
-                            mutableData.value = if (currentStock >= qty) currentStock - qty else 0
+                            val newStock = if (currentStock >= qty) currentStock - qty else 0
+                            mutableData.value = newStock
+
+                            // Tambahkan Notif Stok Rendah jika stok < 5
+                            if (newStock < 5) {
+                                val notifRef = database.getReference("notifications").push()
+                                val stockNotif = ModelNotification(
+                                    id = notifRef.key,
+                                    type = "stok",
+                                    title = "Stok Hampir Habis!",
+                                    message = "Produk ${item.namaProduk} sisa $newStock. Segera tambah stok!",
+                                    timestamp = System.currentTimeMillis(),
+                                    isRead = false,
+                                    targetId = idProduk
+                                )
+                                notifRef.setValue(stockNotif)
+                            }
+
                             return Transaction.success(mutableData)
                         }
 
@@ -248,7 +266,20 @@ class PembayaranActivity : AppCompatActivity() {
                 }
             }
 
-            // 3. Tambah Catatan Histori
+            // 3. Tambah Notifikasi Transaksi Berhasil
+            val notifRef = database.getReference("notifications").push()
+            val transNotif = ModelNotification(
+                id = notifRef.key,
+                type = "transaksi",
+                title = "Pembayaran Berhasil",
+                message = "Transaksi ${order.idOrder} senilai ${formatRupiah(totalAkhir)} telah sukses.",
+                timestamp = System.currentTimeMillis(),
+                isRead = false,
+                targetId = order.idOrder
+            )
+            notifRef.setValue(transNotif)
+
+            // 4. Tambah Catatan Histori
             val historiRef = database.getReference("histori").push()
             val formatWaktu = java.text.SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))
             val formattedTime = formatWaktu.format(java.util.Date())
