@@ -38,8 +38,10 @@ class LaporanActivity : AppCompatActivity() {
     private lateinit var tvTotalPendapatan: TextView
     private lateinit var tvTotalKeuntungan: TextView
     private lateinit var tvJumlahTransaksi: TextView
+    private lateinit var tvAvgTransaksi: TextView
     private lateinit var searchView: SearchView
     private lateinit var btnFilterTanggal: MaterialButton
+    private lateinit var cgPaymentFilter: com.google.android.material.chip.ChipGroup
 
     private lateinit var adapter: LaporanTransaksiAdapter
     private val database = FirebaseDatabase.getInstance()
@@ -48,6 +50,7 @@ class LaporanActivity : AppCompatActivity() {
     private var allOrders = listOf<ModelOrder>()
     private var searchQuery = ""
     private var filterDayStartMillis: Long? = null
+    private var selectedPaymentMethod = "Semua"
 
     private val dateDisplayFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
     private val dateTimeParseFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))
@@ -84,8 +87,16 @@ class LaporanActivity : AppCompatActivity() {
         tvTotalPendapatan = findViewById(R.id.tv_total_pendapatan)
         tvTotalKeuntungan = findViewById(R.id.tv_total_keuntungan)
         tvJumlahTransaksi = findViewById(R.id.tv_jumlah_transaksi)
+        tvAvgTransaksi = findViewById(R.id.tv_avg_transaksi)
         searchView = findViewById(R.id.search_laporan)
         btnFilterTanggal = findViewById(R.id.btn_filter_tanggal)
+        cgPaymentFilter = findViewById(R.id.cg_payment_filter)
+
+        // Style all chips to match POS style
+        for (i in 0 until cgPaymentFilter.childCount) {
+            val chip = cgPaymentFilter.getChildAt(i) as? com.google.android.material.chip.Chip
+            chip?.let { styleChip(it) }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -109,6 +120,14 @@ class LaporanActivity : AppCompatActivity() {
                 return true
             }
         })
+
+        cgPaymentFilter.setOnCheckedStateChangeListener { group, checkedIds ->
+            if (checkedIds.isNotEmpty()) {
+                val chip = group.findViewById<com.google.android.material.chip.Chip>(checkedIds[0])
+                selectedPaymentMethod = chip.text.toString()
+                applyFilters()
+            }
+        }
 
         btnFilterTanggal.setOnClickListener {
             showDatePicker()
@@ -205,6 +224,12 @@ class LaporanActivity : AppCompatActivity() {
             }
         }
 
+        if (selectedPaymentMethod != "Semua") {
+            filtered = filtered.filter { order ->
+                order.metodeBayar?.equals(selectedPaymentMethod, ignoreCase = true) == true
+            }
+        }
+
         if (searchQuery.isNotEmpty()) {
             val q = searchQuery.lowercase(Locale.getDefault())
             filtered = filtered.filter { order ->
@@ -220,10 +245,12 @@ class LaporanActivity : AppCompatActivity() {
 
         val totalRevenue = filtered.sumOf { it.totalHarga ?: 0 }
         val totalProfit = filtered.sumOf { it.keuntungan ?: 0 }
+        val avgTransaction = if (filtered.isNotEmpty()) totalRevenue / filtered.size else 0
 
         tvTotalPendapatan.text = formatRupiah(totalRevenue)
         tvTotalKeuntungan.text = formatRupiah(totalProfit)
         tvJumlahTransaksi.text = filtered.size.toString()
+        tvAvgTransaksi.text = formatRupiah(avgTransaction)
 
         adapter.updateData(filtered)
 
@@ -243,6 +270,29 @@ class LaporanActivity : AppCompatActivity() {
                 recyclerView.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun styleChip(chip: com.google.android.material.chip.Chip) {
+        val states = arrayOf(
+            intArrayOf(android.R.attr.state_checked),
+            intArrayOf(-android.R.attr.state_checked)
+        )
+        val backgroundColors = intArrayOf(
+            androidx.core.content.ContextCompat.getColor(this, R.color.colorPrimary),
+            android.graphics.Color.TRANSPARENT
+        )
+        chip.chipBackgroundColor = android.content.res.ColorStateList(states, backgroundColors)
+        val textColors = intArrayOf(
+            androidx.core.content.ContextCompat.getColor(this, R.color.white),
+            androidx.core.content.ContextCompat.getColor(this, R.color.colorSecondaryText)
+        )
+        chip.setTextColor(android.content.res.ColorStateList(states, textColors))
+        val strokeColors = intArrayOf(
+            android.graphics.Color.TRANSPARENT,
+            androidx.core.content.ContextCompat.getColor(this, R.color.colorOutlineStroke)
+        )
+        chip.chipStrokeColor = android.content.res.ColorStateList(states, strokeColors)
+        chip.chipStrokeWidth = resources.displayMetrics.density * 1f
     }
 
     private fun parseOrderDate(tanggalWaktu: String?): Long? {
