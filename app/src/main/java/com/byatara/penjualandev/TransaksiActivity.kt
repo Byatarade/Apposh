@@ -56,6 +56,7 @@ class TransaksiActivity : AppCompatActivity() {
     private lateinit var tvCartItems: TextView
     private lateinit var tvCartTotal: TextView
     private lateinit var btnPay: MaterialButton
+    private lateinit var cardCartBar: View
 
     private val cartMap = mutableMapOf<String, Pair<ModelProduk, Int>>() // idProduk -> Pair(Produk, Quantity)
 
@@ -106,6 +107,7 @@ class TransaksiActivity : AppCompatActivity() {
         tvCartItems = findViewById(R.id.tv_cart_items)
         tvCartTotal = findViewById(R.id.tv_cart_total)
         btnPay = findViewById(R.id.btn_pay)
+        cardCartBar = findViewById(R.id.card_cart_bar)
 
         btnPay.setOnClickListener {
             showOrderDetailBottomSheet()
@@ -277,9 +279,11 @@ class TransaksiActivity : AppCompatActivity() {
         }
 
         if (totalItems > 0) {
+            cardCartBar.visibility = View.VISIBLE
             tvCartItems.text = "$totalItems Item Terpilih"
             tvCartTotal.text = formatRupiah(totalPrice)
         } else {
+            cardCartBar.visibility = View.GONE
             tvCartItems.text = "Belum ada pesanan"
             tvCartTotal.text = "Rp 0"
         }

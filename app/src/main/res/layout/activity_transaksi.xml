@@ -123,6 +123,7 @@
 
     <!-- Bottom Cart Bar (Bento POS Style) -->
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_cart_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -130,7 +131,8 @@
         app:cardCornerRadius="24dp"
         app:cardElevation="12dp"
         app:cardBackgroundColor="?attr/colorPrimary"
-        app:strokeWidth="0dp">
+        app:strokeWidth="0dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
