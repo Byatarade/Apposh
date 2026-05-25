@@ -118,12 +118,16 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 btnLogin.isEnabled = true
                 if (task.isSuccessful) {
-                    val user = auth.currentUser
                     Toast.makeText(this, "Selamat datang!", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
-                    val errorMsg = task.exception?.message ?: "Login gagal"
+                    val exception = task.exception
+                    val errorMsg = when (exception) {
+                        is com.google.firebase.auth.FirebaseAuthInvalidUserException -> "Email tidak terdaftar"
+                        is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> "Email atau Password salah"
+                        else -> exception?.message ?: "Login gagal, silakan coba lagi"
+                    }
                     Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
                 }
             }

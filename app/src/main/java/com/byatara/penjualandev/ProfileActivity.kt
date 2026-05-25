@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.database.FirebaseDatabase
 
 class ProfileActivity : AppCompatActivity() {
@@ -89,12 +90,26 @@ class ProfileActivity : AppCompatActivity() {
         val confirmPassword = etConfirmPassword.text.toString()
         val currentUser = auth.currentUser ?: return
 
+        // 1. Validasi Input Terlebih Dahulu
         if (newName.isEmpty()) {
             etName.error = "Nama tidak boleh kosong"
             return
         }
 
+        if (newPassword.isNotEmpty()) {
+            if (newPassword.length < 6) {
+                etNewPassword.error = "Password minimal 6 karakter"
+                return
+            }
+            if (newPassword != confirmPassword) {
+                etConfirmPassword.error = "Password tidak cocok"
+                return
+            }
+        }
+
         btnSave.isEnabled = false
+        
+        // 2. Update Nama di Realtime Database
         val updates = mutableMapOf<String, Any>()
         updates["name"] = newName
 
@@ -102,18 +117,8 @@ class ProfileActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 tvProfileName.text = newName
                 
+                // 3. Update Password jika diisi
                 if (newPassword.isNotEmpty()) {
-                    if (newPassword.length < 6) {
-                        etNewPassword.error = "Password minimal 6 karakter"
-                        btnSave.isEnabled = true
-                        return@addOnCompleteListener
-                    }
-                    if (newPassword != confirmPassword) {
-                        etConfirmPassword.error = "Password tidak cocok"
-                        btnSave.isEnabled = true
-                        return@addOnCompleteListener
-                    }
-
                     currentUser.updatePassword(newPassword).addOnCompleteListener { pwTask ->
                         btnSave.isEnabled = true
                         if (pwTask.isSuccessful) {
@@ -121,12 +126,17 @@ class ProfileActivity : AppCompatActivity() {
                             etNewPassword.text?.clear()
                             etConfirmPassword.text?.clear()
                         } else {
-                            Toast.makeText(this, "Gagal memperbarui password: ${pwTask.exception?.message}", Toast.LENGTH_LONG).show()
+                            val exception = pwTask.exception
+                            if (exception is FirebaseAuthRecentLoginRequiredException) {
+                                Toast.makeText(this, "Keamanan: Silakan keluar dan masuk kembali untuk mengubah password", Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(this, "Gagal ganti password: ${exception?.message}", Toast.LENGTH_LONG).show()
+                            }
                         }
                     }
                 } else {
                     btnSave.isEnabled = true
-                    Toast.makeText(this, "Profil berhasil diperbarui", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Nama berhasil diperbarui", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 btnSave.isEnabled = true

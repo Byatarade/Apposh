@@ -115,38 +115,73 @@
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp" />
 
-                    <GridLayout
+                    <!-- Baris Kasir -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:columnCount="2">
-
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/pegawai"
+                            app:tint="?attr/colorPrimary"
+                            android:alpha="0.8"/>
+                            
                         <TextView
-                            android:text="Kasir / Staff:"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="Kasir / Staff"
                             android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="12sp"
-                            android:layout_columnWeight="1" />
+                            android:textSize="12sp" />
+                            
                         <TextView
                             android:id="@+id/tv_pay_cashier"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Kasir Utama"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:gravity="end" />
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
+                    <!-- Baris Pelanggan -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="10dp">
+                        
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/pegawai"
+                            app:tint="?attr/colorPrimary"
+                            android:alpha="0.8"
+                            android:rotationY="180"/>
+                            
                         <TextView
-                            android:text="Pelanggan:"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="Pelanggan"
                             android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="12sp"
-                            android:layout_marginTop="4dp" />
+                            android:textSize="12sp" />
+                            
                         <TextView
                             android:id="@+id/tv_pay_customer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Umum"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:gravity="end"
-                            android:layout_marginTop="4dp" />
-                    </GridLayout>
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
