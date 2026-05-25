@@ -43,6 +43,9 @@ class PembayaranActivity : AppCompatActivity() {
     private lateinit var rvPayItems: RecyclerView
     private lateinit var togglePaymentMethod: MaterialButtonToggleGroup
     private lateinit var llCashContainer: LinearLayout
+    private lateinit var llQrisContainer: LinearLayout
+    private lateinit var llEwalletContainer: LinearLayout
+    private lateinit var cvQrisCode: View
     private lateinit var etCashReceived: TextInputEditText
     private lateinit var tvChangeAmount: TextView
     
@@ -104,6 +107,9 @@ class PembayaranActivity : AppCompatActivity() {
         rvPayItems = findViewById(R.id.rv_pay_items)
         togglePaymentMethod = findViewById(R.id.toggle_payment_method)
         llCashContainer = findViewById(R.id.ll_cash_container)
+        llQrisContainer = findViewById(R.id.ll_qris_container)
+        llEwalletContainer = findViewById(R.id.ll_ewallet_container)
+        cvQrisCode = findViewById(R.id.cv_qris_code)
         etCashReceived = findViewById(R.id.et_cash_received)
         tvChangeAmount = findViewById(R.id.tv_change_amount)
         
@@ -134,21 +140,34 @@ class PembayaranActivity : AppCompatActivity() {
     }
 
     private fun setupPaymentMethods() {
+        cvQrisCode.setOnClickListener {
+            if (selectedMethod == "QRIS") {
+                Toast.makeText(this, "Simulasi Pembayaran QRIS Berhasil!", Toast.LENGTH_SHORT).show()
+                handleConfirmation()
+            }
+        }
+
         togglePaymentMethod.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
                     R.id.btn_tunai -> {
                         selectedMethod = "Tunai"
                         llCashContainer.visibility = View.VISIBLE
+                        llQrisContainer.visibility = View.GONE
+                        llEwalletContainer.visibility = View.GONE
                     }
                     R.id.btn_qris -> {
                         selectedMethod = "QRIS"
                         llCashContainer.visibility = View.GONE
+                        llQrisContainer.visibility = View.VISIBLE
+                        llEwalletContainer.visibility = View.GONE
                         etCashReceived.text = null
                     }
                     R.id.btn_transfer -> {
-                        selectedMethod = "Transfer"
+                        selectedMethod = "E-Wallet"
                         llCashContainer.visibility = View.GONE
+                        llQrisContainer.visibility = View.GONE
+                        llEwalletContainer.visibility = View.VISIBLE
                         etCashReceived.text = null
                     }
                 }
