@@ -114,7 +114,7 @@ class ModPegawaiActivity : AppCompatActivity() {
         
         if (isEdit) {
             tvTitle.text = "Edit Pegawai"
-            existingPegawai = intent.getParcelableExtra("PEGAWAI_DATA")
+            existingPegawai = intent.getParcelableExtra<ModelPegawai>("PEGAWAI_DATA")
             
             existingPegawai?.let {
                 namaPegawaiEditText.setText(it.namaPegawai)

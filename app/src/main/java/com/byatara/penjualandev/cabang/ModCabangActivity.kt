@@ -1,8 +1,6 @@
 package com.byatara.penjualandev.cabang
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -12,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelCabang
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.FirebaseDatabase
@@ -28,9 +27,9 @@ class ModCabangActivity : AppCompatActivity() {
     private lateinit var alamatCabangEditText: TextInputEditText
     private lateinit var teleponCabangLayout: TextInputLayout
     private lateinit var teleponCabangEditText: TextInputEditText
-    private lateinit var statusCabangLayout: TextInputLayout
-    private lateinit var statusCabangAutoComplete: AutoCompleteTextView
+    private lateinit var switchStatusCabang: MaterialSwitch
     private lateinit var buttonSimpan: Button
+
 
     private var isEdit = false
     private var existingCabang: ModelCabang? = null
@@ -60,7 +59,6 @@ class ModCabangActivity : AppCompatActivity() {
         }
 
         initViews()
-        setupDropdown()
         checkIntent()
         setupListeners()
     }
@@ -73,16 +71,8 @@ class ModCabangActivity : AppCompatActivity() {
         alamatCabangEditText = findViewById(R.id.alamat_cabang_edit_text)
         teleponCabangLayout = findViewById(R.id.telepon_cabang_layout)
         teleponCabangEditText = findViewById(R.id.telepon_cabang_edit_text)
-        statusCabangLayout = findViewById(R.id.status_cabang_layout)
-        statusCabangAutoComplete = findViewById(R.id.status_cabang_auto_complete)
+        switchStatusCabang = findViewById(R.id.switch_status_cabang)
         buttonSimpan = findViewById(R.id.button_simpan)
-    }
-
-    private fun setupDropdown() {
-        val statusItems = arrayOf("Aktif", "Non Aktif")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, statusItems)
-        statusCabangAutoComplete.setAdapter(adapter)
-        statusCabangAutoComplete.setText("Aktif", false)
     }
 
     @Suppress("DEPRECATION")
@@ -93,16 +83,17 @@ class ModCabangActivity : AppCompatActivity() {
         
         if (isEdit) {
             tvTitle.text = "Edit Cabang"
-            existingCabang = intent.getParcelableExtra("CABANG_DATA")
+            existingCabang = intent.getParcelableExtra<ModelCabang>("CABANG_DATA")
             
             existingCabang?.let {
                 namaCabangEditText.setText(it.namaCabang)
                 alamatCabangEditText.setText(it.alamatCabang)
                 teleponCabangEditText.setText(it.teleponCabang)
-                statusCabangAutoComplete.setText(if (it.statusCabang == true) "Aktif" else "Non Aktif", false)
+                switchStatusCabang.isChecked = it.statusCabang == true
             }
         } else {
             tvTitle.text = "Tambah Cabang"
+            switchStatusCabang.isChecked = true
         }
     }
 
@@ -116,7 +107,7 @@ class ModCabangActivity : AppCompatActivity() {
         val namaCabang = namaCabangEditText.text.toString().trim()
         val alamatCabang = alamatCabangEditText.text.toString().trim()
         val teleponCabang = teleponCabangEditText.text.toString().trim()
-        val statusStr = statusCabangAutoComplete.text.toString().trim()
+        val isActive = switchStatusCabang.isChecked
 
         var isValid = true
 
@@ -141,16 +132,7 @@ class ModCabangActivity : AppCompatActivity() {
             teleponCabangLayout.error = null
         }
 
-        if (statusStr.isEmpty()) {
-            statusCabangLayout.error = "Status cabang harus dipilih"
-            isValid = false
-        } else {
-            statusCabangLayout.error = null
-        }
-
         if (!isValid) return
-
-        val isActive = statusStr == "Aktif"
         
         val cabangId = if (isEdit) existingCabang?.idCabang ?: return else myRef.push().key ?: return
         

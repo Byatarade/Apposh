@@ -120,26 +120,30 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Status Cabang -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/status_cabang_layout"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Status Cabang"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="4dp">
 
-                <AutoCompleteTextView
-                    android:id="@+id/status_cabang_auto_complete"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    tools:text="Aktif" />
+                    android:layout_weight="1"
+                    android:text="Status Cabang (Aktif/Non Aktif)"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_status_cabang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:thumbTint="@color/switch_thumb_color"
+                    app:trackTint="@color/switch_track_color" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -7,11 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelCabang
-import com.google.android.material.chip.Chip
+import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.firebase.database.FirebaseDatabase
 
 class CabangAdapter(
     private var cabangList: List<ModelCabang>
 ) : RecyclerView.Adapter<CabangAdapter.CabangViewHolder>() {
+
+    private val database = FirebaseDatabase.getInstance().getReference("cabang")
+
 
     private var onItemClickListener: ((ModelCabang) -> Unit)? = null
 
@@ -39,16 +43,20 @@ class CabangAdapter(
     inner class CabangViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvName: TextView = itemView.findViewById(R.id.cabang_name)
         private val tvAlamat: TextView = itemView.findViewById(R.id.cabang_alamat)
-        private val chipStatus: Chip = itemView.findViewById(R.id.cabang_status)
+        private val switchStatus: MaterialSwitch = itemView.findViewById(R.id.cabang_switch_status)
 
         fun bind(cabang: ModelCabang) {
             tvName.text = cabang.namaCabang
             tvAlamat.text = cabang.alamatCabang
 
-            if (cabang.statusCabang == true) {
-                chipStatus.text = "Aktif"
-            } else {
-                chipStatus.text = "Non Aktif"
+            // Set switch state without triggering listener
+            switchStatus.setOnCheckedChangeListener(null)
+            switchStatus.isChecked = cabang.statusCabang == true
+
+            switchStatus.setOnCheckedChangeListener { _, isChecked ->
+                cabang.idCabang?.let { id ->
+                    database.child(id).child("statusCabang").setValue(isChecked)
+                }
             }
 
             itemView.setOnClickListener {

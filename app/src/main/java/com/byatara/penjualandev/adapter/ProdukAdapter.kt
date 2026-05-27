@@ -15,13 +15,17 @@ import com.byatara.penjualandev.util.formatRupiah
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelProduk
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.chip.Chip
+import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.firebase.database.FirebaseDatabase
 import java.text.NumberFormat
 import java.util.Locale
 
 class ProdukAdapter(
     private val produkList: MutableList<ModelProduk>
 ) : RecyclerView.Adapter<ProdukAdapter.ProdukViewHolder>() {
+
+    private val database = FirebaseDatabase.getInstance().getReference("produk")
+
 
     private lateinit var appContext: Context
 
@@ -82,8 +86,8 @@ class ProdukAdapter(
         val tvNamaProduk: TextView = itemView.findViewById(R.id.tv_nama_produk)
         val tvHargaProduk: TextView = itemView.findViewById(R.id.tv_harga_produk)
 
-        // Chip status (Aktif / Nonaktif)
-        val chipStatus: Chip = itemView.findViewById(R.id.chip_status)
+        // Switch status (Aktif / Nonaktif)
+        val switchStatus: MaterialSwitch = itemView.findViewById(R.id.switch_status)
 
         // Info dekoratif:
         //   ll_info_1 → Cabang
@@ -142,20 +146,16 @@ class ProdukAdapter(
             val stok = produk.stokProduk ?: 0
             tvStok.text = if (produk.tanpaBatas == "ya") "Tak Terbatas" else "$stok pcs"
 
-            // ── Chip Status ──────────────────────────────────────────
+            // ── Switch Status ─────────────────────────────────────────
             val isAktif = produk.statusProduk?.lowercase() == "aktif"
-            if (isAktif) {
-                chipStatus.text = "Aktif"
-                chipStatus.setTextColor(Color.parseColor("#4CAF50"))
-                chipStatus.chipStrokeColor =
-                    android.content.res.ColorStateList.valueOf(Color.parseColor("#4CAF50"))
-                chipStatus.setChipIconResource(R.drawable.tick)
-            } else {
-                chipStatus.text = "Nonaktif"
-                chipStatus.setTextColor(Color.parseColor("#F44336"))
-                chipStatus.chipStrokeColor =
-                    android.content.res.ColorStateList.valueOf(Color.parseColor("#F44336"))
-                chipStatus.setChipIconResource(R.drawable.tick)
+            switchStatus.setOnCheckedChangeListener(null)
+            switchStatus.isChecked = isAktif
+
+            switchStatus.setOnCheckedChangeListener { _, isChecked ->
+                val newStatus = if (isChecked) "aktif" else "nonaktif"
+                produk.idProduk?.let { id ->
+                    database.child(id).child("statusProduk").setValue(newStatus)
+                }
             }
 
             // ── Cart Controls / Klik item ────────────────────────────

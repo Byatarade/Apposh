@@ -93,7 +93,7 @@ class ModPelangganActivity : AppCompatActivity() {
 
         if (isEdit) {
             tvTitle.text = "Edit Pelanggan"
-            existingPelanggan = intent.getParcelableExtra("PELANGGAN_DATA")
+            existingPelanggan = intent.getParcelableExtra<ModelPelanggan>("PELANGGAN_DATA")
 
             existingPelanggan?.let {
                 namaPelangganEditText.setText(it.namaPelanggan)

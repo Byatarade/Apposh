@@ -146,17 +146,12 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_status"
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aktif"
-            android:textColor="?attr/colorOnSecondary"
-            app:chipBackgroundColor="?attr/colorSecondary"
-            app:chipIcon="@drawable/tick"
-            app:chipIconTint="?attr/colorPrimary"
-            app:chipIconVisible="true"
-            app:chipStrokeWidth="0dp"
+            app:thumbTint="@color/switch_thumb_color"
+            app:trackTint="@color/switch_track_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/card_image" />
 

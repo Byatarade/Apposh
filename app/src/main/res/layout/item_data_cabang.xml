@@ -74,17 +74,12 @@
             app:layout_constraintTop_toBottomOf="@id/cabang_name"
             tools:text="Jl. Merdeka No. 10" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/cabang_status"
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/cabang_switch_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aktif"
-            android:textColor="?attr/colorOnSecondary"
-            app:chipBackgroundColor="?attr/colorSecondary"
-            app:chipIcon="@drawable/tick"
-            app:chipIconTint="?attr/colorPrimary"
-            app:chipIconVisible="true"
-            app:chipStrokeWidth="0dp"
+            app:thumbTint="@color/switch_thumb_color"
+            app:trackTint="@color/switch_track_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

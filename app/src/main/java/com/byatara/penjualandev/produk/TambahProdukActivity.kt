@@ -13,8 +13,10 @@ import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelProduk
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
+
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.SearchView
@@ -50,8 +52,10 @@ class TambahProdukActivity : AppCompatActivity() {
     
     private lateinit var etStok: TextInputEditText
     private lateinit var cbStokTakTerbatas: MaterialCheckBox
+    private lateinit var switchStatusProduk: MaterialSwitch
     
     private lateinit var btnSimpan: MaterialButton
+
 
     private var selectedIdCabang: String = ""
     private var selectedIdKategori: String = ""
@@ -71,7 +75,7 @@ class TambahProdukActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tambah_produk)
 
         isEditMode = intent.getBooleanExtra("EDIT_MODE", false)
-        existingProduk = intent.getParcelableExtra("PRODUK_DATA")
+        existingProduk = intent.getParcelableExtra<ModelProduk>("PRODUK_DATA")
 
         cabangViewModel = ViewModelProvider(this).get(CabangViewModel::class.java)
         kategoriViewModel = ViewModelProvider(this).get(DataKategoriViewModel::class.java)
@@ -91,6 +95,7 @@ class TambahProdukActivity : AppCompatActivity() {
             etNamaProduk.setText(p.namaProduk)
             etHargaBeli.setText(p.hargaBeli.toString())
             etHargaJual.setText(p.hargaJual.toString())
+            switchStatusProduk.isChecked = p.statusProduk?.lowercase() == "aktif"
             
             // Parse deskripsi back to SKU & Barcode if possible
             val desc = p.deskripsiProduk ?: ""
@@ -161,8 +166,13 @@ class TambahProdukActivity : AppCompatActivity() {
         // Manajemen Stok
         etStok = findViewById(R.id.et_stok)
         cbStokTakTerbatas = findViewById(R.id.cb_stok_tanpa_batas)
+        switchStatusProduk = findViewById(R.id.switch_status_produk)
 
         btnSimpan = findViewById(R.id.btn_simpan)
+
+        if (!isEditMode) {
+            switchStatusProduk.isChecked = true
+        }
         
         // Placeholder for Kamera/Galeri functionality (to be implemented later)
         findViewById<MaterialButton>(R.id.btn_kamera).setOnClickListener {
@@ -401,6 +411,7 @@ class TambahProdukActivity : AppCompatActivity() {
             database.push().key ?: return
         }
 
+        val statusProduk = if (switchStatusProduk.isChecked) "aktif" else "nonaktif"
         val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
         val modelProduk = ModelProduk(
@@ -416,7 +427,7 @@ class TambahProdukActivity : AppCompatActivity() {
             hargaJual = hargaJual,
             tipeKeuntungan = tipeKeuntungan,
             manajemenStok = existingProduk?.manajemenStok ?: "aktif",
-            statusProduk = existingProduk?.statusProduk ?: "aktif",
+            statusProduk = statusProduk,
             createdAt = existingProduk?.createdAt ?: currentDate,
             updatedAt = currentDate
         )

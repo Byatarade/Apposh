@@ -7,11 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.byatara.penjualandev.R
 import com.byatara.penjualandev.model.ModelKategori
-import com.google.android.material.chip.Chip
+import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.firebase.database.FirebaseDatabase
 
 class KategoriAdapter(
     private var kategoriList: List<ModelKategori>
 ) : RecyclerView.Adapter<KategoriAdapter.KategoriViewHolder>() {
+
+    private val database = FirebaseDatabase.getInstance().getReference("kategori")
+
 
     private var onItemClickListener: ((ModelKategori) -> Unit)? = null
 
@@ -38,15 +42,19 @@ class KategoriAdapter(
 
     inner class KategoriViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvName: TextView = itemView.findViewById(R.id.kategori_name)
-        private val chipStatus: Chip = itemView.findViewById(R.id.kategori_status)
+        private val switchStatus: MaterialSwitch = itemView.findViewById(R.id.kategori_switch_status)
 
         fun bind(kategori: ModelKategori) {
             tvName.text = kategori.namaKategori
 
-            if (kategori.statusKategori == true) {
-                chipStatus.text = "Aktif"
-            } else {
-                chipStatus.text = "Non Aktif"
+            // Set switch state without triggering listener
+            switchStatus.setOnCheckedChangeListener(null)
+            switchStatus.isChecked = kategori.statusKategori == true
+
+            switchStatus.setOnCheckedChangeListener { _, isChecked ->
+                kategori.idKategori?.let { id ->
+                    database.child(id).child("statusKategori").setValue(isChecked)
+                }
             }
 
             itemView.setOnClickListener {
