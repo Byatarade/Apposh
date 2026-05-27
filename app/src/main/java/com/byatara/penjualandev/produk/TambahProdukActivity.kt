@@ -250,7 +250,8 @@ class TambahProdukActivity : AppCompatActivity() {
         }
 
         kategoriViewModel.kategoriList.observe(this, Observer { listKategori ->
-            adapter.updateFullList(listKategori)
+            val activeKategori = listKategori.filter { it.statusKategori == true }
+            adapter.updateFullList(activeKategori)
         })
 
         kategoriViewModel.isLoading.observe(this, Observer { isLoading ->
@@ -296,7 +297,8 @@ class TambahProdukActivity : AppCompatActivity() {
         }
 
         cabangViewModel.cabangList.observe(this, Observer { listCabang ->
-            adapter.updateFullList(listCabang)
+            val activeCabang = listCabang.filter { it.statusCabang == true }
+            adapter.updateFullList(activeCabang)
         })
 
         cabangViewModel.isLoading.observe(this, Observer { isLoading ->

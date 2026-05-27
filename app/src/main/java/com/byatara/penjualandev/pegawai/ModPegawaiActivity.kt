@@ -96,8 +96,11 @@ class ModPegawaiActivity : AppCompatActivity() {
         cabangRef.get().addOnSuccessListener { snapshot ->
             val cabangList = mutableListOf<String>()
             for (child in snapshot.children) {
-                val nama = child.child("namaCabang").value as? String
-                if (nama != null) cabangList.add(nama)
+                val status = child.child("statusCabang").getValue(Boolean::class.java) ?: true
+                if (status) {
+                    val nama = child.child("namaCabang").value as? String
+                    if (nama != null) cabangList.add(nama)
+                }
             }
             if (cabangList.isNotEmpty()) {
                 val cabangAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, cabangList)
