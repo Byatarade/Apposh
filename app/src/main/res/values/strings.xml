@@ -11,6 +11,87 @@
     <string name="printer">Cetak</string>
     <string name="pegawai">Pegawai</string>
     <string name="kategori">Kategori</string>
+    <string name="layanan_anda">Layanan Anda</string>
+    <string name="halo_salam">Halo, %1$s</string>
+    <string name="pagi">Selamat Pagi</string>
+    <string name="siang">Selamat Siang</string>
+    <string name="malam">Selamat Malam</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Beranda</string>
+    <string name="nav_history">Histori</string>
+    <string name="nav_profile">Profil</string>
+    <string name="nav_notif">Notif</string>
+    <string name="nav_exit">Keluar</string>
+
+    <!-- Product -->
+    <string name="tambah_produk">Tambah Produk</string>
+    <string name="jual">Jual</string>
+    <string name="tambah_foto_produk">Tambah Foto Produk</string>
+    <string name="kamera">Kamera</string>
+    <string name="galeri">Galeri</string>
+    <string name="informasi_dasar">Informasi Dasar</string>
+    <string name="nama_produk">Nama Produk</string>
+    <string name="sku_opsional">SKU (Opsional)</string>
+    <string name="barcode_opsional">Barcode (Opsional)</string>
+    <string name="relasi_produk">Relasi Produk</string>
+    <string name="pilih_kategori">Pilih Kategori</string>
+    <string name="pilih_cabang">Pilih Cabang</string>
+    <string name="harga_keuntungan">Harga &amp; Keuntungan</string>
+    <string name="harga_beli">Harga Beli</string>
+    <string name="tipe_keuntungan">Tipe Keuntungan</string>
+    <string name="persentase">Persentase (%)</string>
+    <string name="nilai_profit">Nilai Profit</string>
+    <string name="harga_jual">Harga Jual</string>
+    <string name="otomatis_terhitung">(Otomatis terhitung)</string>
+    <string name="manajemen_stok">Manajemen Stok</string>
+    <string name="stok">Stok</string>
+    <string name="stok_tanpa_batas">Stok Tak Terbatas</string>
+    <string name="status_produk_label">Status Produk (Aktif/Non Aktif)</string>
+    <string name="simpan">Simpan</string>
+
+    <!-- Transaksi -->
+    <string name="mesin_kasir">Mesin Kasir (POS)</string>
+    <string name="cari_item">Cari item di menu...</string>
+    <string name="semua">Semua</string>
+    <string name="menu_kosong">Menu produk masih kosong</string>
+    <string name="belum_ada_pesanan">Belum ada pesanan</string>
+    <string name="buat_order">Buat Order</string>
+    <string name="items_format">%1$d Item</string>
+
+    <!-- Auth -->
+    <string name="slogan_app">Kelola toko Anda dengan mudah</string>
+    <string name="selamat_datang">Selamat Datang DevSpark!</string>
+    <string name="login_subtitle">Login sekarang untuk menikmati semua fitur yang tersedia di DevSpark</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="belum_punya_akun">Belum punya akun? Daftar</string>
+
+    <!-- Register -->
+    <string name="daftar_akun">Daftar Akun</string>
+    <string name="buat_akun_subtitle">Buat akun untuk memulai DevSpark</string>
+    <string name="nama_lengkap">Nama Lengkap</string>
+    <string name="konfirmasi_password">Konfirmasi Password</string>
+    <string name="daftar">Daftar</string>
+    <string name="sudah_punya_akun">Sudah punya akun? </string>
+    <string name="masuk">Masuk</string>
+    <string name="hint_nama">Masukkan nama lengkap Anda</string>
+    <string name="hint_email">Masukkan email Anda</string>
+    <string name="hint_password">Masukkan password Anda</string>
+    <string name="hint_konfirmasi">Ulangi password Anda</string>
+
+    <!-- Common -->
+    <string name="kembali">Kembali</string>
+    <string name="cari_cabang">Cari cabang...</string>
+    <string name="cari_kategori">Cari sesuatu...</string>
+    <string name="tambah_cabang">Tambah Cabang</string>
+    <string name="tambah_kategori">Tambah Kategori</string>
+
+    <!-- Laporan -->
+    <string name="laporan_transaksi">Laporan Transaksi</string>
+    <string name="pendapatan">Pendapatan</string>
+    <string name="keuntungan">Keuntungan</string>
 
     <!-- Exit Dialog -->
     <string name="exit_title">Ingin Keluar?</string>

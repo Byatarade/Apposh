@@ -51,4 +51,7 @@
     <color name="bottom_nav_background">#FFFFFF</color>
     <color name="bottom_nav_item_tint">#059669</color>
     <color name="bottom_nav_selected_item_background">#D1FAE5</color>
+
+    <!-- Auth & UI Cards -->
+    <color name="colorAuthCardBackground">#FFFFFF</color>
 </resources>

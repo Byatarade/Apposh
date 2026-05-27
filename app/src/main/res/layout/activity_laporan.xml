@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="Laporan Transaksi"
+        app:title="@string/laporan_transaksi"
         app:titleCentered="true"
         app:titleTextColor="?attr/colorOnSurface"
         app:navigationIcon="?homeAsUpIndicator"
@@ -55,7 +55,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pendapatan"
+                        android:text="@string/pendapatan"
                         android:textColor="#E6FFFFFF"
                         android:textSize="11sp" />
                     <TextView
@@ -93,7 +93,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Keuntungan"
+                        android:text="@string/keuntungan"
                         android:textColor="#E6FFFFFF"
                         android:textSize="11sp" />
                     <TextView

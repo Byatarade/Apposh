@@ -31,7 +31,7 @@
                     android:id="@+id/tv_toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tambah Produk"
+                    android:text="@string/tambah_produk"
                     android:textColor="@color/colorToolbarTitle"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -39,7 +39,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Jual"
+                    android:text="@string/jual"
                     android:textColor="@color/colorToolbarSubtitle"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -96,7 +96,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Tambah Foto Produk"
+                            android:text="@string/tambah_foto_produk"
                             android:textColor="@color/colorPhotoAreaText"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -117,7 +117,7 @@
                             android:layout_weight="1"
                             android:layout_marginEnd="6dp"
                             app:backgroundTint="@color/colorPhotoButtonBg"
-                            android:text="Kamera"
+                            android:text="@string/kamera"
                             android:textColor="@color/colorPhotoButtonText"
                             app:icon="@android:drawable/ic_menu_camera"
                             app:iconTint="@color/colorPhotoButtonText"
@@ -131,7 +131,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="6dp"
                             app:backgroundTint="@color/colorPhotoButtonBg"
-                            android:text="Galeri"
+                            android:text="@string/galeri"
                             android:textColor="@color/colorPhotoButtonText"
                             app:icon="@android:drawable/ic_menu_gallery"
                             app:iconTint="@color/colorPhotoButtonText"
@@ -160,7 +160,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Informasi Dasar"
+                        android:text="@string/informasi_dasar"
                         android:textColor="?attr/colorOutline"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -181,7 +181,7 @@
                             android:id="@+id/et_nama_produk"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Nama Produk"
+                            android:hint="@string/nama_produk"
                             android:textColor="?attr/colorOnSurface"
                             android:inputType="text" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -200,7 +200,7 @@
                             android:id="@+id/et_sku"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="SKU (Opsional)"
+                            android:hint="@string/sku_opsional"
                             android:textColor="?attr/colorOnSurface"
                             android:inputType="text" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -219,7 +219,7 @@
                             android:id="@+id/et_barcode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Barcode (Opsional)"
+                            android:hint="@string/barcode_opsional"
                             android:textColor="?attr/colorOnSurface"
                             android:inputType="text" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -227,7 +227,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Relasi Produk"
+                        android:text="@string/relasi_produk"
                         android:textColor="?attr/colorOutline"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -241,14 +241,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="Pilih Kategori" />
+                        android:text="@string/pilih_kategori" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_pilih_cabang"
                         style="@style/Widget.App.Button.Outlined"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Pilih Cabang" />
+                        android:text="@string/pilih_cabang" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -273,7 +273,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Harga &amp; Keuntungan"
+                        android:text="@string/harga_keuntungan"
                         android:textColor="?attr/colorOutline"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -294,7 +294,7 @@
                             android:id="@+id/et_harga_beli"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Harga Beli"
+                            android:hint="@string/harga_beli"
                             android:textColor="?attr/colorOnSurface"
                             android:inputType="number" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -304,7 +304,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:hint="Tipe Keuntungan"
+                        android:hint="@string/tipe_keuntungan"
                         app:boxCornerRadiusTopStart="12dp"
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
@@ -316,7 +316,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="none"
                             android:textColor="?attr/colorOnSurface"
-                            android:text="Persentase (%)" />
+                            android:text="@string/persentase" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -333,7 +333,7 @@
                             android:id="@+id/et_nilai_profit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Nilai Profit"
+                            android:hint="@string/nilai_profit"
                             android:textColor="?attr/colorOnSurface"
                             android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -351,7 +351,7 @@
                             android:id="@+id/et_harga_jual"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Harga Jual"
+                            android:hint="@string/harga_jual"
                             android:textStyle="bold"
                             android:textColor="?attr/colorOnSurface"
                             android:inputType="number" />
@@ -360,7 +360,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(Otomatis terhitung)"
+                        android:text="@string/otomatis_terhitung"
                         android:textSize="12sp"
                         android:textColor="?attr/colorOutline"
                         android:layout_marginTop="4dp"/>
@@ -388,7 +388,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Manajemen Stok"
+                        android:text="@string/manajemen_stok"
                         android:textColor="?attr/colorOutline"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -409,7 +409,7 @@
                             android:id="@+id/et_stok"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Stok"
+                            android:hint="@string/stok"
                             android:textColor="?attr/colorOnSurface"
                             android:inputType="number" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -418,7 +418,7 @@
                         android:id="@+id/cb_stok_tanpa_batas"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Stok Tak Terbatas"
+                        android:text="@string/stok_tanpa_batas"
                         android:textSize="14sp"
                         android:textColor="?attr/colorOutline" />
 
@@ -447,7 +447,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Status Produk (Aktif/Non Aktif)"
+                        android:text="@string/status_produk_label"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -468,7 +468,7 @@
                 style="@style/Widget.App.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Simpan"
+                android:text="@string/simpan"
                 android:layout_marginBottom="32dp"/>
 
         </LinearLayout>

@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
     private var saldoListener: ValueEventListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -83,7 +81,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupGreeting() {
-        tvSalam.text = GreetingHelper.getHaloSalamWib()
+        val salamRes = GreetingHelper.getGreetingResId()
+        val salamStr = getString(salamRes)
+        tvSalam.text = getString(R.string.halo_salam, salamStr)
     }
 
     private fun setupTanggalBeranda() {

@@ -72,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
         passwordLayout = findViewById(R.id.password_layout)
         etPassword = findViewById(R.id.et_password)
         btnLogin = findViewById(R.id.btn_login)
-        tvRegisterLink = findViewById(R.id.tv_register_link)
+        tvRegisterLink = findViewById(R.id.tv_register)
     }
 
     private fun setupListeners() {

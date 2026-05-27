@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Enforce strict light mode by pointing to the exact same theme -->
-    <style name="Base.Theme.PenjualanDev" parent="Theme.Material3.Light.NoActionBar">
+    <!-- Base application theme for Night mode -->
+    <style name="Base.Theme.PenjualanDev" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
@@ -13,7 +13,7 @@
         <item name="colorSurface">@color/colorScreenBackground</item>
         <item name="colorOnSurface">@color/colorPrimaryText</item>
         <item name="colorSurfaceContainer">@color/colorCardBackground</item>
-        <item name="colorSurfaceContainerHigh">@color/white</item>
+        <item name="colorSurfaceContainerHigh">@color/colorAuthCardBackground</item>
         <item name="colorOnSurfaceVariant">@color/colorSecondaryText</item>
         <item name="colorError">@color/red</item>
         <!-- Button Styles -->

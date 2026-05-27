@@ -2,21 +2,21 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home"
-        android:title="Beranda" />
+        android:title="@string/nav_home" />
     <item
         android:id="@+id/navigation_analytics"
         android:icon="@drawable/ic_analytics"
-        android:title="Histori" />
+        android:title="@string/nav_history" />
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/akun"
-        android:title="Profil" />
+        android:title="@string/nav_profile" />
     <item
         android:id="@+id/navigation_clock"
         android:icon="@drawable/notif"
-        android:title="Notif" />
+        android:title="@string/nav_notif" />
     <item
         android:id="@+id/exit"
         android:icon="@drawable/exit"
-        android:title="Keluar" />
+        android:title="@string/nav_exit" />
 </menu>

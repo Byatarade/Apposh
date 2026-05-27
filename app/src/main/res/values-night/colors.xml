@@ -16,4 +16,10 @@
     <color name="colorPhotoButtonText">#E8DEF8</color>
     <color name="colorOutlineStroke">#49454F</color>
     <color name="colorSubtitleText">#CAC4D0</color>
+    
+    <!-- Auth & UI Cards -->
+    <color name="colorAuthCardBackground">#1E1E1E</color>
+    <color name="colorBottomNavBackground">#1E1E1E</color>
+    <color name="colorBottomNavSelectedBg">#2D4F43</color>
+    <color name="colorBottomNavItemTint">#10B981</color>
 </resources>

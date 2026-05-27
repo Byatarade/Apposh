@@ -12,6 +12,87 @@
     <string name="printer">Print</string>
     <string name="pegawai">Employee</string>
     <string name="kategori">Category</string>
+    <string name="layanan_anda">Your Services</string>
+    <string name="halo_salam">Hello, %1$s</string>
+    <string name="pagi">Good Morning</string>
+    <string name="siang">Good Afternoon</string>
+    <string name="malam">Good Evening</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_history">History</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_notif">Notif</string>
+    <string name="nav_exit">Exit</string>
+
+    <!-- Product -->
+    <string name="tambah_produk">Add Product</string>
+    <string name="jual">Sell</string>
+    <string name="tambah_foto_produk">Add Product Photo</string>
+    <string name="kamera">Camera</string>
+    <string name="galeri">Gallery</string>
+    <string name="informasi_dasar">Basic Information</string>
+    <string name="nama_produk">Product Name</string>
+    <string name="sku_opsional">SKU (Optional)</string>
+    <string name="barcode_opsional">Barcode (Optional)</string>
+    <string name="relasi_produk">Product Relation</string>
+    <string name="pilih_kategori">Select Category</string>
+    <string name="pilih_cabang">Select Branch</string>
+    <string name="harga_keuntungan">Price &amp; Profit</string>
+    <string name="harga_beli">Purchase Price</string>
+    <string name="tipe_keuntungan">Profit Type</string>
+    <string name="persentase">Percentage (%)</string>
+    <string name="nilai_profit">Profit Value</string>
+    <string name="harga_jual">Selling Price</string>
+    <string name="otomatis_terhitung">(Automatically calculated)</string>
+    <string name="manajemen_stok">Stock Management</string>
+    <string name="stok">Stock</string>
+    <string name="stok_tanpa_batas">Unlimited Stock</string>
+    <string name="status_produk_label">Product Status (Active/Inactive)</string>
+    <string name="simpan">Save</string>
+
+    <!-- Transaksi -->
+    <string name="mesin_kasir">Cashier Machine (POS)</string>
+    <string name="cari_item">Search items in menu...</string>
+    <string name="semua">All</string>
+    <string name="menu_kosong">Product menu is still empty</string>
+    <string name="belum_ada_pesanan">No orders yet</string>
+    <string name="buat_order">Create Order</string>
+    <string name="items_format">%1$d Item(s)</string>
+
+    <!-- Auth -->
+    <string name="slogan_app">Manage your store easily</string>
+    <string name="selamat_datang">Welcome to DevSpark!</string>
+    <string name="login_subtitle">Login now to enjoy all the features available in DevSpark</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="belum_punya_akun">Don\'t have an account? Register</string>
+
+    <!-- Register -->
+    <string name="daftar_akun">Register Account</string>
+    <string name="buat_akun_subtitle">Create an account to start with DevSpark</string>
+    <string name="nama_lengkap">Full Name</string>
+    <string name="konfirmasi_password">Confirm Password</string>
+    <string name="daftar">Register</string>
+    <string name="sudah_punya_akun">Already have an account? </string>
+    <string name="masuk">Login</string>
+    <string name="hint_nama">Enter your full name</string>
+    <string name="hint_email">Enter your email</string>
+    <string name="hint_password">Enter your password</string>
+    <string name="hint_konfirmasi">Repeat your password</string>
+
+    <!-- Common -->
+    <string name="kembali">Back</string>
+    <string name="cari_cabang">Search branch...</string>
+    <string name="cari_kategori">Search something...</string>
+    <string name="tambah_cabang">Add Branch</string>
+    <string name="tambah_kategori">Add Category</string>
+
+    <!-- Laporan -->
+    <string name="laporan_transaksi">Transaction Report</string>
+    <string name="pendapatan">Income</string>
+    <string name="keuntungan">Profit</string>
 
     <!-- Exit Dialog -->
     <string name="exit_title">Want to Exit?</string>

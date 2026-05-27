@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Mesin Kasir (POS)"
+            app:title="@string/mesin_kasir"
             app:titleCentered="true"
             app:titleTextColor="?attr/colorOnSurface"
             app:navigationIcon="?homeAsUpIndicator"
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     app:iconifiedByDefault="false"
                     app:queryBackground="@null"
-                    app:queryHint="Cari item di menu..." />
+                    app:queryHint="@string/cari_item" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
         
@@ -70,7 +70,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Semua"
+                    android:text="@string/semua"
                     android:checked="true"/>
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
@@ -104,7 +104,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Menu produk masih kosong"
+                android:text="@string/menu_kosong"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -160,7 +160,7 @@
                     android:id="@+id/tv_cart_items"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Belum ada pesanan"
+                    android:text="@string/belum_ada_pesanan"
                     android:textColor="?attr/colorOnPrimary"
                     android:alpha="0.8"
                     android:textSize="12sp"
@@ -182,7 +182,7 @@
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Buat Order"
+                android:text="@string/buat_order"
                 app:cornerRadius="16dp"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="12dp"

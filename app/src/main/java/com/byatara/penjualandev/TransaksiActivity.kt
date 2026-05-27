@@ -281,11 +281,11 @@ class TransaksiActivity : AppCompatActivity() {
 
         if (totalItems > 0) {
             cardCartBar.visibility = View.VISIBLE
-            tvCartItems.text = "$totalItems Item Terpilih"
+            tvCartItems.text = getString(R.string.items_format, totalItems)
             tvCartTotal.text = formatRupiah(totalPrice)
         } else {
             cardCartBar.visibility = View.GONE
-            tvCartItems.text = "Belum ada pesanan"
+            tvCartItems.text = getString(R.string.belum_ada_pesanan)
             tvCartTotal.text = "Rp 0"
         }
 

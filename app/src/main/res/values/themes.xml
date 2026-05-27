@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. Enforced Light Mode by inheriting from Light -->
-    <style name="Base.Theme.PenjualanDev" parent="Theme.Material3.Light.NoActionBar">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PenjualanDev" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
@@ -13,7 +13,7 @@
         <item name="colorSurface">@color/colorScreenBackground</item>
         <item name="colorOnSurface">@color/colorPrimaryText</item>
         <item name="colorSurfaceContainer">@color/colorCardBackground</item>
-        <item name="colorSurfaceContainerHigh">@color/white</item>
+        <item name="colorSurfaceContainerHigh">@color/colorAuthCardBackground</item>
         <item name="colorOnSurfaceVariant">@color/colorSecondaryText</item>
         <item name="colorError">@color/red</item>
         <!-- Button Styles -->
@@ -22,14 +22,14 @@
 
     <style name="Theme.PenjualanDev" parent="Base.Theme.PenjualanDev" />
 
-    <!-- Splash Screen Theme untuk mencegah kilatan layar putih -->
+    <!-- Splash Screen Theme -->
     <style name="Theme.PenjualanDev.Splash" parent="Theme.PenjualanDev">
         <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
     </style>
 
     <!-- Dialog Theme -->
-    <style name="Theme.PenjualanDev.Dialog" parent="Theme.Material3.Light.Dialog">
+    <style name="Theme.PenjualanDev.Dialog" parent="Theme.Material3.DayNight.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/colorSecondary</item>
@@ -42,7 +42,7 @@
         <item name="android:windowMinWidthMinor">90%</item>
     </style>
 
-    <!-- DatePicker: header hijau gelap + teks putih agar tanggal terbaca -->
+    <!-- DatePicker -->
     <style name="Theme.PenjualanDev.DatePicker" parent="ThemeOverlay.Material3.MaterialCalendar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/white</item>
