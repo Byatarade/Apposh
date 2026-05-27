@@ -57,7 +57,6 @@ class PegawaiAdapter(
         private val tvCabang: TextView = itemView.findViewById(R.id.tv_pegawai_cabang)
         private val tvJoined: TextView = itemView.findViewById(R.id.tv_pegawai_joined)
         private val btnHubungi: MaterialButton = itemView.findViewById(R.id.btn_hubungi)
-        private val btnLihat: MaterialButton = itemView.findViewById(R.id.btn_lihat)
         private val btnEdit: MaterialButton = itemView.findViewById(R.id.btn_edit)
 
         fun bind(pegawai: ModelPegawai) {
@@ -69,14 +68,12 @@ class PegawaiAdapter(
 
             if (isPickerMode) {
                 btnHubungi.visibility = View.GONE
-                btnLihat.visibility = View.GONE
                 btnEdit.visibility = View.GONE
                 itemView.setOnClickListener { onShowClickListener?.invoke(pegawai) }
                 return
             }
 
             btnHubungi.visibility = View.VISIBLE
-            btnLihat.visibility = View.VISIBLE
             btnEdit.visibility = View.VISIBLE
 
             btnHubungi.setOnClickListener {
@@ -88,10 +85,6 @@ class PegawaiAdapter(
                     Toast.makeText(itemView.context, "Nomor telepon tidak tersedia", Toast.LENGTH_SHORT)
                         .show()
                 }
-            }
-
-            btnLihat.setOnClickListener {
-                onShowClickListener?.invoke(pegawai)
             }
 
             btnEdit.setOnClickListener {

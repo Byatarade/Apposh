@@ -56,7 +56,6 @@ class PelangganAdapter(
         private val tvPhone: TextView = itemView.findViewById(R.id.tv_pelanggan_phone)
         private val tvAddress: TextView = itemView.findViewById(R.id.tv_pelanggan_address)
         private val btnHubungi: MaterialButton = itemView.findViewById(R.id.btn_hubungi)
-        private val btnLihat: MaterialButton = itemView.findViewById(R.id.btn_lihat)
         private val btnEdit: MaterialButton = itemView.findViewById(R.id.btn_edit)
         private val cardView: MaterialCardView = itemView.findViewById(R.id.card_pelanggan)
 
@@ -67,7 +66,6 @@ class PelangganAdapter(
 
             if (isPickerMode) {
                 btnHubungi.visibility = View.GONE
-                btnLihat.visibility = View.GONE
                 btnEdit.visibility = View.GONE
                 val params = cardView.layoutParams as ViewGroup.MarginLayoutParams
                 params.setMargins(0, 4, 0, 4)
@@ -77,7 +75,6 @@ class PelangganAdapter(
             }
 
             btnHubungi.visibility = View.VISIBLE
-            btnLihat.visibility = View.VISIBLE
             btnEdit.visibility = View.VISIBLE
 
             btnHubungi.setOnClickListener {
@@ -89,10 +86,6 @@ class PelangganAdapter(
                     Toast.makeText(itemView.context, "Nomor telepon tidak tersedia", Toast.LENGTH_SHORT)
                         .show()
                 }
-            }
-
-            btnLihat.setOnClickListener {
-                onShowClickListener?.invoke(pelanggan)
             }
 
             btnEdit.setOnClickListener {
