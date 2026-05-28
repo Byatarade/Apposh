@@ -64,6 +64,9 @@ Aplikasi DevSpark dilengkapi dengan serangkaian fitur tingkat lanjut yang diranc
 * Memanfaatkan teknologi Android modern `enableEdgeToEdge()` dan pengaturan *window insets* agar tampilan menyatu sempurna di belakang status bar dan bar navigasi sistem.
 * Diperkaya dengan **Animasi Meluncur & Wobble Recoil** pada *Splash Screen* menggunakan gabungan `ObjectAnimator` dan `OvershootInterpolator` yang dinamis dan berkelas premium.
 
+### 🔌 10. Konektivitas Printer Thermal Bluetooth & Cetak Nota Nirkabel
+* Dilengkapi utilitas nirkabel khusus (`BluetoothPrinterHelper` & `BluetoothPermissionHelper`) yang mendukung pencetakan nota fisik secara instan lewat printer thermal Bluetooth 58mm/80mm. Menyediakan tata letak struk otomatis, garis pemisah dinamis, dan penanganan status koneksi printer secara *real-time* untuk operasional kasir yang mulus.
+
 ---
 
 ## 🛠️ Tech Stack
