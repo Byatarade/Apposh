@@ -53,7 +53,7 @@
                         android:id="@+id/tvSalam"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Halo, Selamat Pagi"
+                        android:text="@string/halo_salam"
                         android:textColor="?attr/colorOutline"
                         android:textSize="14sp" />
                     <TextView
@@ -66,12 +66,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/searchView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:iconifiedByDefault="true"
-                    app:queryHint="Cari layanan..." />
             </LinearLayout>
 
             <!-- Master Dashboard Card (Wadah Saldo hingga Quick Stats) -->
@@ -189,11 +183,15 @@
 
                         <!-- Pelanggan -->
                         <LinearLayout
+                            android:id="@+id/btn_pelanggan"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground">
                             <View
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
@@ -258,7 +256,7 @@
                 android:id="@+id/program"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Layanan Anda"
+                android:text="@string/layanan_anda"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="24dp"
                 android:textColor="?attr/colorOnSurface"

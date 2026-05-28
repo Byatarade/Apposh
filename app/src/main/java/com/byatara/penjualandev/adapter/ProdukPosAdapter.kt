@@ -115,9 +115,9 @@ class ProdukPosAdapter(
             tvStok.text = if (isUnlimited) "Stok: Tak Terbatas" else "Stok: $currentStok"
             if (!isUnlimited && currentStok <= 0) {
                 tvStok.text = "Stok Habis"
-                tvStok.setTextColor(Color.RED)
+                tvStok.setTextColor(context.getColor(R.color.red))
             } else {
-                tvStok.setTextColor(Color.GRAY)
+                tvStok.setTextColor(context.getColor(R.color.colorSecondaryText))
             }
 
             // Cart state logic

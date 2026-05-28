@@ -456,43 +456,138 @@
                         android:padding="24dp"
                         android:gravity="center">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pindai Kode QR"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textStyle="bold"
-                            android:textSize="16sp" />
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:background="?attr/colorSurfaceContainerLow"
+                            android:layout_marginBottom="16dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="QRIS"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/colorPrimary" />
+                        </LinearLayout>
 
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/cv_qris_code"
                             android:layout_width="220dp"
                             android:layout_height="220dp"
-                            android:layout_marginTop="16dp"
+                            android:clickable="true"
+                            android:focusable="true"
                             app:cardCornerRadius="12dp"
-                            app:cardElevation="2dp"
-                            app:strokeWidth="1dp"
-                            app:strokeColor="@color/colorOutlineStroke">
+                            app:cardElevation="4dp"
+                            app:strokeWidth="2dp"
+                            app:strokeColor="@color/colorPrimary">
                             
-                            <ImageView
+                            <FrameLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@drawable/tick"
-                                android:padding="40dp"
-                                android:alpha="0.2"
-                                android:scaleType="centerInside"/>
+                                android:background="@color/white"
+                                android:padding="16dp">
+
+                                <!-- Fake QR Code Grid -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center">
+
+                                    <!-- Top row -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal"
+                                        android:gravity="center">
+                                        <View
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:background="@color/black" />
+                                        <View
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:layout_marginHorizontal="8dp"
+                                            android:background="@color/colorPrimary" />
+                                        <View
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:background="@color/black" />
+                                    </LinearLayout>
+
+                                    <!-- Middle row -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal"
+                                        android:gravity="center"
+                                        android:layout_marginVertical="4dp">
+                                        <View
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:background="@color/colorPrimary" />
+                                        <View
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:layout_marginHorizontal="8dp"
+                                            android:background="@color/black" />
+                                        <View
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:background="@color/colorPrimary" />
+                                    </LinearLayout>
+
+                                    <!-- Bottom row -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal"
+                                        android:gravity="center">
+                                        <View
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:background="@color/black" />
+                                        <View
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:layout_marginHorizontal="8dp"
+                                            android:background="@color/colorPrimary" />
+                                        <View
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
+                                            android:background="@color/black" />
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <!-- Overlay hint -->
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="#CCFFFFFF">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="KLIK UNTUK SIMULASI"
+                                        android:textSize="12sp"
+                                        android:textColor="?attr/colorPrimary"
+                                        android:textStyle="bold"
+                                        android:gravity="center" />
+                                </FrameLayout>
+
+                            </FrameLayout>
                                 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="KLIK UNTUK SIMULASI BAYAR"
-                                android:textSize="10sp"
-                                android:textColor="?attr/colorPrimary"
-                                android:textStyle="bold" />
                         </com.google.android.material.card.MaterialCardView>
 
                         <TextView
+                            android:id="@+id/tv_qris_status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -542,6 +637,7 @@
                             android:layout_marginTop="12dp">
 
                             <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_gopay"
                                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -551,6 +647,7 @@
                                 app:cornerRadius="8dp" />
 
                             <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_dana"
                                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -560,6 +657,7 @@
                                 app:cornerRadius="8dp" />
 
                             <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_ovo"
                                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -569,6 +667,7 @@
                                 app:cornerRadius="8dp" />
 
                             <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_shopeepay"
                                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"

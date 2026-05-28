@@ -55,6 +55,11 @@ class PembayaranActivity : AppCompatActivity() {
     private lateinit var chip100k: Chip
     
     private lateinit var btnConfirmPayment: MaterialButton
+    
+    private lateinit var btnGopay: MaterialButton
+    private lateinit var btnDana: MaterialButton
+    private lateinit var btnOvo: MaterialButton
+    private lateinit var btnShopeePay: MaterialButton
 
     private var currentOrder: ModelOrder? = null
     private var selectedMethod = "Tunai"
@@ -119,6 +124,11 @@ class PembayaranActivity : AppCompatActivity() {
         chip100k = findViewById(R.id.chip_100k)
         
         btnConfirmPayment = findViewById(R.id.btn_confirm_payment)
+        
+        btnGopay = findViewById(R.id.btn_gopay)
+        btnDana = findViewById(R.id.btn_dana)
+        btnOvo = findViewById(R.id.btn_ovo)
+        btnShopeePay = findViewById(R.id.btn_shopeepay)
     }
 
     private fun bindOrderData(order: ModelOrder) {
@@ -147,6 +157,27 @@ class PembayaranActivity : AppCompatActivity() {
                 handleConfirmation()
             }
         }
+        
+        // E-Wallet button listeners
+        val eWalletClickListener = View.OnClickListener { view ->
+            if (selectedMethod == "E-Wallet") {
+                val walletName = when (view.id) {
+                    R.id.btn_gopay -> "GOPAY"
+                    R.id.btn_dana -> "DANA"
+                    R.id.btn_ovo -> "OVO"
+                    R.id.btn_shopeepay -> "SHOPEEPAY"
+                    else -> "E-Wallet"
+                }
+                selectedMethod = walletName
+                Toast.makeText(this, "Simulasi Pembayaran $walletName Berhasil!", Toast.LENGTH_SHORT).show()
+                handleConfirmation()
+            }
+        }
+        
+        btnGopay.setOnClickListener(eWalletClickListener)
+        btnDana.setOnClickListener(eWalletClickListener)
+        btnOvo.setOnClickListener(eWalletClickListener)
+        btnShopeePay.setOnClickListener(eWalletClickListener)
 
         togglePaymentMethod.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {

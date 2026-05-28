@@ -33,6 +33,10 @@
     <color name="colorError">#EF4444</color>
     <color name="green_success">#10B981</color>
     
+    <!-- Quantity Controls Background & Text -->
+    <color name="colorQtyControlsBg">#064E3B</color>
+    <color name="colorQtyControlsText">#FFFFFF</color>
+    
     <!-- Old colors mapping (kept to prevent crashes if used directly) -->
     <color name="colorThird">#9CA3AF</color>
     <color name="gray_background">#374151</color>
