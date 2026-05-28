@@ -329,11 +329,11 @@ Berikut adalah visualisasi antarmuka dari aplikasi **DevSpark** yang dikelompokk
 Sistem otentikasi modern untuk memproteksi masuknya pegawai ke dasbor kasir.
 <table>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="15%">
       <img src="Documentation/Auth/Login.jpg" width="100%" alt="Login DevSpark" />
       <br/><sub><b>Halaman Login</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="15%">
       <img src="Documentation/Auth/Register.jpg" width="100%" alt="Register DevSpark" />
       <br/><sub><b>Halaman Registrasi Kasir</b></sub>
     </td>
@@ -371,15 +371,15 @@ Dasbor ringkasan performa cabang kasir, log histori, dan pusat notifikasi.
 Pengelolaan data lokasi fisik dari cabang-cabang bisnis.
 <table>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Cabang/Cabang.jpg" width="100%" alt="Daftar Cabang" />
       <br/><sub><b>Daftar Cabang</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Cabang/Show cabang.jpg" width="100%" alt="Detail Cabang" />
       <br/><sub><b>Detail Informasi Cabang</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Cabang/Tambah cabang.jpg" width="100%" alt="Tambah Cabang" />
       <br/><sub><b>Tambah Cabang Baru</b></sub>
     </td>
@@ -390,15 +390,15 @@ Pengelolaan data lokasi fisik dari cabang-cabang bisnis.
 Pengorganisasian produk berdasarkan klasifikasi/kategori.
 <table>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Kategori/Kategori.jpg" width="100%" alt="Daftar Kategori" />
       <br/><sub><b>Daftar Kategori</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Kategori/Show kategori.jpg" width="100%" alt="Detail Kategori" />
       <br/><sub><b>Detail Kategori</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Kategori/Tambah kategori.jpg" width="100%" alt="Tambah Kategori" />
       <br/><sub><b>Tambah Kategori Baru</b></sub>
     </td>
@@ -409,15 +409,15 @@ Pengorganisasian produk berdasarkan klasifikasi/kategori.
 Katalog menu/produk dagang yang dijual lengkap dengan harga beli, harga jual, dan kontrol stok.
 <table>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Menu/Menu.jpeg" width="100%" alt="Daftar Menu" />
       <br/><sub><b>Daftar Menu & Produk</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Menu/Show menu.jpeg" width="100%" alt="Detail Menu" />
       <br/><sub><b>Detail Informasi Menu</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Menu/Tambah menu.jpeg" width="100%" alt="Tambah Menu" />
       <br/><sub><b>Tambah Menu Baru</b></sub>
     </td>
@@ -428,15 +428,15 @@ Katalog menu/produk dagang yang dijual lengkap dengan harga beli, harga jual, da
 Pengaturan keanggotaan staf kasir di setiap cabang bisnis.
 <table>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Pegawai/Pegawai.jpg" width="100%" alt="Daftar Pegawai" />
       <br/><sub><b>Daftar Pegawai</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Pegawai/Show pegawai.jpg" width="100%" alt="Detail Pegawai" />
       <br/><sub><b>Detail Data Staf</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Pegawai/Tambah pegawai.jpg" width="100%" alt="Tambah Pegawai" />
       <br/><sub><b>Daftarkan Pegawai Baru</b></sub>
     </td>
@@ -447,15 +447,15 @@ Pengaturan keanggotaan staf kasir di setiap cabang bisnis.
 Basis data identitas pelanggan loyal pendukung program loyalitas atau pencatatan transaksi terarah.
 <table>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Pelanggan/Pelanggan.jpg" width="100%" alt="Daftar Pelanggan" />
       <br/><sub><b>Daftar Pelanggan</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Pelanggan/Show Pelanggan.jpg" width="100%" alt="Detail Pelanggan" />
       <br/><sub><b>Detail Pelanggan</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="17%">
       <img src="Documentation/Pelanggan/Tambah Pelanggan.jpg" width="100%" alt="Tambah Pelanggan" />
       <br/><sub><b>Tambah Pelanggan Baru</b></sub>
     </td>
@@ -512,11 +512,11 @@ Proses POS yang sangat komprehensif mulai dari pemilihan produk, pengaturan prof
 Statistik performa penjualan cabang harian/bulanan beserta omset kumulatif yang terdokumentasi.
 <table>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="15%">
       <img src="Documentation/Laporan/Laporan.jpg" width="100%" alt="Grafik Omset Penjualan" />
       <br/><sub><b>Dasbor Ringkasan Laporan</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="15%">
       <img src="Documentation/Laporan/Laporan-tanggal.jpg" width="100%" alt="Laporan Berdasarkan Tanggal" />
       <br/><sub><b>Filter Laporan per Rentang Tanggal</b></sub>
     </td>
@@ -527,11 +527,11 @@ Statistik performa penjualan cabang harian/bulanan beserta omset kumulatif yang 
 Simulasi struk penjualan terstruktur siap cetak.
 <table>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="15%">
       <img src="Documentation/Print/Print.jpg" width="100%" alt="Simulasi Cetak Struk" />
       <br/><sub><b>Halaman Struk Pembayaran</b></sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="15%">
       <img src="Documentation/Print/Print Nota.jpg" width="100%" alt="Tampilan Struk Nota" />
       <br/><sub><b>Struk Belanja Terstruktur</b></sub>
     </td>
