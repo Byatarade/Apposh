@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="drawable/cart.png" alt="DevSpark Logo" width="100" style="border-radius: 20px; box-shadow: 0 4px 10px #05976A />
+<img src="app/src/main/res/drawable/cart.png" alt="DevSpark Logo" width="100" style="border-radius: 20px; box-shadow: 0 4px 10px #05976A;" />
 
 # ⚡ DevSpark
 
