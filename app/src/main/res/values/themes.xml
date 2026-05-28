@@ -52,7 +52,7 @@
         <item name="colorOnPrimaryContainer">@color/white</item>
         <item name="colorSecondary">@color/colorPrimary</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSurface">@color/white</item>
+        <item name="colorSurface">@color/colorCardBackground</item>
         <item name="colorOnSurface">@color/colorPrimaryText</item>
         <item name="colorOnSurfaceVariant">@color/colorSecondaryText</item>
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>

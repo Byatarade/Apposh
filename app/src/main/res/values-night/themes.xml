@@ -22,4 +22,19 @@
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
     </style>
     <style name="Theme.PenjualanDev" parent="Base.Theme.PenjualanDev" />
+    
+    <!-- DatePicker for Night mode -->
+    <style name="Theme.PenjualanDev.DatePicker" parent="ThemeOverlay.Material3.MaterialCalendar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/colorPrimary</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSurface">@color/colorCardBackground</item>
+        <item name="colorOnSurface">@color/colorPrimaryText</item>
+        <item name="colorOnSurfaceVariant">@color/colorSecondaryText</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
+    </style>
 </resources>

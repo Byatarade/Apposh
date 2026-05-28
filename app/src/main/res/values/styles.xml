@@ -6,7 +6,7 @@
 
     <style name="App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
         <item name="shapeAppearanceOverlay">@style/App.ShapeAppearance.BottomNavigationView</item>
-        <item name="backgroundTint">@color/white</item>
+        <item name="backgroundTint">?attr/colorSurfaceContainerLow</item>
     </style>
 
     <style name="App.ShapeAppearance.BottomNavigationView" parent="">
