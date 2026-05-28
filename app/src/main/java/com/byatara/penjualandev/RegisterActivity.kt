@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.byatara.penjualandev.utils.ToastHelper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -152,7 +153,7 @@ class RegisterActivity : AppCompatActivity() {
         if (!isValid) return
 
         btnRegister.isEnabled = false
-        Toast.makeText(this, "Mendaftarkan akun...", Toast.LENGTH_SHORT).show()
+        ToastHelper.showToast(this, "Mendaftarkan akun...")
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -169,18 +170,18 @@ class RegisterActivity : AppCompatActivity() {
 
                     usersRef.child(userId).setValue(userMap)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
+                            ToastHelper.showToast(this, "Registrasi berhasil!")
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
                         }
                         .addOnFailureListener { e ->
                             btnRegister.isEnabled = true
-                            Toast.makeText(this, "Gagal menyimpan profil: ${e.message}", Toast.LENGTH_SHORT).show()
+                            ToastHelper.showToast(this, "Gagal menyimpan profil: ${e.message}")
                         }
                 } else {
                     btnRegister.isEnabled = true
                     val errorMsg = task.exception?.message ?: "Registrasi gagal"
-                    Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
+                    ToastHelper.showToast(this, errorMsg)
                 }
             }
     }

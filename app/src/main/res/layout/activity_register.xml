@@ -196,11 +196,12 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_register"
-                    style="@style/Widget.App.Button.Pill"
+                    style="@style/Widget.App.Button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="20dp"
-                    android:text="@string/daftar" />
+                    android:text="@string/daftar"
+                    app:cornerRadius="12dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

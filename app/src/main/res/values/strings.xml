@@ -75,7 +75,7 @@
     <string name="konfirmasi_password">Konfirmasi Password</string>
     <string name="daftar">Daftar</string>
     <string name="sudah_punya_akun">Sudah punya akun? </string>
-    <string name="masuk">Masuk</string>
+    <string name="masuk">  Masuk</string>
     <string name="hint_nama">Masukkan nama lengkap Anda</string>
     <string name="hint_email">Masukkan email Anda</string>
     <string name="hint_password">Masukkan password Anda</string>

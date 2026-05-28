@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.byatara.penjualandev.utils.ToastHelper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -119,13 +120,13 @@ class LoginActivity : AppCompatActivity() {
         if (!isValid) return
 
         btnLogin.isEnabled = false
-        Toast.makeText(this, "Mencoba masuk...", Toast.LENGTH_SHORT).show()
+        ToastHelper.showToast(this, "Mencoba masuk...")
 
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 btnLogin.isEnabled = true
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "Selamat datang!", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showToast(this, "Selamat datang!")
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
@@ -135,7 +136,7 @@ class LoginActivity : AppCompatActivity() {
                         is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> "Email atau Password salah"
                         else -> exception?.message ?: "Login gagal, silakan coba lagi"
                     }
-                    Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
+                    ToastHelper.showToast(this, errorMsg)
                 }
             }
     }
