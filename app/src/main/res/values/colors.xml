@@ -54,4 +54,7 @@
 
     <!-- Auth & UI Cards -->
     <color name="colorAuthCardBackground">#FFFFFF</color>
+
+    <color name="colorSurfaceContainerLowest">#FFFFFF</color>
+    <color name="colorSurfaceContainerLow">#F3F4F6</color>
 </resources>

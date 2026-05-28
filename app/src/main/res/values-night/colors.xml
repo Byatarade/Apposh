@@ -22,4 +22,7 @@
     <color name="colorBottomNavBackground">#1E1E1E</color>
     <color name="colorBottomNavSelectedBg">#2D4F43</color>
     <color name="colorBottomNavItemTint">#10B981</color>
+
+    <color name="colorSurfaceContainerLowest">#121212</color>
+    <color name="colorSurfaceContainerLow">#1A1A1A</color>
 </resources>

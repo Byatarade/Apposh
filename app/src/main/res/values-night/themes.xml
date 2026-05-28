@@ -13,6 +13,8 @@
         <item name="colorSurface">@color/colorScreenBackground</item>
         <item name="colorOnSurface">@color/colorPrimaryText</item>
         <item name="colorSurfaceContainer">@color/colorCardBackground</item>
+        <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
+        <item name="colorSurfaceContainerLowest">@color/colorSurfaceContainerLowest</item>
         <item name="colorSurfaceContainerHigh">@color/colorAuthCardBackground</item>
         <item name="colorOnSurfaceVariant">@color/colorSecondaryText</item>
         <item name="colorError">@color/red</item>
