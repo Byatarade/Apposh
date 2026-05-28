@@ -44,11 +44,13 @@ class LoginActivity : AppCompatActivity() {
     private fun setupEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.WHITE
+
+        val isDarkMode = isDarkModeEnabled()
+        window.navigationBarColor = if (isDarkMode) Color.BLACK else Color.WHITE
 
         WindowInsetsControllerCompat(window, window.decorView).apply {
             isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = true
+            isAppearanceLightNavigationBars = !isDarkMode
         }
 
         val header = findViewById<View>(R.id.layout_header)
@@ -64,6 +66,11 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, v.paddingBottom + bars.bottom)
             insets
         }
+    }
+
+    private fun isDarkModeEnabled(): Boolean {
+        val nightModeFlags = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+        return nightModeFlags == android.content.res.Configuration.UI_MODE_NIGHT_YES
     }
 
     private fun initViews() {

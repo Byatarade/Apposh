@@ -1,10 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Core Colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Primary Colors (Fresh Green) -->
+    <color name="colorPrimary">#10B981</color>
+    <color name="colorPrimaryVariant">#059669</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    
+    <!-- Secondary Colors (Soft Mint/Light Teal) -->
+    <color name="colorSecondary">#064E3B</color>
+    <color name="colorOnSecondary">#D1FAE5</color>
+
+    <!-- Background Colors -->
     <color name="colorScreenBackground">#121212</color>
     <color name="colorCardBackground">#1E1E1E</color>
+
+    <!-- Text Colors -->
     <color name="colorPrimaryText">#FFFFFF</color>
     <color name="colorSecondaryText">#B3B3B3</color>
     <color name="colorHint">#999999</color>
+
+    <!-- UI Component Colors -->
+    <color name="colorButtonBackground">#10B981</color>
+    <color name="colorButtonText">#FFFFFF</color>
+    <color name="colorOutlineStroke">#49454F</color>
+    
+    <!-- Accent/Status Colors -->
+    <color name="colorAccent">#10B981</color>
+    <color name="red">#EF4444</color>
+    <color name="colorError">#EF4444</color>
+    <color name="green_success">#10B981</color>
+    
+    <!-- Old colors mapping (kept to prevent crashes if used directly) -->
+    <color name="colorThird">#9CA3AF</color>
+    <color name="gray_background">#374151</color>
     <color name="colorSectionTitle">#D0BCFF</color>
     <color name="colorPageBackground">#121212</color>
     <color name="colorToolbarTitle">#E6E1E5</color>
@@ -14,14 +45,15 @@
     <color name="colorPhotoBarBg">#1D1B20</color>
     <color name="colorPhotoButtonBg">#4A4458</color>
     <color name="colorPhotoButtonText">#E8DEF8</color>
-    <color name="colorOutlineStroke">#49454F</color>
     <color name="colorSubtitleText">#CAC4D0</color>
-    
+
+    <!-- Bottom Nav Colors for new design -->
+    <color name="bottom_nav_background">#1E1E1E</color>
+    <color name="bottom_nav_item_tint">#10B981</color>
+    <color name="bottom_nav_selected_item_background">#2D4F43</color>
+
     <!-- Auth & UI Cards -->
     <color name="colorAuthCardBackground">#1E1E1E</color>
-    <color name="colorBottomNavBackground">#1E1E1E</color>
-    <color name="colorBottomNavSelectedBg">#2D4F43</color>
-    <color name="colorBottomNavItemTint">#10B981</color>
 
     <color name="colorSurfaceContainerLowest">#121212</color>
     <color name="colorSurfaceContainerLow">#1A1A1A</color>
