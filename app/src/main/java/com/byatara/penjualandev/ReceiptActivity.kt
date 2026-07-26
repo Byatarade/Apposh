@@ -178,7 +178,7 @@ class ReceiptActivity : AppCompatActivity() {
     }
 
     private fun shareReceiptText(order: ModelOrder) {
-        val storeHeader = "=== DEVSPARK POS ===\n" +
+        val storeHeader = "=== APPOSH POS ===\n" +
                           "Solusi Point of Sale Pintar\n" +
                           "====================\n\n"
         

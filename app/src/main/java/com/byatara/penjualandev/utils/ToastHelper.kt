@@ -12,7 +12,7 @@ import com.byatara.penjualandev.R
 object ToastHelper {
 
     /**
-     * Menampilkan Toast kustom premium dengan logo DevSpark
+     * Menampilkan Toast kustom premium dengan logo Apposh
      */
     fun showToast(context: Context, message: String) {
         try {

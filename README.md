@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="Documentation/devspark_app_logo.png" alt="DevSpark Logo" width="100" style="border-radius: 20px; box-shadow: 0 4px 10px #05976A;" />
+<img src="Documentation/apposh_app_logo.png" alt="Apposh Logo" width="100" style="border-radius: 20px; box-shadow: 0 4px 10px #05976A;" />
 
-# ⚡ DevSpark
+# ⚡ Apposh
 
 **Sistem Kasir Pintar (Point of Sale) Multi-Cabang & Real-Time Berbasis Android**
 
@@ -20,15 +20,15 @@
 
 ## 📋 Deskripsi
 
-**DevSpark** adalah aplikasi **Point of Sale (POS) / Sistem Kasir** berbasis Android modern yang dirancang khusus untuk memenuhi kebutuhan bisnis retail, F&B, dan UMKM berskala multi-cabang. Dibangun menggunakan bahasa pemrograman **Kotlin** dan diintegrasikan dengan **Firebase Realtime Database** dan **Firebase Authentication**, DevSpark menyajikan sinkronisasi data yang instan, responsif, dan aman antara kasir di toko fisik dengan pemilik usaha.
+**Apposh** adalah aplikasi **Point of Sale (POS) / Sistem Kasir** berbasis Android modern yang dirancang khusus untuk memenuhi kebutuhan bisnis retail, F&B, dan UMKM berskala multi-cabang. Dibangun menggunakan bahasa pemrograman **Kotlin** dan diintegrasikan dengan **Firebase Realtime Database** dan **Firebase Authentication**, Apposh menyajikan sinkronisasi data yang instan, responsif, dan aman antara kasir di toko fisik dengan pemilik usaha.
 
-Aplikasi ini menyederhanakan alur transaksi harian, mengotomatiskan pengelolaan stok barang, meminimalisir kesalahan manusia (*human error*), serta memberikan wawasan keuntungan (*profit analytics*) secara *real-time*. Dengan antarmuka berstandar **Material Design 3**, DevSpark menghadirkan pengalaman pengguna yang premium, estetik, dan interaktif.
+Aplikasi ini menyederhanakan alur transaksi harian, mengotomatiskan pengelolaan stok barang, meminimalisir kesalahan manusia (*human error*), serta memberikan wawasan keuntungan (*profit analytics*) secara *real-time*. Dengan antarmuka berstandar **Material Design 3**, Apposh menghadirkan pengalaman pengguna yang premium, estetik, dan interaktif.
 
 ---
 
 ## ✨ Fitur Unggulan Kompleks
 
-Aplikasi DevSpark dilengkapi dengan serangkaian fitur tingkat lanjut yang dirancang untuk mendukung operasional bisnis secara menyeluruh:
+Aplikasi Apposh dilengkapi dengan serangkaian fitur tingkat lanjut yang dirancang untuk mendukung operasional bisnis secara menyeluruh:
 
 ### 1. 🔄 Sinkronisasi Transaksi & Pengurangan Stok Aman (*Concurrency-Safe*)
 * Menggunakan fitur **Firebase Transactions (`runTransaction`)** untuk memperbarui kuantitas stok produk saat transaksi diselesaikan. Proses ini menjamin tidak terjadi *data race* (perselisihan jumlah stok) ketika beberapa kasir di cabang yang sama melakukan checkout produk yang sama secara bersamaan.
@@ -102,25 +102,25 @@ Aplikasi DevSpark dilengkapi dengan serangkaian fitur tingkat lanjut yang diranc
 ### 1. Kloning Repositori
 Jalankan perintah berikut di terminal Anda untuk menyalin proyek ke lokal komputer:
 ```bash
-git clone https://github.com/Byatarade/DevSpark.git
-cd DevSpark
+git clone https://github.com/Byatarade/Apposh.git
+cd Apposh
 ```
 
 ### 2. Hubungkan dengan Firebase Anda
 1. Buka [Firebase Console](https://console.firebase.google.com/).
-2. Buat proyek baru dengan nama **DevSpark** (atau nama pilihan Anda).
+2. Buat proyek baru dengan nama **Apposh** (atau nama pilihan Anda).
 3. Daftarkan aplikasi Android baru dengan Package Name: `com.byatara.penjualandev`.
 4. Unduh file konfigurasi **`google-services.json`**.
 5. Letakkan file `google-services.json` tersebut ke dalam folder `/app/` proyek Anda:
    ```
-   DevSpark/
+   Apposh/
    └── 📁 app/
        └── google-services.json  <-- Letakkan di sini
    ```
 6. Di Firebase Console, aktifkan fitur **Authentication** (metode Email/Password) dan **Realtime Database**.
 
 ### 3. Konfigurasi Awal Gradle
-Buka proyek **DevSpark** menggunakan **Android Studio**. IDE akan secara otomatis memicu proses *Gradle Sync* untuk mengunduh seluruh dependensi yang tertera di file `build.gradle.kts` dan `gradle/libs.versions.toml`.
+Buka proyek **Apposh** menggunakan **Android Studio**. IDE akan secara otomatis memicu proses *Gradle Sync* untuk mengunduh seluruh dependensi yang tertera di file `build.gradle.kts` dan `gradle/libs.versions.toml`.
 
 ### 4. Menjalankan Aplikasi
 * Hubungkan perangkat Android fisik via USB Debugging, atau aktifkan Android Virtual Device (Emulator) di Android Studio.
@@ -141,7 +141,7 @@ Aplikasi memiliki alur otentikasi mandiri terpadu demi keamanan data transaksi c
 ## 📁 Struktur Folder Proyek
 
 ```
-DevSpark/
+Apposh/
 ├── 📁 app/
 │   ├── 📁 src/
 │   │   ├── 📁 main/
@@ -198,7 +198,7 @@ DevSpark/
 ## 🗄️ Arsitektur Database & Keamanan
 
 ### Entity Relationship Diagram (ERD) - Firebase Realtime Database
-Meskipun Firebase menggunakan struktur NoSQL JSON Tree, hubungan relasional antar entitas di DevSpark dirancang dengan ketat demi menjaga keutuhan relasi master-transaksi:
+Meskipun Firebase menggunakan struktur NoSQL JSON Tree, hubungan relasional antar entitas di Apposh dirancang dengan ketat demi menjaga keutuhan relasi master-transaksi:
 
 ```mermaid
 erDiagram
@@ -326,18 +326,18 @@ erDiagram
 
 ## 📸 Dokumentasi
 
-Berikut adalah visualisasi antarmuka dari aplikasi **DevSpark** yang dikelompokkan secara terstruktur mulai dari halaman otentikasi hingga transaksi:
+Berikut adalah visualisasi antarmuka dari aplikasi **Apposh** yang dikelompokkan secara terstruktur mulai dari halaman otentikasi hingga transaksi:
 
 ### 🔐 1. Autentikasi
 Sistem otentikasi modern untuk memproteksi masuknya pegawai ke dasbor kasir.
 <table>
   <tr>
     <td align="center" width="15%">
-      <img src="Documentation/Auth/Login.jpg" width="100%" alt="Login DevSpark" />
+      <img src="Documentation/Auth/Login.jpg" width="100%" alt="Login Apposh" />
       <br/><sub><b>Halaman Login</b></sub>
     </td>
     <td align="center" width="15%">
-      <img src="Documentation/Auth/Register.jpg" width="100%" alt="Register DevSpark" />
+      <img src="Documentation/Auth/Register.jpg" width="100%" alt="Register Apposh" />
       <br/><sub><b>Halaman Registrasi Kasir</b></sub>
     </td>
   </tr>
@@ -545,9 +545,9 @@ Simulasi struk penjualan terstruktur siap cetak.
 
 ## 🤝 Kontribusi
 
-Kontribusi dari seluruh pengembang sangat kami hargai! Jika Anda ingin meningkatkan fungsionalitas DevSpark:
+Kontribusi dari seluruh pengembang sangat kami hargai! Jika Anda ingin meningkatkan fungsionalitas Apposh:
 
-1. **Fork** repositori ini ke akun Anda: [Byatarade/DevSpark](https://github.com/Byatarade/DevSpark)
+1. **Fork** repositori ini ke akun Anda: [Byatarade/Apposh](https://github.com/Byatarade/Apposh)
 2. Buat **branch** fitur baru: `git checkout -b feature/NamaFiturKeren`
 3. **Commit** perubahan Anda dengan pesan yang jelas: `git commit -m 'feat: menambahkan integrasi printer thermal bluetooth'`
 4. **Push** ke branch Anda: `git push origin feature/NamaFiturKeren`

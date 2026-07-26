@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DevSpark</string>
+    <string name="app_name">Apposh</string>
     <string name="sapauser">Byataradev</string>
     <string name="saldoanda">Your Balance: </string>
     <string name="tanggalberanda">January 26, 2026</string>
@@ -62,8 +62,8 @@
 
     <!-- Auth -->
     <string name="slogan_app">Manage your store easily</string>
-    <string name="selamat_datang">Welcome to DevSpark!</string>
-    <string name="login_subtitle">Login now to enjoy all the features available in DevSpark</string>
+    <string name="selamat_datang">Welcome to Apposh!</string>
+    <string name="login_subtitle">Login now to enjoy all the features available in Apposh</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -71,7 +71,7 @@
 
     <!-- Register -->
     <string name="daftar_akun">Register Account</string>
-    <string name="buat_akun_subtitle">Create an account to start with DevSpark</string>
+    <string name="buat_akun_subtitle">Create an account to start with Apposh</string>
     <string name="nama_lengkap">Full Name</string>
     <string name="konfirmasi_password">Confirm Password</string>
     <string name="daftar">Register</string>

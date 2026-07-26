@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/logo"
-            android:contentDescription="DevSpark Logo" />
+            android:contentDescription="Apposh Logo" />
     </androidx.cardview.widget.CardView>
 
     <TextView
