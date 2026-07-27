@@ -3,6 +3,7 @@ package com.byatara.penjualandev.adapter
 import android.content.Context
 import android.graphics.Color
 import android.text.format.DateFormat
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -122,12 +123,24 @@ class ProdukAdapter(
 
             // ── Gambar produk (Glide) ────────────────────────────────
             if (!produk.fotoProduk.isNullOrEmpty()) {
-                Glide.with(appContext)
-                    .load(produk.fotoProduk)
-                    .placeholder(R.drawable.menu)
-                    .error(R.drawable.menu)
-                    .centerCrop()
-                    .into(imgProduk)
+                val foto = produk.fotoProduk
+                if (foto != null && foto.startsWith("base64:")) {
+                    val base64Str = foto.substring(7)
+                    val decodedString = Base64.decode(base64Str, Base64.DEFAULT)
+                    Glide.with(appContext)
+                        .load(decodedString)
+                        .placeholder(R.drawable.menu)
+                        .error(R.drawable.menu)
+                        .centerCrop()
+                        .into(imgProduk)
+                } else {
+                    Glide.with(appContext)
+                        .load(foto)
+                        .placeholder(R.drawable.menu)
+                        .error(R.drawable.menu)
+                        .centerCrop()
+                        .into(imgProduk)
+                }
             } else {
                 imgProduk.setImageResource(R.drawable.menu)
             }

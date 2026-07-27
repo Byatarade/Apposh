@@ -2,6 +2,7 @@ package com.byatara.penjualandev.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,13 +97,29 @@ class ProdukPosAdapter(
 
             // Glide Image
             if (!produk.fotoProduk.isNullOrEmpty()) {
-                Glide.with(context)
-                    .load(produk.fotoProduk)
-                    .placeholder(R.drawable.menu)
-                    .error(R.drawable.menu)
-                    .centerCrop()
-                    .into(imgProduk)
+                val foto = produk.fotoProduk
+                if (imgProduk.tag != foto) {
+                    imgProduk.tag = foto
+                    if (foto != null && foto.startsWith("base64:")) {
+                        val base64Str = foto.substring(7)
+                        val decodedString = Base64.decode(base64Str, Base64.DEFAULT)
+                        Glide.with(context)
+                            .load(decodedString)
+                            .placeholder(R.drawable.menu)
+                            .error(R.drawable.menu)
+                            .centerCrop()
+                            .into(imgProduk)
+                    } else {
+                        Glide.with(context)
+                            .load(foto)
+                            .placeholder(R.drawable.menu)
+                            .error(R.drawable.menu)
+                            .centerCrop()
+                            .into(imgProduk)
+                    }
+                }
             } else {
+                imgProduk.tag = null
                 imgProduk.setImageResource(R.drawable.menu)
             }
 

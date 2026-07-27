@@ -21,6 +21,14 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.activity.enableEdgeToEdge
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContracts
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import com.bumptech.glide.Glide
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +39,7 @@ import com.byatara.penjualandev.adapter.KategoriAdapter
 import com.byatara.penjualandev.viewmodel.CabangViewModel
 import com.byatara.penjualandev.viewmodel.DataKategoriViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -45,9 +54,6 @@ class TambahProdukActivity : AppCompatActivity() {
     private lateinit var btnPilihKategori: MaterialButton
     private lateinit var btnPilihCabang: MaterialButton
     
-    private lateinit var etHargaBeli: TextInputEditText
-    private lateinit var spinnerTipeKeuntungan: AutoCompleteTextView
-    private lateinit var etNilaiProfit: TextInputEditText
     private lateinit var etHargaJual: TextInputEditText
     
     private lateinit var etStok: TextInputEditText
@@ -61,6 +67,56 @@ class TambahProdukActivity : AppCompatActivity() {
     private var selectedIdKategori: String = ""
     private lateinit var cabangViewModel: CabangViewModel
     private lateinit var kategoriViewModel: DataKategoriViewModel
+
+    // Image Upload (Base64)
+    private var base64Image: String? = null
+    
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if (uri != null) {
+            val imgPreview = findViewById<ImageView>(R.id.img_preview)
+            imgPreview.layoutParams.width = android.view.ViewGroup.LayoutParams.MATCH_PARENT
+            imgPreview.layoutParams.height = android.view.ViewGroup.LayoutParams.MATCH_PARENT
+            imgPreview.scaleType = ImageView.ScaleType.CENTER_CROP
+            imgPreview.imageTintList = null
+            
+            val tvPhotoHint = (imgPreview.parent as? android.widget.LinearLayout)?.getChildAt(1) as? TextView
+            tvPhotoHint?.visibility = View.GONE
+
+            Glide.with(this).load(uri).into(imgPreview)
+            
+            // Proses gambar ke Base64 (compress to small size)
+            try {
+                val inputStream: InputStream? = contentResolver.openInputStream(uri)
+                val originalBitmap = BitmapFactory.decodeStream(inputStream)
+                
+                // Resize bitmap to max 400px width/height to save database space
+                val maxSize = 400
+                val width = originalBitmap.width
+                val height = originalBitmap.height
+                val ratioBitmap = width.toFloat() / height.toFloat()
+                
+                var finalWidth = maxSize
+                var finalHeight = maxSize
+                if (ratioBitmap > 1) {
+                    finalWidth = maxSize
+                    finalHeight = (maxSize / ratioBitmap).toInt()
+                } else {
+                    finalHeight = maxSize
+                    finalWidth = (maxSize * ratioBitmap).toInt()
+                }
+                
+                val scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, finalWidth, finalHeight, true)
+                val outputStream = ByteArrayOutputStream()
+                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
+                val byteArray = outputStream.toByteArray()
+                
+                // Tambahkan prefix agar mudah dikenali nantinya
+                base64Image = "base64:" + Base64.encodeToString(byteArray, Base64.DEFAULT)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Gagal memproses gambar: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     // Edit Mode
     private var isEditMode: Boolean = false
@@ -82,7 +138,6 @@ class TambahProdukActivity : AppCompatActivity() {
 
         initViews()
         setupListeners()
-        setupSpinner()
 
         if (isEditMode && existingProduk != null) {
             setupEditMode()
@@ -93,8 +148,10 @@ class TambahProdukActivity : AppCompatActivity() {
         existingProduk?.let { p ->
             findViewById<TextView>(R.id.tv_toolbar_title).text = "Edit Produk"
             etNamaProduk.setText(p.namaProduk)
-            etHargaBeli.setText(p.hargaBeli.toString())
-            etHargaJual.setText(p.hargaJual.toString())
+            
+            // Format existing harga jual
+            val formatter = NumberFormat.getNumberInstance(Locale("id", "ID"))
+            etHargaJual.setText(formatter.format(p.hargaJual ?: 0))
             switchStatusProduk.isChecked = p.statusProduk?.lowercase() == "aktif"
             
             // Parse deskripsi back to SKU & Barcode if possible
@@ -122,7 +179,7 @@ class TambahProdukActivity : AppCompatActivity() {
                     }
             }
 
-            spinnerTipeKeuntungan.setText(p.tipeKeuntungan, false)
+            // Removed spinnerTipeKeuntungan
             
             if (p.tanpaBatas == "ya") {
                 cbStokTakTerbatas.isChecked = true
@@ -135,6 +192,29 @@ class TambahProdukActivity : AppCompatActivity() {
             }
 
             btnSimpan.text = "Update Produk"
+            
+            // Load existing image if available
+            if (!p.fotoProduk.isNullOrEmpty()) {
+                val imgPreview = findViewById<ImageView>(R.id.img_preview)
+                imgPreview.layoutParams.width = android.view.ViewGroup.LayoutParams.MATCH_PARENT
+                imgPreview.layoutParams.height = android.view.ViewGroup.LayoutParams.MATCH_PARENT
+                imgPreview.scaleType = ImageView.ScaleType.CENTER_CROP
+                imgPreview.imageTintList = null
+                
+                val tvPhotoHint = (imgPreview.parent as? android.widget.LinearLayout)?.getChildAt(1) as? TextView
+                tvPhotoHint?.visibility = View.GONE
+
+                val foto = p.fotoProduk
+                if (foto != null && foto.startsWith("base64:")) {
+                    val base64Str = foto.substring(7)
+                    val decodedString = Base64.decode(base64Str, Base64.DEFAULT)
+                    Glide.with(this).load(decodedString).into(imgPreview)
+                    base64Image = foto // simpan supaya tidak terhapus jika tidak ganti foto
+                } else {
+                    Glide.with(this).load(foto).into(imgPreview)
+                    base64Image = foto
+                }
+            }
         }
     }
 
@@ -154,14 +234,8 @@ class TambahProdukActivity : AppCompatActivity() {
         btnPilihKategori = findViewById(R.id.btn_pilih_kategori)
         btnPilihCabang = findViewById(R.id.btn_pilih_cabang)
 
-        // Harga & Keuntungan
-        etHargaBeli = findViewById(R.id.et_harga_beli)
-        spinnerTipeKeuntungan = findViewById(R.id.spinner_tipe_keuntungan)
-        etNilaiProfit = findViewById(R.id.et_nilai_profit)
         etHargaJual = findViewById(R.id.et_harga_jual)
-        
-        // Disable manual input on Harga Jual because it's calculated automatically
-        etHargaJual.isEnabled = false
+        etHargaJual.isEnabled = true
 
         // Manajemen Stok
         etStok = findViewById(R.id.et_stok)
@@ -179,31 +253,38 @@ class TambahProdukActivity : AppCompatActivity() {
             Toast.makeText(this, "Fitur Kamera belum tersedia", Toast.LENGTH_SHORT).show()
         }
         findViewById<MaterialButton>(R.id.btn_galeri).setOnClickListener {
-            Toast.makeText(this, "Fitur Galeri belum tersedia", Toast.LENGTH_SHORT).show()
+            imagePickerLauncher.launch("image/*")
         }
     }
 
-    private fun setupSpinner() {
-        val tipeKeuntungan = arrayOf("Persentase (%)", "Nominal (Rp)")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, tipeKeuntungan)
-        spinnerTipeKeuntungan.setAdapter(adapter)
-
-        spinnerTipeKeuntungan.setOnItemClickListener { _, _, _, _ ->
-            calculateHargaJual()
-        }
-    }
+    // Removed setupSpinner
 
     private fun setupListeners() {
-        val textWatcher = object : TextWatcher {
+        etHargaJual.addTextChangedListener(object : TextWatcher {
+            private var current = ""
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                calculateHargaJual()
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString() != current) {
+                    etHargaJual.removeTextChangedListener(this)
+                    
+                    val cleanString = s.toString().replace("[^0-9]".toRegex(), "").trim()
+                    if (cleanString.isNotEmpty()) {
+                        val parsed = cleanString.toDoubleOrNull() ?: 0.0
+                        val formatter = NumberFormat.getNumberInstance(Locale("id", "ID"))
+                        val formatted = formatter.format(parsed)
+                        current = formatted
+                        etHargaJual.setText(formatted)
+                        etHargaJual.setSelection(formatted.length)
+                    } else {
+                        current = ""
+                        etHargaJual.setText("")
+                    }
+                    
+                    etHargaJual.addTextChangedListener(this)
+                }
             }
-            override fun afterTextChanged(s: Editable?) {}
-        }
-
-        etHargaBeli.addTextChangedListener(textWatcher)
-        etNilaiProfit.addTextChangedListener(textWatcher)
+        })
 
         // Logika checkbox stok tak terbatas
         cbStokTakTerbatas.setOnCheckedChangeListener { _, isChecked ->
@@ -320,40 +401,15 @@ class TambahProdukActivity : AppCompatActivity() {
         bottomSheetDialog.show()
     }
 
-    private fun calculateHargaJual() {
-        val hargaBeliStr = etHargaBeli.text.toString()
-        val nilaiProfitStr = etNilaiProfit.text.toString()
-        val tipeKeuntungan = spinnerTipeKeuntungan.text.toString()
-
-        val hargaBeli = hargaBeliStr.toDoubleOrNull() ?: 0.0
-        val profit = nilaiProfitStr.toDoubleOrNull() ?: 0.0
-        var hargaJual = 0.0
-
-        if (tipeKeuntungan == "Persentase (%)") {
-            if (hargaBeli > 0) {
-                hargaJual = hargaBeli + (hargaBeli * (profit / 100))
-            }
-        } else {
-            // Nominal (Rp)
-            hargaJual = hargaBeli + profit
-        }
-
-        if (hargaJual > 0) {
-            etHargaJual.setText(hargaJual.toLong().toString())
-        } else {
-            etHargaJual.setText("0")
-        }
-    }
+    // Removed calculateHargaJual
 
     private fun validsiDataProduk() {
         val namaProduk = etNamaProduk.text.toString().trim()
         val sku = etSku.text.toString().trim()
         val barcode = etBarcode.text.toString().trim()
         
-        val hargaBeliStr = etHargaBeli.text.toString().trim()
-        val hargaJualStr = etHargaJual.text.toString().trim()
+        val hargaJualStr = etHargaJual.text.toString().replace("[^0-9]".toRegex(), "").trim()
         
-        val tipeKeuntungan = spinnerTipeKeuntungan.text.toString().trim()
         val stokStr = etStok.text.toString().trim()
         val isTanpaBatas = cbStokTakTerbatas.isChecked
 
@@ -363,9 +419,9 @@ class TambahProdukActivity : AppCompatActivity() {
             return
         }
 
-        if (hargaBeliStr.isEmpty()) {
-            etHargaBeli.error = "Harga Beli wajib diisi"
-            etHargaBeli.requestFocus()
+        if (hargaJualStr.isEmpty()) {
+            etHargaJual.error = "Harga Jual wajib diisi"
+            etHargaJual.requestFocus()
             return
         }
         
@@ -375,7 +431,6 @@ class TambahProdukActivity : AppCompatActivity() {
             return
         }
 
-        val hargaBeli = hargaBeliStr.toIntOrNull() ?: 0
         val hargaJual = hargaJualStr.toIntOrNull() ?: 0
         val stok = if (isTanpaBatas) 0 else (stokStr.toIntOrNull() ?: 0)
         val stringTanpaBatas = if (isTanpaBatas) "ya" else "tidak"
@@ -386,9 +441,9 @@ class TambahProdukActivity : AppCompatActivity() {
         simpanKeFirebase(
             namaProduk = namaProduk,
             deskripsi = deskripsi,
-            hargaBeli = hargaBeli,
+            hargaBeli = 0,
             hargaJual = hargaJual,
-            tipeKeuntungan = tipeKeuntungan,
+            tipeKeuntungan = "",
             stok = stok,
             tanpaBatas = stringTanpaBatas,
             idCabang = selectedIdCabang,
@@ -436,8 +491,21 @@ class TambahProdukActivity : AppCompatActivity() {
 
         val loadingMsg = if (isEditMode) "Mengupdate produk..." else "Menyimpan produk..."
         Toast.makeText(this, loadingMsg, Toast.LENGTH_SHORT).show()
+        
+        // Disable save button to prevent double clicks
+        btnSimpan.isEnabled = false
+
+        if (base64Image != null) {
+            modelProduk.fotoProduk = base64Image
+        }
+        
+        saveDataToDatabase(idProduk, modelProduk, namaProduk)
+    }
+    
+    private fun saveDataToDatabase(idProduk: String, modelProduk: ModelProduk, namaProduk: String) {
 
         database.child(idProduk).setValue(modelProduk).addOnCompleteListener { task ->
+            btnSimpan.isEnabled = true
             if (task.isSuccessful) {
                 if (!isEditMode) {
                     com.byatara.penjualandev.utils.CatatanHistori.catat(

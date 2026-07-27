@@ -51,8 +51,8 @@
                     android:padding="24dp">
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp"
                         app:cardBackgroundColor="@color/colorSecondary">
@@ -264,17 +264,38 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Edit Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_edit_produk"
-        style="@style/Widget.App.Button"
+    <!-- Floating Edit and Delete Buttons -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
-        android:text="Edit Produk"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/pegawai"
-        app:iconGravity="textStart" />
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_edit_produk"
+            style="@style/Widget.App.Button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Edit"
+            app:cornerRadius="16dp"
+            app:icon="@drawable/pegawai"
+            app:iconGravity="textStart" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_hapus_produk"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Hapus"
+            android:textColor="@color/red"
+            app:cornerRadius="16dp"
+            app:strokeColor="@color/red" />
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

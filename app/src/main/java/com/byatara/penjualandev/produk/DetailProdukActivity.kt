@@ -5,7 +5,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.util.Base64
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,6 +19,7 @@ import com.byatara.penjualandev.util.formatRupiah
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.FirebaseDatabase
 
 class DetailProdukActivity : AppCompatActivity() {
@@ -66,12 +69,43 @@ class DetailProdukActivity : AppCompatActivity() {
         tvStok = findViewById(R.id.tv_detail_stok)
         tvHargaBeli = findViewById(R.id.tv_detail_harga_beli)
         btnEdit = findViewById(R.id.btn_edit_produk)
+        val btnHapus = findViewById<MaterialButton>(R.id.btn_hapus_produk)
 
         btnEdit.setOnClickListener {
             val intent = Intent(this, TambahProdukActivity::class.java)
             intent.putExtra("EDIT_MODE", true)
             intent.putExtra("PRODUK_DATA", produk)
             startActivity(intent)
+        }
+
+        btnHapus.setOnClickListener {
+            produk?.let { p ->
+                val nama = p.namaProduk ?: "Produk ini"
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Hapus Produk")
+                    .setMessage("Apakah Anda yakin ingin menghapus \"$nama\"?")
+                    .setNegativeButton("Batal", null)
+                    .setPositiveButton("Hapus") { _, _ ->
+                        deleteProduk(p)
+                    }
+                    .show()
+            }
+        }
+    }
+
+    private fun deleteProduk(p: ModelProduk) {
+        val id = p.idProduk ?: return
+        database.getReference("produk").child(id).removeValue().addOnSuccessListener {
+            // Catat log histori aktivitas ke Firebase
+            com.byatara.penjualandev.utils.CatatanHistori.catat(
+                judul = "Produk Dihapus",
+                deskripsi = "Menghapus produk '${p.namaProduk}'",
+                tipe = "produk"
+            )
+            Toast.makeText(this, "Produk berhasil dihapus", Toast.LENGTH_SHORT).show()
+            finish()
+        }.addOnFailureListener {
+            Toast.makeText(this, "Gagal menghapus produk: ${it.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -94,13 +128,26 @@ class DetailProdukActivity : AppCompatActivity() {
             }
 
             if (!p.fotoProduk.isNullOrEmpty()) {
-                Glide.with(this)
-                    .load(p.fotoProduk)
-                    .placeholder(R.drawable.menu)
-                    .error(R.drawable.menu)
-                    .centerCrop()
-                    .into(ivFoto)
+                val foto = p.fotoProduk
+                if (foto != null && foto.startsWith("base64:")) {
+                    val base64Str = foto.substring(7)
+                    val decodedString = Base64.decode(base64Str, Base64.DEFAULT)
+                    Glide.with(this)
+                        .load(decodedString)
+                        .placeholder(R.drawable.menu)
+                        .error(R.drawable.menu)
+                        .centerCrop()
+                        .into(ivFoto)
+                } else {
+                    Glide.with(this)
+                        .load(foto)
+                        .placeholder(R.drawable.menu)
+                        .error(R.drawable.menu)
+                        .centerCrop()
+                        .into(ivFoto)
+                }
                 ivFoto.setPadding(0, 0, 0, 0)
+                ivFoto.imageTintList = null
             }
 
             tvCabang.text = p.idCabang ?: "Semua Cabang"

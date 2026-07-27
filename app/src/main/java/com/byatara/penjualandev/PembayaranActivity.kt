@@ -39,13 +39,11 @@ class PembayaranActivity : AppCompatActivity() {
     private lateinit var tvPayCashier: TextView
     private lateinit var tvPayCustomer: TextView
     private lateinit var tvPaySubtotal: TextView
-    private lateinit var tvPayTax: TextView
     
     private lateinit var rvPayItems: RecyclerView
     private lateinit var togglePaymentMethod: MaterialButtonToggleGroup
     private lateinit var llCashContainer: LinearLayout
     private lateinit var llQrisContainer: LinearLayout
-    private lateinit var llEwalletContainer: LinearLayout
     private lateinit var cvQrisCode: View
     private lateinit var etCashReceived: TextInputEditText
     private lateinit var tvChangeAmount: TextView
@@ -55,11 +53,6 @@ class PembayaranActivity : AppCompatActivity() {
     private lateinit var chip100k: Chip
     
     private lateinit var btnConfirmPayment: MaterialButton
-    
-    private lateinit var btnGopay: MaterialButton
-    private lateinit var btnDana: MaterialButton
-    private lateinit var btnOvo: MaterialButton
-    private lateinit var btnShopeePay: MaterialButton
 
     private var currentOrder: ModelOrder? = null
     private var selectedMethod = "Tunai"
@@ -108,13 +101,11 @@ class PembayaranActivity : AppCompatActivity() {
         tvPayCashier = findViewById(R.id.tv_pay_cashier)
         tvPayCustomer = findViewById(R.id.tv_pay_customer)
         tvPaySubtotal = findViewById(R.id.tv_pay_subtotal)
-        tvPayTax = findViewById(R.id.tv_pay_tax)
         
         rvPayItems = findViewById(R.id.rv_pay_items)
         togglePaymentMethod = findViewById(R.id.toggle_payment_method)
         llCashContainer = findViewById(R.id.ll_cash_container)
         llQrisContainer = findViewById(R.id.ll_qris_container)
-        llEwalletContainer = findViewById(R.id.ll_ewallet_container)
         cvQrisCode = findViewById(R.id.cv_qris_code)
         etCashReceived = findViewById(R.id.et_cash_received)
         tvChangeAmount = findViewById(R.id.tv_change_amount)
@@ -124,11 +115,6 @@ class PembayaranActivity : AppCompatActivity() {
         chip100k = findViewById(R.id.chip_100k)
         
         btnConfirmPayment = findViewById(R.id.btn_confirm_payment)
-        
-        btnGopay = findViewById(R.id.btn_gopay)
-        btnDana = findViewById(R.id.btn_dana)
-        btnOvo = findViewById(R.id.btn_ovo)
-        btnShopeePay = findViewById(R.id.btn_shopeepay)
     }
 
     private fun bindOrderData(order: ModelOrder) {
@@ -140,7 +126,6 @@ class PembayaranActivity : AppCompatActivity() {
         tvPayCustomer.text = if (order.namaPelanggan.isNullOrEmpty()) "Umum" else order.namaPelanggan
         
         tvPaySubtotal.text = formatRupiah(order.subtotal ?: 0)
-        tvPayTax.text = formatRupiah(order.pajak ?: 0)
     }
 
     private fun setupRecyclerView(order: ModelOrder) {
@@ -157,27 +142,6 @@ class PembayaranActivity : AppCompatActivity() {
                 handleConfirmation()
             }
         }
-        
-        // E-Wallet button listeners
-        val eWalletClickListener = View.OnClickListener { view ->
-            if (selectedMethod == "E-Wallet") {
-                val walletName = when (view.id) {
-                    R.id.btn_gopay -> "GOPAY"
-                    R.id.btn_dana -> "DANA"
-                    R.id.btn_ovo -> "OVO"
-                    R.id.btn_shopeepay -> "SHOPEEPAY"
-                    else -> "E-Wallet"
-                }
-                selectedMethod = walletName
-                Toast.makeText(this, "Simulasi Pembayaran $walletName Berhasil!", Toast.LENGTH_SHORT).show()
-                handleConfirmation()
-            }
-        }
-        
-        btnGopay.setOnClickListener(eWalletClickListener)
-        btnDana.setOnClickListener(eWalletClickListener)
-        btnOvo.setOnClickListener(eWalletClickListener)
-        btnShopeePay.setOnClickListener(eWalletClickListener)
 
         togglePaymentMethod.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
@@ -186,21 +150,29 @@ class PembayaranActivity : AppCompatActivity() {
                         selectedMethod = "Tunai"
                         llCashContainer.visibility = View.VISIBLE
                         llQrisContainer.visibility = View.GONE
-                        llEwalletContainer.visibility = View.GONE
                     }
                     R.id.btn_qris -> {
                         selectedMethod = "QRIS"
                         llCashContainer.visibility = View.GONE
                         llQrisContainer.visibility = View.VISIBLE
-                        llEwalletContainer.visibility = View.GONE
                         etCashReceived.text = null
-                    }
-                    R.id.btn_transfer -> {
-                        selectedMethod = "E-Wallet"
-                        llCashContainer.visibility = View.GONE
-                        llQrisContainer.visibility = View.GONE
-                        llEwalletContainer.visibility = View.VISIBLE
-                        etCashReceived.text = null
+
+                        // Generate Dynamic QRIS
+                        val ivQrisBarcode = findViewById<android.widget.ImageView>(R.id.iv_qris_barcode)
+                        
+                        // QRIS Statis Asli Ababil Cake (Bank BRI)
+                        val staticQris = "00020101021126580013ID.CO.BRI.WWW01189360000200421467690208421467690303UMI51440014ID.CO.QRIS.WWW0215ID10254191294380303UMI5204581453033605802ID5911ABABIL CAKE6004SOLO61055714362070703A0163046CA6"
+                        
+                        val totalAkhir = currentOrder?.totalHarga ?: 0
+                        val dynamicQrisString = com.byatara.penjualandev.utils.QrisHelper.generateDynamicQris(staticQris, totalAkhir)
+                        
+                        val qrisBitmap = com.byatara.penjualandev.utils.QrisHelper.getQrCodeBitmap(dynamicQrisString)
+                        if (qrisBitmap != null) {
+                            ivQrisBarcode.setImageBitmap(qrisBitmap)
+                            findViewById<TextView>(R.id.tv_qris_status)?.text = "Status: Menunggu Pembayaran Rp ${com.byatara.penjualandev.util.formatRupiah(totalAkhir)}"
+                        } else {
+                            findViewById<TextView>(R.id.tv_qris_status)?.text = "Status: Gagal memuat QRIS"
+                        }
                     }
                 }
             }
@@ -225,14 +197,24 @@ class PembayaranActivity : AppCompatActivity() {
         })
 
         // Chips listeners
+        val next50k = (totalAkhir / 50000 + 1) * 50000
+        var next100k = (totalAkhir / 100000 + 1) * 100000
+        if (next50k == next100k) {
+            next100k += 50000
+        }
+
+        chipExactAmount.text = "Uang Pas"
+        chip50k.text = formatRupiah(next50k)
+        chip100k.text = formatRupiah(next100k)
+
         chipExactAmount.setOnClickListener {
             etCashReceived.setText(totalAkhir.toString())
         }
         chip50k.setOnClickListener {
-            etCashReceived.setText("50000")
+            etCashReceived.setText(next50k.toString())
         }
         chip100k.setOnClickListener {
-            etCashReceived.setText("100000")
+            etCashReceived.setText(next100k.toString())
         }
     }
 
@@ -261,14 +243,8 @@ class PembayaranActivity : AppCompatActivity() {
         order.kembalian = if (selectedMethod == "Tunai") change else 0
         order.status = "PAID"
 
-        // Hitung Keuntungan (Profit)
-        val totalKeuntungan = order.items?.sumOf { item ->
-            val jual = item.hargaJual ?: 0
-            val beli = item.hargaBeli ?: 0
-            val qty = item.qty ?: 0
-            (jual - beli) * qty
-        } ?: 0
-        order.keuntungan = totalKeuntungan
+        // Keuntungan diset 0 karena Harga Beli sudah tidak dikelola
+        order.keuntungan = 0
 
         val database = FirebaseDatabase.getInstance()
         

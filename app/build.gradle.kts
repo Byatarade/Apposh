@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth)
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

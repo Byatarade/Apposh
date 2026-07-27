@@ -30,6 +30,15 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+import androidx.activity.result.contract.ActivityResultContracts
+import android.graphics.pdf.PdfDocument
+import android.graphics.Paint
+import android.graphics.Color
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.io.OutputStreamWriter
+import androidx.appcompat.app.AlertDialog
+
 class LaporanActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -37,24 +46,33 @@ class LaporanActivity : AppCompatActivity() {
     private lateinit var layoutEmpty: LinearLayout
     private lateinit var tvEmptyMessage: TextView
     private lateinit var tvTotalPendapatan: TextView
-    private lateinit var tvTotalKeuntungan: TextView
     private lateinit var tvJumlahTransaksi: TextView
     private lateinit var tvAvgTransaksi: TextView
     private lateinit var searchView: SearchView
     private lateinit var btnFilterTanggal: MaterialButton
     private lateinit var cgPaymentFilter: com.google.android.material.chip.ChipGroup
+    private lateinit var fabExport: FloatingActionButton
 
     private lateinit var adapter: LaporanTransaksiAdapter
     private val database = FirebaseDatabase.getInstance()
     private val ordersRef = database.getReference("orders")
 
     private var allOrders = listOf<ModelOrder>()
+    private var filteredOrders = listOf<ModelOrder>()
     private var searchQuery = ""
     private var filterDayStartMillis: Long? = null
     private var selectedPaymentMethod = "Semua"
 
     private val dateDisplayFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
     private val dateTimeParseFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))
+
+    private val exportCsvLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
+        uri?.let { writeCsvToUri(it) }
+    }
+    
+    private val exportPdfLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
+        uri?.let { writePdfToUri(it) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,12 +104,16 @@ class LaporanActivity : AppCompatActivity() {
         layoutEmpty = findViewById(R.id.layout_empty)
         tvEmptyMessage = findViewById(R.id.tv_empty_message)
         tvTotalPendapatan = findViewById(R.id.tv_total_pendapatan)
-        tvTotalKeuntungan = findViewById(R.id.tv_total_keuntungan)
         tvJumlahTransaksi = findViewById(R.id.tv_jumlah_transaksi)
         tvAvgTransaksi = findViewById(R.id.tv_avg_transaksi)
         searchView = findViewById(R.id.search_laporan)
         btnFilterTanggal = findViewById(R.id.btn_filter_tanggal)
         cgPaymentFilter = findViewById(R.id.cg_payment_filter)
+        fabExport = findViewById(R.id.fab_export)
+
+        fabExport.setOnClickListener {
+            showExportDialog()
+        }
 
         // Style all chips to match POS style
         for (i in 0 until cgPaymentFilter.childCount) {
@@ -243,13 +265,12 @@ class LaporanActivity : AppCompatActivity() {
         }
 
         filtered = filtered.sortedByDescending { it.timestamp ?: parseOrderDate(it.tanggalWaktu) ?: 0L }
+        filteredOrders = filtered
 
         val totalRevenue = filtered.sumOf { it.totalHarga ?: 0 }
-        val totalProfit = filtered.sumOf { it.keuntungan ?: 0 }
         val avgTransaction = if (filtered.isNotEmpty()) totalRevenue / filtered.size else 0
 
         tvTotalPendapatan.text = formatRupiah(totalRevenue)
-        tvTotalKeuntungan.text = formatRupiah(totalProfit)
         tvJumlahTransaksi.text = filtered.size.toString()
         tvAvgTransaksi.text = formatRupiah(avgTransaction)
 
@@ -302,6 +323,108 @@ class LaporanActivity : AppCompatActivity() {
             dateTimeParseFormat.parse(tanggalWaktu)?.time
         } catch (_: Exception) {
             null
+        }
+    }
+
+    private fun showExportDialog() {
+        if (filteredOrders.isEmpty()) {
+            Toast.makeText(this, "Tidak ada data untuk diekspor", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val options = arrayOf("Ekspor ke CSV (Excel)", "Ekspor ke PDF")
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Ekspor Laporan")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> exportCsvLauncher.launch("Laporan_Transaksi_${System.currentTimeMillis()}.csv")
+                    1 -> exportPdfLauncher.launch("Laporan_Transaksi_${System.currentTimeMillis()}.pdf")
+                }
+            }
+            .show()
+    }
+
+    private fun writeCsvToUri(uri: android.net.Uri) {
+        try {
+            contentResolver.openOutputStream(uri)?.use { outputStream ->
+                OutputStreamWriter(outputStream).use { writer ->
+                    // Header
+                    writer.write("ID Order,Tanggal,Kasir,Pelanggan,Metode,Total Harga\n")
+                    // Data
+                    for (order in filteredOrders) {
+                        val id = order.idOrder ?: "-"
+                        val tgl = order.tanggalWaktu ?: "-"
+                        val kasir = order.namaKasir ?: "-"
+                        val pel = order.namaPelanggan ?: "-"
+                        val met = order.metodeBayar ?: "-"
+                        val total = order.totalHarga ?: 0
+                        writer.write("$id,$tgl,$kasir,$pel,$met,$total\n")
+                    }
+                }
+            }
+            Toast.makeText(this, "Berhasil mengekspor CSV", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Gagal mengekspor CSV: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun writePdfToUri(uri: android.net.Uri) {
+        try {
+            val pdfDocument = PdfDocument()
+            val paint = Paint()
+            val titlePaint = Paint()
+
+            // Buat halaman A4
+            val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create()
+            var page = pdfDocument.startPage(pageInfo)
+            var canvas = page.canvas
+
+            titlePaint.textSize = 18f
+            titlePaint.isFakeBoldText = true
+            titlePaint.color = Color.BLACK
+            
+            paint.textSize = 12f
+            paint.color = Color.BLACK
+
+            var yPosition = 50f
+            canvas.drawText("Laporan Transaksi Apposh", 50f, yPosition, titlePaint)
+            yPosition += 40f
+
+            canvas.drawText("ID Order", 50f, yPosition, titlePaint)
+            canvas.drawText("Tanggal", 150f, yPosition, titlePaint)
+            canvas.drawText("Total", 450f, yPosition, titlePaint)
+            
+            yPosition += 20f
+
+            for (order in filteredOrders) {
+                if (yPosition > 800f) {
+                    pdfDocument.finishPage(page)
+                    page = pdfDocument.startPage(pageInfo)
+                    canvas = page.canvas
+                    yPosition = 50f
+                }
+                val id = order.idOrder ?: "-"
+                val tgl = order.tanggalWaktu ?: "-"
+                val total = formatRupiah(order.totalHarga ?: 0)
+                
+                val shortId = if (id.length > 12) id.substring(0, 12) + "..." else id
+                val shortTgl = if (tgl.length > 15) tgl.substring(0, 15) else tgl
+
+                canvas.drawText(shortId, 50f, yPosition, paint)
+                canvas.drawText(shortTgl, 150f, yPosition, paint)
+                canvas.drawText(total, 450f, yPosition, paint)
+                
+                yPosition += 20f
+            }
+
+            pdfDocument.finishPage(page)
+
+            contentResolver.openOutputStream(uri)?.use { outputStream ->
+                pdfDocument.writeTo(outputStream)
+            }
+            pdfDocument.close()
+            Toast.makeText(this, "Berhasil mengekspor PDF", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Gagal mengekspor PDF: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 

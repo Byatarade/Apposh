@@ -24,6 +24,16 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.byatara.penjualandev.model.ModelOrder
+import java.util.Calendar
+import androidx.core.content.ContextCompat
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -33,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvGreeting: TextView
     private lateinit var tvNominal: TextView
     private lateinit var tvTanggalBeranda: TextView
+    private lateinit var barChart: BarChart
 
     private var saldoListener: ValueEventListener? = null
 
@@ -55,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         tvGreeting = findViewById(R.id.tvGreeting)
         tvNominal = findViewById(R.id.tvNominal)
         tvTanggalBeranda = findViewById(R.id.tvTanggalBeranda)
+        barChart = findViewById(R.id.barChartPenjualan)
 
         setupGreeting()
         setupTanggalBeranda()
@@ -66,6 +78,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         attachSaldoListener()
+        loadChartData()
     }
 
     override fun onStop() {
@@ -154,5 +167,72 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
         com.byatara.penjualandev.utils.BottomNavigationHelper.setup(this, R.id.navigation_home)
+    }
+
+    private fun loadChartData() {
+        val ordersRef = FirebaseDatabase.getInstance().getReference("orders")
+        ordersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
+                val orders = mutableListOf<ModelOrder>()
+                for (child in snapshot.children) {
+                    val order = child.getValue(ModelOrder::class.java)
+                    if (order != null) {
+                        orders.add(order)
+                    }
+                }
+                processAndShowChart(orders)
+            }
+            override fun onCancelled(error: com.google.firebase.database.DatabaseError) {}
+        })
+    }
+
+    private fun processAndShowChart(orders: List<ModelOrder>) {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        
+        // Go back 6 days (to include today = 7 days)
+        calendar.add(Calendar.DAY_OF_YEAR, -6)
+        
+        val labels = ArrayList<String>()
+        val entries = ArrayList<BarEntry>()
+        val dateFormat = SimpleDateFormat("dd/MM", Locale("id", "ID"))
+        val parseFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))
+
+        for (i in 0..6) {
+            val startOfDay = calendar.timeInMillis
+            val endOfDay = startOfDay + 24 * 60 * 60 * 1000 - 1
+            
+            val dailyOrders = orders.filter { order ->
+                val ts = order.timestamp ?: try { parseFormat.parse(order.tanggalWaktu ?: "")?.time } catch (e: Exception) { null }
+                ts != null && ts in startOfDay..endOfDay
+            }
+            val dailyTotal = dailyOrders.sumOf { it.totalHarga ?: 0 }
+            
+            labels.add(dateFormat.format(calendar.time))
+            entries.add(BarEntry(i.toFloat(), dailyTotal.toFloat()))
+            
+            calendar.add(Calendar.DAY_OF_YEAR, 1) // next day
+        }
+
+        val dataSet = BarDataSet(entries, "Penjualan (Rp)")
+        dataSet.color = ContextCompat.getColor(this, R.color.colorPrimary)
+        dataSet.valueTextSize = 10f
+        
+        val data = BarData(dataSet)
+        data.barWidth = 0.5f
+
+        barChart.data = data
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        barChart.xAxis.setDrawGridLines(false)
+        barChart.xAxis.granularity = 1f
+        barChart.axisLeft.axisMinimum = 0f
+        barChart.axisRight.isEnabled = false
+        barChart.description.isEnabled = false
+        barChart.animateY(1000)
+        barChart.invalidate()
     }
 }

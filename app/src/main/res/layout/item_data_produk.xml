@@ -51,7 +51,7 @@
             android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/chip_status"
+            app:layout_constraintEnd_toStartOf="@+id/switch_status"
             app:layout_constraintStart_toEndOf="@id/card_image"
             app:layout_constraintTop_toTopOf="@id/card_image" />
 

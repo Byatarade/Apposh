@@ -38,10 +38,7 @@ Aplikasi Apposh dilengkapi dengan serangkaian fitur tingkat lanjut yang dirancan
 * Seluruh entitas data utama seperti **Kategori**, **Produk/Menu**, **Pegawai (Kasir)**, dan **Pelanggan** di-scope secara spesifik berdasarkan ID Cabang (`idCabang`).
 * Memungkinkan satu sistem basis data Firebase melayani banyak lokasi cabang sekaligus tanpa terjadi kebocoran data antar cabang. Pemilik bisnis dapat memantau seluruh cabang dari satu dasbor terpusat.
 
-### 💰 3. Pelacakan Margin Keuntungan Otomatis (*Profit Tracking*)
-* Sistem secara otomatis menghitung keuntungan kotor dan bersih secara dinamis pada setiap transaksi berdasarkan selisih harga jual dan harga beli dikalikan dengan kuantitas:
-  $$\text{Keuntungan} = (\text{Harga Jual} - \text{Harga Beli}) \times \text{Qty}$$
-* Membantu pemilik toko melihat margin keuntungan bersih secara langsung tanpa harus melakukan kalkulasi manual di akhir bulan.
+
 
 ### 🚨 4. Peringatan Stok Rendah & Notifikasi Pintar (*Smart Alert System*)
 * Sistem memantau batas minimum stok barang secara *real-time*. Jika persediaan produk jatuh di bawah ambang batas kritis (stok < 5 unit), Firebase secara otomatis memicu generator notifikasi lokal untuk memperingatkan kasir agar segera melakukan *restock*.
@@ -49,7 +46,7 @@ Aplikasi Apposh dilengkapi dengan serangkaian fitur tingkat lanjut yang dirancan
 
 ### 💳 5. Kalkulator Kasir Cepat & Multi Metode Pembayaran
 * Dilengkapi antarmuka kalkulator kasir yang efisien dengan dukungan **Quick Cash Chips** (Uang Pas, Rp50.000, Rp100.000) untuk mempercepat transaksi tunai.
-* Mendukung pencatatan berbagai metode pembayaran modern lainnya seperti **QRIS** (dilengkapi simulasi scan kode QR) dan **E-Wallet** terkemuka (GoPay, DANA, OVO, ShopeePay).
+* Mendukung pencatatan berbagai metode pembayaran modern lainnya seperti **QRIS** (dilengkapi scan kode QR yang lansung nominal pembayaran)
 
 ### 🖨️ 6. Pencetakan Struk / Nota Instan & Digital Receipt
 * Setelah pembayaran dikonfirmasi, aplikasi menghasilkan struk belanja terstruktur yang dapat langsung dicetak menggunakan printer termal bluetooth atau disimpan sebagai bukti transaksi digital yang rapi.
@@ -66,6 +63,12 @@ Aplikasi Apposh dilengkapi dengan serangkaian fitur tingkat lanjut yang dirancan
 
 ### 🔌 10. Konektivitas Printer Thermal Bluetooth & Cetak Nota Nirkabel
 * Dilengkapi utilitas nirkabel khusus (`BluetoothPrinterHelper` & `BluetoothPermissionHelper`) yang mendukung pencetakan nota fisik secara instan lewat printer thermal Bluetooth 58mm/80mm. Menyediakan tata letak struk otomatis, garis pemisah dinamis, dan penanganan status koneksi printer secara *real-time* untuk operasional kasir yang mulus.
+
+### 📊 11. Dashboard Analitik (Grafik Penjualan)
+* Menggunakan library visualisasi canggih `MPAndroidChart` untuk menampilkan metrik performa toko di layar Beranda. Admin dapat langsung memantau riwayat tren penjualan harian selama **7 hari terakhir** secara *real-time* dan interaktif.
+
+### 📄 12. Ekspor Laporan Penjualan (PDF & CSV Excel)
+* Dilengkapi dengan sistem pelaporan yang aman dan modern dengan menggunakan `CreateDocument` Intent (Tanpa Izin Memori Eksternal). Admin dapat dengan mudah menyimpan dan membagikan laporan rekapan penjualan transaksi ke format **PDF (Siap Cetak)** atau **CSV (Microsoft Excel)** untuk keperluan pembukuan lanjutan.
 
 ---
 

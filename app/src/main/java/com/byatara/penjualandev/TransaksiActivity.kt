@@ -41,8 +41,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import java.util.Locale
-
 class TransaksiActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -81,6 +82,25 @@ class TransaksiActivity : AppCompatActivity() {
                 insets
             }
         }
+
+        // Handle back press
+        val backCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (cartMap.isNotEmpty()) {
+                    AlertDialog.Builder(this@TransaksiActivity)
+                        .setTitle("Batal Transaksi?")
+                        .setMessage("Keranjang belanja akan dikosongkan. Apakah Anda yakin ingin keluar?")
+                        .setPositiveButton("Keluar") { _, _ ->
+                            finish()
+                        }
+                        .setNegativeButton("Batal", null)
+                        .show()
+                } else {
+                    finish()
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, backCallback)
 
         // Handle back button on toolbar
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
@@ -353,8 +373,8 @@ class TransaksiActivity : AppCompatActivity() {
                 )
             }
 
-            // Hitung Pajak (PPN 11%) & Total Akhir
-            val pajak = (subtotalPrice * 0.11).toInt()
+            // Hitung Pajak (dihilangkan / 0%) & Total Akhir
+            val pajak = 0
             val totalAkhir = subtotalPrice + pajak
 
             val formatter = java.text.SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))

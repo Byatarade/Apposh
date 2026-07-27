@@ -30,7 +30,6 @@ class ReceiptActivity : AppCompatActivity() {
     private lateinit var llReceiptItems: LinearLayout
     
     private lateinit var tvReceiptSubtotal: TextView
-    private lateinit var tvReceiptTax: TextView
     private lateinit var tvReceiptTotal: TextView
     
     private lateinit var tvReceiptPayMethod: TextView
@@ -108,7 +107,6 @@ class ReceiptActivity : AppCompatActivity() {
         llReceiptItems = findViewById(R.id.ll_receipt_items)
         
         tvReceiptSubtotal = findViewById(R.id.tv_receipt_subtotal)
-        tvReceiptTax = findViewById(R.id.tv_receipt_tax)
         tvReceiptTotal = findViewById(R.id.tv_receipt_total)
         
         tvReceiptPayMethod = findViewById(R.id.tv_receipt_pay_method)
@@ -146,7 +144,6 @@ class ReceiptActivity : AppCompatActivity() {
         tvReceiptCustomer.text = if (order.namaPelanggan.isNullOrEmpty()) "Umum" else order.namaPelanggan
 
         tvReceiptSubtotal.text = formatRupiah(order.subtotal ?: 0)
-        tvReceiptTax.text = formatRupiah(order.pajak ?: 0)
         tvReceiptTotal.text = formatRupiah(order.totalHarga ?: 0)
 
         val method = order.metodeBayar ?: "Tunai"

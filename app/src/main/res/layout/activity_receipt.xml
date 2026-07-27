@@ -211,28 +211,6 @@
                                 android:textSize="12sp" />
                         </LinearLayout>
 
-                        <!-- PPN 11% -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="4dp">
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Pajak (PPN 11%)"
-                                android:textColor="?attr/colorOnSurfaceVariant"
-                                android:textSize="12sp" />
-                            <TextView
-                                android:id="@+id/tv_receipt_tax"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Rp 4.950"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
                         <!-- Total Tagihan -->
                         <LinearLayout
                             android:layout_width="match_parent"

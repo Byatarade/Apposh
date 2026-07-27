@@ -60,11 +60,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TOTAL AKHIR (TERMASUK PPN 11%)"
+                        android:text="TOTAL AKHIR"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.08"
-                        android:textSize="11sp" />
+                        android:textSize="12sp"
+                        android:alpha="0.8" />
 
                     <TextView
                         android:id="@+id/tv_total_price"
@@ -248,27 +247,6 @@
                                 android:textColor="?attr/colorOnSurface"
                                 android:textSize="12sp" />
                         </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="4dp">
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="PPN (11%)"
-                                android:textColor="?attr/colorOnSurfaceVariant"
-                                android:textSize="12sp" />
-                            <TextView
-                                android:id="@+id/tv_pay_tax"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Rp 0"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textSize="12sp" />
-                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -313,19 +291,6 @@
                     android:layout_weight="1"
                     android:paddingVertical="12dp"
                     android:text="QRIS"
-                    android:textSize="12sp"
-                    app:backgroundTint="@color/toggle_button_background"
-                    android:textColor="@color/toggle_button_text"
-                    app:strokeColor="@color/colorOutlineStroke"/>
-                
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_transfer"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="12dp"
-                    android:text="E-Wallet"
                     android:textSize="12sp"
                     app:backgroundTint="@color/toggle_button_background"
                     android:textColor="@color/toggle_button_text"
@@ -490,98 +455,12 @@
                                 android:background="@color/white"
                                 android:padding="16dp">
 
-                                <!-- Fake QR Code Grid -->
-                                <LinearLayout
+                                <ImageView
+                                    android:id="@+id/iv_qris_barcode"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <!-- Top row -->
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_weight="1"
-                                        android:orientation="horizontal"
-                                        android:gravity="center">
-                                        <View
-                                            android:layout_width="50dp"
-                                            android:layout_height="50dp"
-                                            android:background="@color/black" />
-                                        <View
-                                            android:layout_width="50dp"
-                                            android:layout_height="50dp"
-                                            android:layout_marginHorizontal="8dp"
-                                            android:background="@color/colorPrimary" />
-                                        <View
-                                            android:layout_width="50dp"
-                                            android:layout_height="50dp"
-                                            android:background="@color/black" />
-                                    </LinearLayout>
-
-                                    <!-- Middle row -->
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_weight="1"
-                                        android:orientation="horizontal"
-                                        android:gravity="center"
-                                        android:layout_marginVertical="4dp">
-                                        <View
-                                            android:layout_width="50dp"
-                                            android:layout_height="50dp"
-                                            android:background="@color/colorPrimary" />
-                                        <View
-                                            android:layout_width="50dp"
-                                            android:layout_height="50dp"
-                                            android:layout_marginHorizontal="8dp"
-                                            android:background="@color/black" />
-                                        <View
-                                            android:layout_width="50dp"
-                                            android:layout_height="50dp"
-                                            android:background="@color/colorPrimary" />
-                                    </LinearLayout>
-
-                                    <!-- Bottom row -->
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_weight="1"
-                                        android:orientation="horizontal"
-                                        android:gravity="center">
-                                        <View
-                                            android:layout_width="50dp"
-                                            android:layout_height="50dp"
-                                            android:background="@color/black" />
-                                        <View
-                                            android:layout_width="50dp"
-                                            android:layout_height="50dp"
-                                            android:layout_marginHorizontal="8dp"
-                                            android:background="@color/colorPrimary" />
-                                        <View
-                                            android:layout_width="50dp"
-                                            android:layout_height="50dp"
-                                            android:background="@color/black" />
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-                                <!-- Overlay hint -->
-                                <FrameLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="#CCFFFFFF">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:text="KLIK UNTUK SIMULASI"
-                                        android:textSize="12sp"
-                                        android:textColor="?attr/colorPrimary"
-                                        android:textStyle="bold"
-                                        android:gravity="center" />
-                                </FrameLayout>
-
+                                    android:scaleType="fitCenter" />
+                                
                             </FrameLayout>
                                 
                         </com.google.android.material.card.MaterialCardView>
@@ -598,129 +477,30 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- Section 7: Panel E-Wallet -->
-            <LinearLayout
-                android:id="@+id/ll_ewallet_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                android:visibility="gone">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/colorOutlineStroke"
-                    app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pilih Dompet Digital"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textStyle="bold"
-                            android:textSize="14sp" />
-
-                        <GridLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="2"
-                            android:layout_marginTop="12dp">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_gopay"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_columnWeight="1"
-                                android:layout_margin="4dp"
-                                android:text="GOPAY"
-                                app:cornerRadius="8dp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_dana"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_columnWeight="1"
-                                android:layout_margin="4dp"
-                                android:text="DANA"
-                                app:cornerRadius="8dp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_ovo"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_columnWeight="1"
-                                android:layout_margin="4dp"
-                                android:text="OVO"
-                                app:cornerRadius="8dp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_shopeepay"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_columnWeight="1"
-                                android:layout_margin="4dp"
-                                android:text="SHOPEEPAY"
-                                app:cornerRadius="8dp" />
-                        </GridLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:hint="Nomor HP Pelanggan (Opsional)">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="phone" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
+            <!-- End of Cash Container -->
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <!-- Bottom Confirmation Button -->
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="16dp"
-        app:strokeWidth="0dp"
-        app:cardBackgroundColor="?attr/colorSurface">
+        android:elevation="16dp"
+        android:background="?attr/colorSurfaceContainerLowest"
+        android:padding="16dp">
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirm_payment"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_confirm_payment"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Konfirmasi Pembayaran"
-                app:cornerRadius="16dp"
-                android:textSize="16sp"
-                app:backgroundTint="?attr/colorPrimary"
-                android:textColor="?attr/colorOnPrimary" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+            android:layout_height="56dp"
+            android:text="Konfirmasi Pembayaran"
+            app:cornerRadius="16dp"
+            android:textSize="16sp"
+            app:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary" />
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
