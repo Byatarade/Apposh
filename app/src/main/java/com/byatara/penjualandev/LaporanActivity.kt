@@ -51,7 +51,8 @@ class LaporanActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private lateinit var btnFilterTanggal: MaterialButton
     private lateinit var cgPaymentFilter: com.google.android.material.chip.ChipGroup
-    private lateinit var fabExport: FloatingActionButton
+    private lateinit var cardExport: com.google.android.material.card.MaterialCardView
+    private lateinit var barChart: com.github.mikephil.charting.charts.BarChart
 
     private lateinit var adapter: LaporanTransaksiAdapter
     private val database = FirebaseDatabase.getInstance()
@@ -96,6 +97,9 @@ class LaporanActivity : AppCompatActivity() {
         setupRecyclerView()
         setupFilters()
         loadDataFromFirebase()
+
+        // Setup Bottom Navigation using reusable helper
+        com.byatara.penjualandev.utils.BottomNavigationHelper.setup(this, R.id.navigation_analytics)
     }
 
     private fun initViews() {
@@ -109,9 +113,10 @@ class LaporanActivity : AppCompatActivity() {
         searchView = findViewById(R.id.search_laporan)
         btnFilterTanggal = findViewById(R.id.btn_filter_tanggal)
         cgPaymentFilter = findViewById(R.id.cg_payment_filter)
-        fabExport = findViewById(R.id.fab_export)
+        cardExport = findViewById(R.id.card_export)
+        barChart = findViewById(R.id.barChartPenjualan)
 
-        fabExport.setOnClickListener {
+        cardExport.setOnClickListener {
             showExportDialog()
         }
 
@@ -266,6 +271,8 @@ class LaporanActivity : AppCompatActivity() {
 
         filtered = filtered.sortedByDescending { it.timestamp ?: parseOrderDate(it.tanggalWaktu) ?: 0L }
         filteredOrders = filtered
+        
+        processAndShowChart(filtered)
 
         val totalRevenue = filtered.sumOf { it.totalHarga ?: 0 }
         val avgTransaction = if (filtered.isNotEmpty()) totalRevenue / filtered.size else 0
@@ -292,6 +299,69 @@ class LaporanActivity : AppCompatActivity() {
                 recyclerView.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun processAndShowChart(orders: List<ModelOrder>) {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        
+        // Go back 6 days (to include today = 7 days)
+        calendar.add(Calendar.DAY_OF_YEAR, -6)
+        
+        val labels = ArrayList<String>()
+        val entries = ArrayList<com.github.mikephil.charting.data.BarEntry>()
+        val dateFormat = SimpleDateFormat("dd/MM", Locale("id", "ID"))
+
+        for (i in 0..6) {
+            val startOfDay = calendar.timeInMillis
+            val endOfDay = startOfDay + 24 * 60 * 60 * 1000 - 1
+            
+            val dailyOrders = orders.filter { order ->
+                val ts = order.timestamp ?: parseOrderDate(order.tanggalWaktu)
+                ts != null && ts in startOfDay..endOfDay
+            }
+            val dailyTotal = dailyOrders.sumOf { it.totalHarga ?: 0 }
+            
+            labels.add(dateFormat.format(calendar.time))
+            entries.add(com.github.mikephil.charting.data.BarEntry(i.toFloat(), dailyTotal.toFloat()))
+            
+            calendar.add(Calendar.DAY_OF_YEAR, 1) // next day
+        }
+
+        val dataSet = com.github.mikephil.charting.data.BarDataSet(entries, "Penjualan (Rp)")
+        dataSet.color = androidx.core.content.ContextCompat.getColor(this, R.color.colorPrimary)
+        dataSet.valueTextSize = 10f
+        
+        // Dapatkan warna teks yang sesuai dengan tema (Terang/Gelap)
+        val typedValue = android.util.TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true)
+        val textColor = typedValue.data
+        
+        dataSet.valueTextColor = textColor
+        
+        val data = com.github.mikephil.charting.data.BarData(dataSet)
+        data.barWidth = 0.5f
+
+        barChart.data = data
+        barChart.xAxis.valueFormatter = com.github.mikephil.charting.formatter.IndexAxisValueFormatter(labels)
+        barChart.xAxis.position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+        barChart.xAxis.setDrawGridLines(false)
+        barChart.xAxis.granularity = 1f
+        barChart.xAxis.textColor = textColor
+        
+        barChart.axisLeft.axisMinimum = 0f
+        barChart.axisLeft.textColor = textColor
+        
+        barChart.axisRight.isEnabled = false
+        barChart.description.isEnabled = false
+        
+        barChart.legend.textColor = textColor
+        
+        barChart.animateY(1000)
+        barChart.invalidate()
     }
 
     private fun styleChip(chip: com.google.android.material.chip.Chip) {

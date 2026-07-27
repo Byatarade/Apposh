@@ -75,7 +75,6 @@ class ProdukPosAdapter(
 
     inner class ProdukPosViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgProduk: ImageView = itemView.findViewById(R.id.img_produk)
-        val chipKategori: Chip = itemView.findViewById(R.id.chip_kategori_badge)
         val tvNamaProduk: TextView = itemView.findViewById(R.id.tv_nama_produk)
         val tvHargaProduk: TextView = itemView.findViewById(R.id.tv_harga_produk)
         val tvStok: TextView = itemView.findViewById(R.id.tv_stok)
@@ -89,11 +88,6 @@ class ProdukPosAdapter(
         fun bind(produk: ModelProduk) {
             tvNamaProduk.text = produk.namaProduk ?: "-"
             tvHargaProduk.text = formatRupiah(produk.hargaJual ?: 0)
-
-            // Category Badge
-            val idKategori = produk.idKategori ?: ""
-            val namaKategori = mapKategori[idKategori] ?: idKategori.ifEmpty { "Umum" }
-            chipKategori.text = namaKategori
 
             // Glide Image
             if (!produk.fotoProduk.isNullOrEmpty()) {

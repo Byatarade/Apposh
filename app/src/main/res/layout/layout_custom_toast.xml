@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo"
+            android:src="@drawable/apposh_app_logo"
             android:contentDescription="Apposh Logo" />
     </androidx.cardview.widget.CardView>
 

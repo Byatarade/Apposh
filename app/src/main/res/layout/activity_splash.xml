@@ -4,96 +4,86 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary">
+    android:background="@drawable/bg_splash_gradient">
 
-    <!-- Container Utama untuk Animasi POS -->
-    <FrameLayout
-        android:id="@+id/animation_container"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
+    <!-- Efek Lingkaran Estetik di Latar Belakang -->
+    <View
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@drawable/circle_shape"
+        android:backgroundTint="#1AFFFFFF"
+        android:translationX="-100dp"
+        android:translationY="-100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/circle_shape"
+        android:backgroundTint="#1AFFFFFF"
+        android:translationX="50dp"
+        android:translationY="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Wadah Teks Utama -->
+    <LinearLayout
+        android:id="@+id/text_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Efek Garis Ngebut (Speed Lines) -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="60dp">
+        <TextView
+            android:id="@+id/tv_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Halo,"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:alpha="0"
+            android:letterSpacing="0.05" />
+
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Kasir"
+            android:textColor="@color/white"
+            android:textSize="38sp"
+            android:textStyle="bold"
+            android:alpha="0"
+            android:letterSpacing="0.02" />
             
-            <View
-                android:id="@+id/speed_line_1"
-                android:layout_width="80dp"
-                android:layout_height="4dp"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginBottom="20dp"
-                android:background="#80FFFFFF" />
-
-            <View
-                android:id="@+id/speed_line_2"
-                android:layout_width="50dp"
-                android:layout_height="4dp"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginTop="25dp"
-                android:background="#80FFFFFF" />
-
-            <View
-                android:id="@+id/speed_line_3"
-                android:layout_width="120dp"
-                android:layout_height="4dp"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginBottom="35dp"
-                android:background="#80FFFFFF" />
-        </FrameLayout>
-
-        <!-- Ikon Keranjang Belanja -->
-        <FrameLayout
-            android:id="@+id/cart_container"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
+        <View
+            android:id="@+id/line_divider"
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/circle_shape"
-            android:backgroundTint="?attr/colorSurface"
-            android:elevation="8dp">
-
-            <ImageView
-                android:id="@+id/img_cart"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:src="@drawable/cart"
-                app:tint="?attr/colorPrimary" />
-        </FrameLayout>
-    </FrameLayout>
-
-    <!-- Teks Aplikasi -->
-    <TextView
-        android:id="@+id/tv_app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Apposh"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:alpha="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/animation_container" />
+            android:backgroundTint="@color/white"
+            android:alpha="0" />
+            
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_subtitle"
+        android:id="@+id/tv_footer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Manajemen Penjualan Cerdas"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="14sp"
+        android:layout_marginBottom="32dp"
+        android:text="Apposh - Manajemen Penjualan Cerdas"
+        android:textColor="#B3FFFFFF"
+        android:textSize="12sp"
         android:alpha="0"
+        android:letterSpacing="0.05"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_app_name" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

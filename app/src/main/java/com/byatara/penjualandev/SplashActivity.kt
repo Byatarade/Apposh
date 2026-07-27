@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_splash)
 
-        val mainView = findViewById<View>(R.id.animation_container).parent as View
+        val mainView = findViewById<View>(R.id.text_container).parent as View
         ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -34,68 +34,59 @@ class SplashActivity : AppCompatActivity() {
         }
 
         // Referensi View
-        val cartContainer = findViewById<FrameLayout>(R.id.cart_container)
-        val imgCart = findViewById<ImageView>(R.id.img_cart)
         val tvAppName = findViewById<TextView>(R.id.tv_app_name)
         val tvSubtitle = findViewById<TextView>(R.id.tv_subtitle)
-        
-        val speedLine1 = findViewById<View>(R.id.speed_line_1)
-        val speedLine2 = findViewById<View>(R.id.speed_line_2)
-        val speedLine3 = findViewById<View>(R.id.speed_line_3)
+        val lineDivider = findViewById<View>(R.id.line_divider)
+        val tvFooter = findViewById<TextView>(R.id.tv_footer)
+
+        // Set nama user
+        val currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+        val namaUser = currentUser?.email?.substringBefore("@")?.replaceFirstChar { it.uppercase() } ?: "Kasir"
+        tvSubtitle.text = namaUser
 
         // Setup Awal Animasi
-        cartContainer.translationX = -800f // Mulai dari luar layar sebelah kiri
-        
-        tvAppName.translationY = 30f
+        tvAppName.translationY = 50f
         tvAppName.alpha = 0f
-        tvSubtitle.translationY = 30f
+        tvSubtitle.translationY = 50f
         tvSubtitle.alpha = 0f
+        lineDivider.scaleX = 0f
+        lineDivider.alpha = 0f
+        tvFooter.translationY = 30f
+        tvFooter.alpha = 0f
 
-        // 1. Animasi Keranjang Meluncur Cepat (Ngebut) dari Kiri ke Tengah
-        cartContainer.animate()
-            .translationX(0f)
-            .setDuration(800)
-            .setInterpolator(OvershootInterpolator(1.5f)) // Memantul saat ngerem
-            .setStartDelay(300)
-            .withEndAction {
-                // Efek "mesin menyala/bergetar" (Wobble) saat keranjang berhenti
-                val wobble = PropertyValuesHolder.ofFloat(View.ROTATION, 0f, -3f, 3f, 0f)
-                val wobbleAnim = ObjectAnimator.ofPropertyValuesHolder(imgCart, wobble)
-                wobbleAnim.duration = 400
-                wobbleAnim.repeatCount = ValueAnimator.INFINITE
-                wobbleAnim.start()
-            }
-            .start()
-
-        // 2. Animasi Garis Angin (Speed Lines) untuk Efek Ngebut
-        fun animateSpeedLine(line: View, durationMs: Long, delayMs: Long) {
-            val windAnim = ObjectAnimator.ofFloat(line, View.TRANSLATION_X, 800f, -800f)
-            windAnim.duration = durationMs
-            windAnim.startDelay = delayMs
-            windAnim.interpolator = LinearInterpolator()
-            windAnim.repeatCount = ValueAnimator.INFINITE
-            windAnim.start()
-        }
-
-        animateSpeedLine(speedLine1, 600, 400)
-        animateSpeedLine(speedLine2, 500, 550)
-        animateSpeedLine(speedLine3, 700, 600)
-
-        // 3. Jalankan Animasi Teks Muncul
+        // Animasi Teks & Garis dengan efek perlahan dan elegan
         tvAppName.animate()
             .translationY(0f)
             .alpha(1f)
             .setDuration(800)
-            .setStartDelay(1000)
+            .setInterpolator(OvershootInterpolator(1.0f))
+            .setStartDelay(200)
             .start()
 
         tvSubtitle.animate()
             .translationY(0f)
-            .alpha(0.8f) // Opacity 80%
+            .alpha(1f)
             .setDuration(800)
-            .setStartDelay(1200)
+            .setInterpolator(OvershootInterpolator(1.0f))
+            .setStartDelay(400)
+            .start()
+            
+        lineDivider.animate()
+            .scaleX(1f)
+            .alpha(1f)
+            .setDuration(600)
+            .setInterpolator(OvershootInterpolator(1.5f))
+            .setStartDelay(600)
+            .start()
+            
+        tvFooter.animate()
+            .translationY(0f)
+            .alpha(1f)
+            .setDuration(800)
+            .setStartDelay(800)
             .start()
 
+        // Animasi tambahan dihilangkan karena teks sudah meluncur masuk
         // Pindah ke MainActivity atau LoginActivity setelah animasi selesai
         Handler(Looper.getMainLooper()).postDelayed({
             val currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser

@@ -34,19 +34,6 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/menu" />
 
-            <!-- Category / Branch Badge Overlay -->
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_kategori_badge"
-                style="@style/Widget.MaterialComponents.Chip.Action"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_margin="8dp"
-                android:text="Makanan"
-                android:textSize="10sp"
-                android:textColor="?attr/colorOnSecondary"
-                app:chipBackgroundColor="?attr/colorSecondary"
-                app:chipMinHeight="24dp"
-                app:chipStrokeWidth="0dp" />
         </FrameLayout>
 
         <!-- Product Info & Actions -->
